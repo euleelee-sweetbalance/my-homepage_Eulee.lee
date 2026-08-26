@@ -84,7 +84,8 @@
     border-bottom: 1px solid var(--div);
   }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
-  .logo { font-family: var(--en); font-weight: 800; font-size: 20px; color: var(--g); letter-spacing: -.02em; }
+  .logo { height: 28px; width: auto; display: block; }
+  .foot-logo { height: 24px; width: auto; display: block; margin: 0 auto 10px; opacity: .95; }
   .nav-links { display: flex; gap: 28px; }
   .nav-links a { font-size: 14px; font-weight: 600; color: var(--char); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
   .nav-links a:hover { color: var(--g); }
@@ -297,7 +298,7 @@
 
   <header class="site-header">
     <div class="nav-inner">
-      <span class="logo">SweetBalance</span>
+      <a href="#hero"><img class="logo" src="assets/logo-green.png" alt="SweetBalance"></a>
       <nav class="nav-links">
         <a href="#product">시그니처 메뉴</a>
         <a href="#week-game">7일 식단 게임</a>
@@ -542,6 +543,7 @@
   </section>
 
   <footer>
+    <img class="foot-logo" src="assets/logo-white.png" alt="SweetBalance">
     <div>© 2026 SweetBalance. All rights reserved.</div>
     <div class="foot-tagline">Eat fresh, be your Best.</div>
   </footer>
