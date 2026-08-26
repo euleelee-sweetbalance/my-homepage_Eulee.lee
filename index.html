@@ -21,11 +21,13 @@
     --border: rgba(0,97,78,.15);
     --div: rgba(0,97,78,.09);
     --red: #D64545;
+    --overlay: rgba(15,23,20,.5);
 
     --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-2xl: 36px; --r-pill: 999px;
 
     --sh-sm: 0 2px 8px rgba(27,42,36,.07);
     --sh-md: 0 8px 24px rgba(27,42,36,.10);
+    --sh-lg: 0 16px 48px rgba(27,42,36,.18);
     --sh-brand: 0 10px 28px rgba(0,97,78,.22);
 
     --en: 'Montserrat', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -44,10 +46,13 @@
     -webkit-font-smoothing: antialiased;
     line-height: 1.6;
   }
+  body.no-scroll { overflow: hidden; }
   img, svg { display: block; max-width: 100%; }
   a { color: inherit; }
+  button { font-family: inherit; }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
   .word-keep { word-break: keep-all; }
+  .icon { width: 22px; height: 22px; display: block; }
 
   /* ---------- Buttons ---------- */
   .btn {
@@ -66,6 +71,8 @@
   .btn-ghost { background: transparent; color: var(--g); }
   .btn-ghost:hover { background: rgba(0,97,78,.06); }
   .btn:disabled { opacity: .4; cursor: default; box-shadow: none; }
+  .btn-block { width: 100%; }
+  .btn-sm { padding: 9px 16px; font-size: 12px; }
 
   /* ---------- Badges ---------- */
   .badge {
@@ -76,6 +83,7 @@
   .badge-best { background: var(--seed); color: #fff; }
   .badge-soft { background: rgba(0,97,78,.1); color: var(--g); }
   .badge-outline { background: #fff; color: var(--g); border: 1.5px solid var(--g); }
+  .badge-sale { background: var(--red); color: #fff; }
 
   /* ---------- Header ---------- */
   .site-header {
@@ -83,17 +91,32 @@
     background: rgba(253,255,230,.88); backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--div);
   }
-  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; gap: 20px; }
   .logo { height: 28px; width: auto; display: block; }
   .foot-logo { height: 24px; width: auto; display: block; margin: 0 auto 10px; opacity: .95; }
-  .nav-links { display: flex; gap: 28px; }
+  .nav-links { display: flex; gap: 26px; }
   .nav-links a { font-size: 14px; font-weight: 600; color: var(--char); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
   .nav-links a:hover { color: var(--g); }
-  @media (max-width: 720px) { .nav-links { display: none; } }
+  @media (max-width: 860px) { .nav-links { display: none; } }
+
+  .nav-actions { display: flex; align-items: center; gap: 6px; }
+  .icon-btn {
+    position: relative; width: 40px; height: 40px; border-radius: 999px; border: none;
+    background: transparent; color: var(--g); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background var(--dur-fast) var(--ease-out);
+  }
+  .icon-btn:hover { background: rgba(0,97,78,.08); }
+  .icon-count {
+    position: absolute; top: 1px; right: 1px; min-width: 17px; height: 17px; padding: 0 4px;
+    border-radius: 999px; background: var(--red); color: #fff; font-family: var(--en); font-weight: 700;
+    font-size: 10px; display: flex; align-items: center; justify-content: center; line-height: 1;
+    box-shadow: 0 0 0 2px var(--sw);
+  }
+  .icon-count.zero { display: none; }
 
   /* ---------- Hero ---------- */
   #hero {
-    position: relative; overflow: hidden; padding: 120px 24px 96px; text-align: center;
+    position: relative; overflow: hidden; padding: 108px 24px 88px; text-align: center;
     background-image:
       linear-gradient(180deg, rgba(253,255,230,.38) 0%, rgba(253,255,230,.78) 66%, var(--sw) 100%),
       url("assets/nature-bg.jpg");
@@ -123,7 +146,7 @@
   .hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
 
   /* ---------- Section shell ---------- */
-  .section { padding: 96px 24px; }
+  .section { padding: 88px 24px; }
   .section-alt { background: var(--paper); }
   .section-eyebrow {
     font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
@@ -134,61 +157,170 @@
     letter-spacing: -.02em; color: var(--ink); text-align: center; margin-bottom: 14px;
   }
   .section-sub {
-    font-size: 16px; color: var(--char); text-align: center; max-width: 520px;
-    margin: 0 auto 56px; line-height: 1.75;
+    font-size: 16px; color: var(--char); text-align: center; max-width: 560px;
+    margin: 0 auto 44px; line-height: 1.75;
   }
 
-  /* ---------- Product ---------- */
-  .product-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
-    max-width: 980px; margin: 0 auto;
+  /* ---------- Coupon strip ---------- */
+  .coupon-strip {
+    max-width: 980px; margin: 0 auto 40px; background: var(--g); color: var(--sw);
+    border-radius: var(--r-xl); padding: 20px 28px; display: flex; align-items: center;
+    justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: var(--sh-brand);
   }
-  @media (max-width: 860px) { .product-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .coupon-strip-text { display: flex; align-items: center; gap: 12px; }
+  .coupon-strip-text .icon { width: 26px; height: 26px; color: var(--sw); flex-shrink: 0; }
+  .coupon-strip-title { font-weight: 700; font-size: 15px; }
+  .coupon-strip-sub { font-size: 12px; opacity: .78; margin-top: 2px; }
+  .coupon-strip .btn-secondary { border-color: var(--sw); color: var(--sw); }
+  .coupon-strip .btn-secondary:hover { background: rgba(255,255,255,.12); }
 
-  .plate {
-    position: relative; width: 300px; height: 300px; margin: 0 auto;
-    border-radius: 50%; box-shadow: var(--sh-md);
-    background: radial-gradient(circle at 35% 30%, #EEF6DE, #CFE3B0 62%, #A9C983);
-    display: flex; align-items: center; justify-content: center;
+  /* ---------- Shop: tabs ---------- */
+  .tab-bar {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 40px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px;
   }
-  .plate-center { font-size: 76px; }
-  .ring-item {
-    position: absolute; font-size: 32px; top: 50%; left: 50%;
-    transform: rotate(calc(60deg * var(--i))) translate(122px) rotate(calc(-60deg * var(--i)));
+  .tab-btn {
+    flex-shrink: 0; border: 1.5px solid var(--border); background: #fff; color: var(--char);
+    font-family: var(--kr); font-weight: 600; font-size: 14px; padding: 10px 20px;
+    border-radius: var(--r-pill); cursor: pointer; transition: all var(--dur-fast) var(--ease-out);
   }
+  .tab-btn:hover { border-color: var(--g); color: var(--g); }
+  .tab-btn.active { background: var(--g); border-color: var(--g); color: var(--sw); }
 
-  .product-card { }
-  .product-badges { display: flex; gap: 8px; margin-bottom: 14px; }
-  .product-name { font-family: var(--en); font-weight: 700; font-size: 28px; color: var(--ink); }
-  .product-name-kr { font-size: 15px; color: var(--slate); margin-top: 4px; }
-  .product-desc { font-size: 15px; color: var(--char); line-height: 1.75; margin-top: 16px; }
-  .product-stats {
-    display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; font-size: 13px;
-    color: var(--g); font-weight: 700; font-family: var(--en);
+  /* ---------- Shop: product grid ---------- */
+  .shop-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px;
   }
-  .product-stats span { display: flex; align-items: center; gap: 6px; }
-  .product-price { font-family: var(--en); font-weight: 800; font-size: 26px; color: var(--g); margin-top: 20px; }
-  .product-ctas { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
-
-  .mini-cards { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 56px; }
-  .mini-card {
+  .shop-card {
     background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
-    overflow: hidden; width: 190px; box-shadow: var(--sh-sm);
+    overflow: hidden; box-shadow: var(--sh-sm); display: flex; flex-direction: column;
+    transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
   }
-  .mini-card-visual {
-    height: 120px; display: flex; align-items: center; justify-content: center;
-    font-size: 48px; position: relative;
+  .shop-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+  .shop-card-visual {
+    position: relative; height: 168px; display: flex; align-items: center; justify-content: center;
+    font-size: 56px; overflow: hidden;
   }
-  .mini-card-body { padding: 14px; }
-  .mini-card-name { font-family: var(--en); font-weight: 600; font-size: 13px; color: var(--ink); }
-  .mini-card-sub { font-size: 11px; color: var(--slate); margin: 3px 0 8px; }
-  .mini-card-stat { font-size: 11px; color: var(--slate); }
-  .mini-card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-  .mini-card-price { font-family: var(--en); font-weight: 700; font-size: 14px; color: var(--g); }
-  .plus-btn {
-    width: 26px; height: 26px; border-radius: 999px; background: var(--g); color: var(--sw);
-    border: none; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer;
+  .shop-card-visual img { width: 100%; height: 100%; object-fit: cover; }
+  .shop-card-badges { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .wish-btn {
+    position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 999px;
+    background: rgba(255,255,255,.9); border: none; color: var(--slate); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+    transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
   }
+  .wish-btn:hover { transform: scale(1.08); }
+  .wish-btn.active { color: var(--red); }
+  .shop-card-body { padding: 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .shop-card-name { font-family: var(--en); font-weight: 700; font-size: 15px; color: var(--ink); }
+  .shop-card-kr { font-size: 12.5px; color: var(--slate); }
+  .shop-card-stat { font-size: 11px; color: var(--slate); margin-top: 2px; }
+  .shop-card-foot { margin-top: auto; padding-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .shop-card-price { display: flex; flex-direction: column; gap: 2px; }
+  .price-original { font-size: 11px; color: var(--slate); text-decoration: line-through; }
+  .price-now { display: flex; align-items: baseline; gap: 6px; }
+  .price-discount { font-family: var(--en); font-weight: 800; font-size: 13px; color: var(--red); }
+  .price-value { font-family: var(--en); font-weight: 800; font-size: 16px; color: var(--g); }
+  .add-btn {
+    height: 34px; padding: 0 16px; border-radius: 999px; background: var(--g); color: var(--sw);
+    border: none; font-family: var(--en); font-weight: 700; font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .add-btn:hover { background: var(--g2); transform: translateY(-1px); }
+  .add-btn:active { transform: scale(.96); }
+  .shop-empty { text-align: center; color: var(--slate); font-size: 14px; padding: 40px 0; display: none; }
+  .shop-empty.visible { display: block; }
+
+  /* ---------- Overlay / Drawer ---------- */
+  .overlay {
+    position: fixed; inset: 0; background: var(--overlay); z-index: 200; opacity: 0; visibility: hidden;
+    transition: opacity var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .overlay.open { opacity: 1; visibility: visible; }
+
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(420px, 100%); background: #fff; z-index: 201;
+    display: flex; flex-direction: column; box-shadow: var(--sh-lg);
+    transform: translateX(100%); transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    display: flex; align-items: center; justify-content: space-between; padding: 20px 22px;
+    border-bottom: 1px solid var(--div);
+  }
+  .drawer-title { font-family: var(--en); font-weight: 800; font-size: 18px; color: var(--ink); }
+  .drawer-close {
+    width: 34px; height: 34px; border-radius: 999px; border: none; background: transparent;
+    color: var(--char); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .drawer-close:hover { background: rgba(0,97,78,.08); }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 18px 22px; }
+  .drawer-foot { padding: 18px 22px 22px; border-top: 1px solid var(--div); }
+
+  /* Cart items */
+  .cart-empty { text-align: center; color: var(--slate); font-size: 14px; padding: 60px 0; }
+  .cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--div); }
+  .cart-item-visual {
+    width: 64px; height: 64px; border-radius: var(--r-md); background: var(--paper); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 28px; overflow: hidden;
+  }
+  .cart-item-visual img { width: 100%; height: 100%; object-fit: cover; }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .cart-item-kr { font-size: 11.5px; color: var(--slate); margin-top: 2px; }
+  .cart-item-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .qty-stepper { display: flex; align-items: center; border: 1px solid var(--border); border-radius: var(--r-pill); overflow: hidden; }
+  .qty-stepper button {
+    width: 26px; height: 26px; border: none; background: #fff; color: var(--g); cursor: pointer; font-size: 13px; font-weight: 700;
+  }
+  .qty-stepper button:hover { background: rgba(0,97,78,.08); }
+  .qty-stepper span { width: 28px; text-align: center; font-family: var(--en); font-weight: 700; font-size: 12.5px; }
+  .cart-item-price { font-family: var(--en); font-weight: 700; font-size: 13.5px; color: var(--g); }
+  .cart-item-remove {
+    border: none; background: transparent; color: var(--slate); font-size: 11px; cursor: pointer;
+    text-decoration: underline; margin-top: 6px;
+  }
+  .cart-item-remove:hover { color: var(--red); }
+
+  .cart-coupon { margin-top: 4px; margin-bottom: 16px; }
+  .cart-coupon label { font-size: 12px; font-weight: 700; color: var(--char); display: block; margin-bottom: 8px; }
+  .cart-coupon select {
+    width: 100%; padding: 11px 14px; border-radius: var(--r-md); border: 1.5px solid var(--border);
+    font-family: var(--kr); font-size: 13px; color: var(--ink); background: #fff;
+  }
+  .cart-coupon-hint { font-size: 11px; color: var(--slate); margin-top: 6px; }
+
+  .totals-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--char); margin-bottom: 8px; }
+  .totals-row.discount { color: var(--red); }
+  .totals-row.grand { font-size: 16px; font-weight: 800; color: var(--ink); padding-top: 10px; border-top: 1px solid var(--div); margin-top: 6px; }
+  .totals-row.grand .val { font-family: var(--en); color: var(--g); }
+
+  /* Coupon drawer */
+  .coupon-card {
+    border: 1.5px dashed var(--border); border-radius: var(--r-lg); padding: 16px 18px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px; justify-content: space-between;
+  }
+  .coupon-card-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .coupon-card-desc { font-size: 12px; color: var(--slate); margin-top: 4px; word-break: keep-all; }
+  .coupon-card-min { font-size: 11px; color: var(--seed); margin-top: 6px; font-weight: 700; }
+  .claim-btn {
+    flex-shrink: 0; padding: 9px 16px; border-radius: 999px; font-family: var(--en); font-weight: 700;
+    font-size: 12px; border: 1.5px solid var(--g); background: #fff; color: var(--g); cursor: pointer;
+    transition: all var(--dur-fast) var(--ease-out);
+  }
+  .claim-btn:hover { background: rgba(0,97,78,.08); }
+  .claim-btn.claimed { background: var(--mist); border-color: var(--mist); color: var(--slate); cursor: default; }
+
+  /* Toast */
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 12px); z-index: 300;
+    background: var(--ink); color: var(--sw); padding: 13px 22px; border-radius: var(--r-pill);
+    font-size: 13px; display: flex; align-items: center; gap: 12px; box-shadow: var(--sh-lg);
+    opacity: 0; visibility: hidden; transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  .toast a { color: var(--seed); font-weight: 700; text-decoration: underline; }
 
   /* ---------- Week Game (star feature) ---------- */
   #week-game { background: var(--g); color: var(--sw); }
@@ -294,9 +426,13 @@
   .target-pill { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); padding: 8px 16px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; }
 
   footer {
-    background: #004F40; color: rgba(253,255,230,.65); padding: 28px 24px; text-align: center; font-size: 12px;
+    background: #004F40; color: rgba(253,255,230,.65); padding: 40px 24px 28px; text-align: center; font-size: 12px;
   }
-  footer .foot-tagline { font-family: var(--en); font-style: italic; margin-top: 6px; opacity: .8; }
+  .foot-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+  .foot-links a { font-size: 12px; color: rgba(253,255,230,.8); text-decoration: none; }
+  .foot-links a:hover { color: var(--sw); text-decoration: underline; }
+  .foot-info { font-size: 11.5px; opacity: .7; margin-top: 10px; line-height: 1.8; }
+  footer .foot-tagline { font-family: var(--en); font-style: italic; margin-top: 10px; opacity: .8; }
 </style>
 </head>
 <body>
@@ -305,11 +441,21 @@
     <div class="nav-inner">
       <a href="#hero"><img class="logo" src="assets/logo-green.png" alt="SweetBalance"></a>
       <nav class="nav-links">
-        <a href="#product">시그니처 메뉴</a>
+        <a href="#shop">전체 상품</a>
         <a href="#week-game">7일 식단 게임</a>
         <a href="#brand">브랜드</a>
       </nav>
-      <a class="btn btn-primary" href="#week-game" style="padding:10px 20px;font-size:13px;">식단 뽑으러 가기</a>
+      <div class="nav-actions">
+        <button class="icon-btn" type="button" aria-label="쿠폰함" onclick="SB.openCoupons()">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a1.5 1.5 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a1.5 1.5 0 0 0 0-3V9Z"/><path d="M9 7v10" stroke-dasharray="2 2.2"/></svg>
+          <span class="icon-count zero" id="couponCount">0</span>
+        </button>
+        <button class="icon-btn" type="button" aria-label="장바구니" onclick="SB.openCart()">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 8Z"/><path d="M9 8a3 3 0 1 1 6 0"/></svg>
+          <span class="icon-count zero" id="cartCount">0</span>
+        </button>
+        <a class="btn btn-primary" href="#week-game" style="padding:10px 20px;font-size:13px;">식단 뽑으러 가기</a>
+      </div>
     </div>
   </header>
 
@@ -321,7 +467,7 @@
       <p class="hero-kr word-keep">혼자 사는 날에도, 오늘 한 끼는 제대로.</p>
       <p class="hero-sub word-keep">장 보고 다듬고 요리할 시간이 없는 날에도 괜찮아요.<br>스윗밸런스가 신선한 재료로 오늘의 균형을 채워드릴게요.</p>
       <div class="hero-ctas">
-        <a class="btn btn-primary" href="#product">시그니처 콥샐러드 보기</a>
+        <a class="btn btn-primary" href="#shop">전체 상품 보러가기</a>
         <a class="btn btn-secondary" href="#week-game">7일 식단 뽑기</a>
       </div>
       <div class="hero-badges">
@@ -333,84 +479,28 @@
     </div>
   </section>
 
-  <!-- ===== Product ===== -->
-  <section id="product" class="section">
+  <!-- ===== Shop: Coupons + Category tabs + Product grid ===== -->
+  <section id="shop" class="section">
     <div class="wrap">
-      <div class="section-eyebrow">Our Signature</div>
-      <h2 class="section-title">오늘의 초록, 콥샐러드</h2>
-      <p class="section-sub word-keep">생생한 초록빛 재료를 그대로 담았어요. 스윗밸런스를 처음 만난다면, 여기서 시작하세요.</p>
+      <div class="section-eyebrow">Shop</div>
+      <h2 class="section-title">스윗밸런스 전체 상품</h2>
+      <p class="section-sub word-keep">샐러드부터 도시락 세트, 다이어트식, 정기구독까지. 카테고리별로 오늘의 균형을 골라보세요.</p>
 
-      <div class="product-grid">
-        <div class="plate" aria-hidden="true">
-          <span class="ring-item" style="--i:0">🍅</span>
-          <span class="ring-item" style="--i:1">🥒</span>
-          <span class="ring-item" style="--i:2">🫑</span>
-          <span class="ring-item" style="--i:3">🫘</span>
-          <span class="ring-item" style="--i:4">🥑</span>
-          <span class="ring-item" style="--i:5">🍗</span>
-          <div class="plate-center">🥗</div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-badges">
-            <span class="badge badge-new">NEW</span>
-            <span class="badge badge-soft">저당</span>
-            <span class="badge badge-soft">고단백</span>
-          </div>
-          <div class="product-name">Signature Cobb Salad</div>
-          <div class="product-name-kr">시그니처 콥샐러드</div>
-          <p class="product-desc word-keep">닭가슴살 120g · 신선 채소 5종 · 저당 발사믹 드레싱.<br>한 그릇에 담은 오늘의 균형이에요.</p>
-          <div class="product-stats">
-            <span>🔥 420kcal</span>
-            <span>💪 단백질 23g</span>
-            <span>🧂 나트륨 610mg</span>
-          </div>
-          <div class="product-price">₩9,900</div>
-          <div class="product-ctas">
-            <button class="btn btn-primary" type="button">메뉴 자세히 보기</button>
-            <button class="btn btn-ghost" type="button">♡ 찜하기</button>
+      <div class="coupon-strip">
+        <div class="coupon-strip-text">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a1.5 1.5 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a1.5 1.5 0 0 0 0-3V9Z"/><path d="M9 7v10" stroke-dasharray="2 2.2"/></svg>
+          <div>
+            <div class="coupon-strip-title">지금 쿠폰 받고 더 저렴하게!</div>
+            <div class="coupon-strip-sub">신규가입 10% 할인부터 무료배송까지, 받아둔 쿠폰은 장바구니에서 바로 적용돼요.</div>
           </div>
         </div>
+        <button class="btn btn-secondary" type="button" onclick="SB.openCoupons()">쿠폰함 열기</button>
       </div>
 
-      <div class="mini-cards">
-        <div class="mini-card">
-          <div class="mini-card-visual" style="background:linear-gradient(135deg,#D6ECF5,#9CCBE0);">🐟</div>
-          <div class="mini-card-body">
-            <div class="mini-card-name">Salmon Poke Bowl</div>
-            <div class="mini-card-sub">연어 포케 보울</div>
-            <div class="mini-card-stat">390kcal · 단백질 27g</div>
-            <div class="mini-card-foot">
-              <span class="mini-card-price">₩11,900</span>
-              <button class="plus-btn" type="button" aria-label="담기">+</button>
-            </div>
-          </div>
-        </div>
-        <div class="mini-card">
-          <div class="mini-card-visual" style="background:linear-gradient(135deg,#EFE6D2,#D8C39A);">🍱</div>
-          <div class="mini-card-body">
-            <div class="mini-card-name">Tofu Steak Set</div>
-            <div class="mini-card-sub">두부 스테이크 정식</div>
-            <div class="mini-card-stat">330kcal · 단백질 21g</div>
-            <div class="mini-card-foot">
-              <span class="mini-card-price">₩8,900</span>
-              <button class="plus-btn" type="button" aria-label="담기">+</button>
-            </div>
-          </div>
-        </div>
-        <div class="mini-card">
-          <div class="mini-card-visual" style="background:linear-gradient(135deg,#F1EAD8,#DCC98B);">🥣</div>
-          <div class="mini-card-body">
-            <div class="mini-card-name">Greek Yogurt Bowl</div>
-            <div class="mini-card-sub">그릭요거트 그래놀라 보울</div>
-            <div class="mini-card-stat">260kcal · 단백질 19g</div>
-            <div class="mini-card-foot">
-              <span class="mini-card-price">₩6,900</span>
-              <button class="plus-btn" type="button" aria-label="담기">+</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="tab-bar" id="tabBar"></div>
+
+      <div class="shop-grid" id="shopGrid"></div>
+      <p class="shop-empty" id="shopEmpty">해당 카테고리에 상품이 없어요.</p>
     </div>
   </section>
 
@@ -494,7 +584,7 @@
             <div class="game-summary" id="gameSummary"></div>
             <div class="game-result-ctas">
               <button class="btn btn-ghost" type="button" onclick="SB.resetGame()">다시 뽑기</button>
-              <a class="btn btn-secondary" href="#product">전체 메뉴 보러가기</a>
+              <a class="btn btn-secondary" href="#shop">전체 메뉴 보러가기</a>
             </div>
           </div>
         </div>
@@ -547,13 +637,453 @@
 
   <footer>
     <img class="foot-logo" src="assets/logo-white.png" alt="SweetBalance">
+    <div class="foot-links">
+      <a href="#shop">전체 상품</a>
+      <a href="#" onclick="SB.openCoupons(); return false;">쿠폰함</a>
+      <a href="#" onclick="SB.openCart(); return false;">장바구니</a>
+      <a href="#brand">브랜드 소개</a>
+    </div>
     <div>© 2026 SweetBalance. All rights reserved.</div>
+    <div class="foot-info">고객센터 1522-0390 · 평일 09:00–17:00 (점심 12:00–13:00) · 이 페이지는 데모용 쇼핑몰 UI입니다.</div>
     <div class="foot-tagline">Eat fresh, be your Best.</div>
   </footer>
 
+  <!-- ===== Overlay ===== -->
+  <div class="overlay" id="overlay" onclick="SB.closeAll()"></div>
+
+  <!-- ===== Cart drawer ===== -->
+  <div class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-title">장바구니</div>
+      <button class="drawer-close" type="button" aria-label="닫기" onclick="SB.closeAll()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="cartBody"></div>
+    <div class="drawer-foot" id="cartFoot"></div>
+  </div>
+
+  <!-- ===== Coupon drawer ===== -->
+  <div class="drawer" id="couponDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-title">쿠폰함</div>
+      <button class="drawer-close" type="button" aria-label="닫기" onclick="SB.closeAll()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="couponBody"></div>
+  </div>
+
+  <!-- ===== Toast ===== -->
+  <div class="toast" id="toast"></div>
+
   <script>
   (function () {
-    // ---- 7-day meal recommendation game ----
+    /* ===================== Shop catalog ===================== */
+    var CATEGORIES = [
+      { key: 'all', label: '전체' },
+      { key: 'salad', label: '샐러드' },
+      { key: 'lunchbox', label: '도시락 세트' },
+      { key: 'diet', label: '다이어트식' },
+      { key: 'snack', label: '스낵' },
+      { key: 'drink', label: '음료' },
+      { key: 'subscribe', label: '정기구독' }
+    ];
+
+    var CATALOG = [
+      { id: 'cobb-salad', cat: 'salad', img: '🥗', badges: ['new', 'diet'], name: 'Signature Cobb Salad', kr: '시그니처 콥샐러드', stat: '420kcal · 단백질 23g', price: 9900 },
+      { id: 'salmon-poke', cat: 'salad', img: '🐟', badges: ['best'], name: 'Salmon Poke Bowl', kr: '연어 포케 보울', stat: '390kcal · 단백질 27g', price: 11900 },
+      { id: 'yogurt-bowl', cat: 'salad', img: '🥣', badges: [], name: 'Greek Yogurt Bowl', kr: '그릭요거트 그래놀라 보울', stat: '260kcal · 단백질 19g', price: 6900 },
+      { id: 'tofu-steak', cat: 'lunchbox', img: '🍱', badges: [], name: 'Tofu Steak Set', kr: '두부 스테이크 정식', stat: '330kcal · 단백질 21g', price: 8900 },
+      { id: 'chicken-steak', cat: 'lunchbox', img: '🍗', badges: ['diet'], name: 'Low-Sugar Chicken Steak', kr: '저당 닭가슴살 스테이크', stat: '280kcal · 단백질 32g', price: 7900 },
+      { id: 'mushroom-risotto', cat: 'lunchbox', img: '🍄', badges: [], name: 'Low-Sugar Mushroom Risotto', kr: '저당 버섯 리조또', stat: '300kcal · 단백질 16g', price: 9500 },
+      {
+        id: 'basil-wrap-party', cat: 'lunchbox', img: 'assets/product-basil-wrap-party.png', badges: ['best', 'sale'],
+        name: 'Basil Pesto Salad Wrap Party Pack', kr: '바질페스토 샐러드랩 파티팩', stat: '4인분 · 모임/파티용', price: 24900, originalPrice: 29900
+      },
+      {
+        id: 'basil-wrap-single', cat: 'snack', img: 'assets/product-basil-wrap-single.png', badges: ['new'],
+        name: 'Basil Pesto Salad Wrap', kr: '바질페스토 샐러드랩', stat: '340kcal · 단백질 15g', price: 6900
+      },
+      { id: 'hummus-bowl', cat: 'diet', img: '🫘', badges: ['diet'], name: 'Chickpea Hummus Bowl', kr: '병아리콩 후무스 보울', stat: '350kcal · 단백질 18g', price: 8500 },
+      { id: 'quinoa-bowl', cat: 'diet', img: '🌾', badges: ['diet'], name: 'Quinoa Veggie Bowl', kr: '퀴노아 채소 보울', stat: '310kcal · 단백질 14g', price: 8300 },
+      { id: 'nut-mix', cat: 'snack', img: '🥜', badges: [], name: 'Low-Sugar Nut Mix', kr: '저당 견과 믹스', stat: '150kcal · 소분 스낵', price: 4900 },
+      { id: 'granola-bar', cat: 'snack', img: '🍫', badges: [], name: 'Low-Sugar Granola Bar', kr: '저당 그래놀라바', stat: '130kcal · 1개입', price: 3300 },
+      { id: 'green-juice', cat: 'drink', img: '🥤', badges: ['new'], name: 'Cold-Pressed Green Juice', kr: '콜드프레스 그린주스', stat: '90kcal · 채소 5종', price: 5900 },
+      { id: 'protein-smoothie', cat: 'drink', img: '🧃', badges: ['diet'], name: 'Low-Sugar Protein Smoothie', kr: '저당 프로틴 스무디', stat: '160kcal · 단백질 20g', price: 6200 },
+      {
+        id: 'week-subscribe', cat: 'subscribe', img: '🗓️', badges: ['best', 'sale'],
+        name: '7-Day Balance Subscription', kr: '7일 균형 식단 구독팩', stat: '주 7끼 · 새벽배송', price: 59000, originalPrice: 69000
+      },
+      {
+        id: 'month-subscribe', cat: 'subscribe', img: '📦', badges: ['sale'],
+        name: '4-Week Subscription Plan', kr: '4주 정기구독 플랜', stat: '4주 28끼 · 새벽배송', price: 219000, originalPrice: 249000
+      }
+    ];
+
+    var BADGE_LABEL = { new: 'NEW', best: 'BEST', diet: '저당', sale: 'SALE' };
+    var BADGE_CLASS = { new: 'badge-new', best: 'badge-best', diet: 'badge-soft', sale: 'badge-sale' };
+
+    /* ===================== Coupons ===================== */
+    var COUPONS = [
+      { id: 'welcome10', title: '신규 회원 10% 할인', desc: '전 상품 10% 할인 (최대 5,000원 할인)', minOrder: 10000, type: 'percent', value: 10, cap: 5000 },
+      { id: 'first3000', title: '첫 구매 3,000원 즉시할인', desc: '첫 구매 시 주문금액에서 바로 할인돼요', minOrder: 15000, type: 'amount', value: 3000 },
+      { id: 'freeship', title: '무료배송 쿠폰', desc: '배송비 3,000원이 무료가 돼요', minOrder: 20000, type: 'freeship', value: 3000 },
+      { id: 'sub5000', title: '정기구독 5,000원 할인', desc: '정기구독 상품 구매 시 5,000원 할인', minOrder: 50000, type: 'amount', value: 5000 }
+    ];
+
+    var SHIP_FEE = 3000;
+    var FREE_SHIP_MIN = 40000;
+
+    /* ===================== State ===================== */
+    var cart = {};            // { productId: qty }
+    var claimed = [];         // [couponId]
+    var appliedCoupon = null; // couponId or null
+    var activeCat = 'all';
+    var wished = {};
+
+    function loadState() {
+      try {
+        cart = JSON.parse(localStorage.getItem('sb_cart') || '{}');
+        claimed = JSON.parse(localStorage.getItem('sb_coupons') || '[]');
+        appliedCoupon = localStorage.getItem('sb_applied_coupon') || null;
+        wished = JSON.parse(localStorage.getItem('sb_wished') || '{}');
+      } catch (e) { cart = {}; claimed = []; appliedCoupon = null; wished = {}; }
+    }
+    function saveState() {
+      try {
+        localStorage.setItem('sb_cart', JSON.stringify(cart));
+        localStorage.setItem('sb_coupons', JSON.stringify(claimed));
+        localStorage.setItem('sb_applied_coupon', appliedCoupon || '');
+        localStorage.setItem('sb_wished', JSON.stringify(wished));
+      } catch (e) { /* storage unavailable */ }
+    }
+
+    function formatWon(n) { return '₩' + Math.round(n).toLocaleString('ko-KR'); }
+    function findProduct(id) { return CATALOG.filter(function (p) { return p.id === id; })[0]; }
+    function findCoupon(id) { return COUPONS.filter(function (c) { return c.id === id; })[0]; }
+    function cartCount() {
+      var n = 0;
+      Object.keys(cart).forEach(function (id) { n += cart[id]; });
+      return n;
+    }
+
+    /* ===================== Rendering: tabs + grid ===================== */
+    function renderTabs() {
+      var bar = document.getElementById('tabBar');
+      bar.innerHTML = '';
+      CATEGORIES.forEach(function (c) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tab-btn' + (c.key === activeCat ? ' active' : '');
+        btn.textContent = c.label;
+        btn.setAttribute('data-cat', c.key);
+        btn.onclick = function () { setCategory(c.key); };
+        bar.appendChild(btn);
+      });
+    }
+
+    function setCategory(key) {
+      activeCat = key;
+      document.querySelectorAll('.tab-btn').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-cat') === key);
+      });
+      renderGrid();
+    }
+
+    function visualMarkup(p) {
+      if (/\.(png|jpg|jpeg|webp)$/i.test(p.img)) {
+        return '<img src="' + p.img + '" alt="' + p.kr + '">';
+      }
+      return p.img;
+    }
+
+    function priceMarkup(p) {
+      if (p.originalPrice && p.originalPrice > p.price) {
+        var pct = Math.round((1 - p.price / p.originalPrice) * 100);
+        return (
+          '<div class="shop-card-price">' +
+            '<span class="price-original">' + formatWon(p.originalPrice) + '</span>' +
+            '<span class="price-now"><span class="price-discount">' + pct + '%</span><span class="price-value">' + formatWon(p.price) + '</span></span>' +
+          '</div>'
+        );
+      }
+      return '<div class="shop-card-price"><span class="price-now"><span class="price-value">' + formatWon(p.price) + '</span></span></div>';
+    }
+
+    function renderGrid() {
+      var grid = document.getElementById('shopGrid');
+      var empty = document.getElementById('shopEmpty');
+      var list = activeCat === 'all' ? CATALOG : CATALOG.filter(function (p) { return p.cat === activeCat; });
+
+      grid.innerHTML = '';
+      empty.classList.toggle('visible', list.length === 0);
+
+      list.forEach(function (p) {
+        var card = document.createElement('div');
+        card.className = 'shop-card';
+        var badgesHtml = (p.badges || []).map(function (b) {
+          return '<span class="badge ' + BADGE_CLASS[b] + '">' + BADGE_LABEL[b] + '</span>';
+        }).join('');
+        var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
+
+        card.innerHTML =
+          '<div class="shop-card-visual"' + (isImg ? '' : ' style="background:linear-gradient(135deg,#EEF6DE,#CFE3B0);"') + '>' +
+            visualMarkup(p) +
+            '<div class="shop-card-badges">' + badgesHtml + '</div>' +
+            '<button class="wish-btn' + (wished[p.id] ? ' active' : '') + '" type="button" aria-label="찜하기" data-wish="' + p.id + '">♡</button>' +
+          '</div>' +
+          '<div class="shop-card-body">' +
+            '<div class="shop-card-name">' + p.name + '</div>' +
+            '<div class="shop-card-kr">' + p.kr + '</div>' +
+            '<div class="shop-card-stat">' + p.stat + '</div>' +
+            '<div class="shop-card-foot">' +
+              priceMarkup(p) +
+              '<button class="add-btn" type="button" data-add="' + p.id + '">+ 담기</button>' +
+            '</div>' +
+          '</div>';
+
+        grid.appendChild(card);
+      });
+
+      grid.querySelectorAll('[data-add]').forEach(function (btn) {
+        btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-add')); });
+      });
+      grid.querySelectorAll('[data-wish]').forEach(function (btn) {
+        btn.addEventListener('click', function () { toggleWish(btn.getAttribute('data-wish'), btn); });
+      });
+    }
+
+    function toggleWish(id, btn) {
+      wished[id] = !wished[id];
+      btn.classList.toggle('active', wished[id]);
+      btn.textContent = wished[id] ? '♥' : '♡';
+      saveState();
+    }
+
+    /* ===================== Cart ===================== */
+    function addToCart(id) {
+      cart[id] = (cart[id] || 0) + 1;
+      saveState();
+      updateBadges();
+      renderCart();
+      var p = findProduct(id);
+      showToast((p ? p.kr : '상품') + '을(를) 담았어요.', '장바구니 보기', openCart);
+    }
+
+    function changeQty(id, delta) {
+      if (!cart[id]) return;
+      cart[id] += delta;
+      if (cart[id] <= 0) delete cart[id];
+      saveState();
+      updateBadges();
+      renderCart();
+    }
+
+    function removeItem(id) {
+      delete cart[id];
+      saveState();
+      updateBadges();
+      renderCart();
+    }
+
+    function subtotal() {
+      var sum = 0;
+      Object.keys(cart).forEach(function (id) {
+        var p = findProduct(id);
+        if (p) sum += p.price * cart[id];
+      });
+      return sum;
+    }
+
+    function couponDiscount(sub) {
+      if (!appliedCoupon) return { amount: 0, freeship: false };
+      var c = findCoupon(appliedCoupon);
+      if (!c || sub < c.minOrder) return { amount: 0, freeship: false };
+      if (c.type === 'percent') return { amount: Math.min(sub * c.value / 100, c.cap || Infinity), freeship: false };
+      if (c.type === 'amount') return { amount: c.value, freeship: false };
+      if (c.type === 'freeship') return { amount: 0, freeship: true };
+      return { amount: 0, freeship: false };
+    }
+
+    function renderCart() {
+      var body = document.getElementById('cartBody');
+      var foot = document.getElementById('cartFoot');
+      var ids = Object.keys(cart);
+
+      if (ids.length === 0) {
+        body.innerHTML = '<div class="cart-empty">장바구니가 비어있어요.<br>마음에 드는 메뉴를 담아보세요 🥗</div>';
+        foot.innerHTML = '';
+        return;
+      }
+
+      var html = '';
+      ids.forEach(function (id) {
+        var p = findProduct(id);
+        if (!p) return;
+        var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
+        html +=
+          '<div class="cart-item">' +
+            '<div class="cart-item-visual">' + (isImg ? '<img src="' + p.img + '" alt="' + p.kr + '">' : p.img) + '</div>' +
+            '<div class="cart-item-info">' +
+              '<div class="cart-item-name">' + p.name + '</div>' +
+              '<div class="cart-item-kr">' + p.kr + '</div>' +
+              '<div class="cart-item-row">' +
+                '<div class="qty-stepper">' +
+                  '<button type="button" data-qty="' + id + '" data-delta="-1">−</button>' +
+                  '<span>' + cart[id] + '</span>' +
+                  '<button type="button" data-qty="' + id + '" data-delta="1">+</button>' +
+                '</div>' +
+                '<span class="cart-item-price">' + formatWon(p.price * cart[id]) + '</span>' +
+              '</div>' +
+              '<button class="cart-item-remove" type="button" data-remove="' + id + '">삭제</button>' +
+            '</div>' +
+          '</div>';
+      });
+      body.innerHTML = html;
+
+      var sub = subtotal();
+      var discount = couponDiscount(sub);
+      var ship = (sub - discount.amount >= FREE_SHIP_MIN || discount.freeship) ? 0 : SHIP_FEE;
+      var total = Math.max(sub - discount.amount, 0) + ship;
+
+      var eligible = claimed.filter(function (id) {
+        var c = findCoupon(id);
+        return c && sub >= c.minOrder;
+      });
+
+      var options = '<option value="">쿠폰 선택 안 함</option>' + eligible.map(function (id) {
+        var c = findCoupon(id);
+        return '<option value="' + id + '"' + (appliedCoupon === id ? ' selected' : '') + '>' + c.title + '</option>';
+      }).join('');
+
+      foot.innerHTML =
+        '<div class="cart-coupon">' +
+          '<label for="couponSelect">쿠폰 적용</label>' +
+          '<select id="couponSelect">' + options + '</select>' +
+          (claimed.length === 0 ? '<div class="cart-coupon-hint">보유한 쿠폰이 없어요. <a href="#" id="goCoupons" style="color:var(--g);font-weight:700;">쿠폰함에서 받기 →</a></div>' :
+            (eligible.length === 0 ? '<div class="cart-coupon-hint">받은 쿠폰이 있지만 최소 주문금액 조건을 아직 만족하지 않았어요.</div>' : '')) +
+        '</div>' +
+        '<div class="totals-row"><span>상품금액</span><span>' + formatWon(sub) + '</span></div>' +
+        (discount.amount > 0 ? '<div class="totals-row discount"><span>쿠폰 할인</span><span>−' + formatWon(discount.amount) + '</span></div>' : '') +
+        '<div class="totals-row"><span>배송비</span><span>' + (ship === 0 ? '무료' : formatWon(ship)) + '</span></div>' +
+        '<div class="totals-row grand"><span>결제 예정 금액</span><span class="val">' + formatWon(total) + '</span></div>' +
+        '<button class="btn btn-primary btn-block" type="button" id="checkoutBtn" style="margin-top:14px;">주문하기</button>';
+
+      var sel = document.getElementById('couponSelect');
+      if (sel) sel.addEventListener('change', function () { appliedCoupon = sel.value || null; saveState(); renderCart(); });
+
+      var goCoupons = document.getElementById('goCoupons');
+      if (goCoupons) goCoupons.addEventListener('click', function (e) { e.preventDefault(); openCoupons(); });
+
+      body.querySelectorAll('[data-qty]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          changeQty(btn.getAttribute('data-qty'), parseInt(btn.getAttribute('data-delta'), 10));
+        });
+      });
+      body.querySelectorAll('[data-remove]').forEach(function (btn) {
+        btn.addEventListener('click', function () { removeItem(btn.getAttribute('data-remove')); });
+      });
+
+      var checkoutBtn = document.getElementById('checkoutBtn');
+      if (checkoutBtn) checkoutBtn.addEventListener('click', checkout);
+    }
+
+    function checkout() {
+      if (Object.keys(cart).length === 0) return;
+      cart = {};
+      appliedCoupon = null;
+      saveState();
+      updateBadges();
+      renderCart();
+      closeAll();
+      showToast('주문이 접수되었어요. 신선하게 준비해서 보내드릴게요! 🥗');
+    }
+
+    /* ===================== Coupons drawer ===================== */
+    function renderCoupons() {
+      var body = document.getElementById('couponBody');
+      body.innerHTML = COUPONS.map(function (c) {
+        var isClaimed = claimed.indexOf(c.id) !== -1;
+        return (
+          '<div class="coupon-card">' +
+            '<div>' +
+              '<div class="coupon-card-title">' + c.title + '</div>' +
+              '<div class="coupon-card-desc word-keep">' + c.desc + '</div>' +
+              '<div class="coupon-card-min">' + formatWon(c.minOrder) + ' 이상 구매 시</div>' +
+            '</div>' +
+            '<button class="claim-btn' + (isClaimed ? ' claimed' : '') + '" type="button" data-claim="' + c.id + '"' + (isClaimed ? ' disabled' : '') + '>' +
+              (isClaimed ? '받음' : '받기') +
+            '</button>' +
+          '</div>'
+        );
+      }).join('');
+
+      body.querySelectorAll('[data-claim]').forEach(function (btn) {
+        btn.addEventListener('click', function () { claimCoupon(btn.getAttribute('data-claim')); });
+      });
+    }
+
+    function claimCoupon(id) {
+      if (claimed.indexOf(id) !== -1) return;
+      claimed.push(id);
+      saveState();
+      updateBadges();
+      renderCoupons();
+      renderCart();
+      var c = findCoupon(id);
+      showToast((c ? c.title : '쿠폰') + '을(를) 받았어요.');
+    }
+
+    /* ===================== Drawers / overlay ===================== */
+    function openCart() {
+      renderCart();
+      document.getElementById('overlay').classList.add('open');
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('couponDrawer').classList.remove('open');
+      document.body.classList.add('no-scroll');
+    }
+    function openCoupons() {
+      renderCoupons();
+      document.getElementById('overlay').classList.add('open');
+      document.getElementById('couponDrawer').classList.add('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.body.classList.add('no-scroll');
+    }
+    function closeAll() {
+      document.getElementById('overlay').classList.remove('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('couponDrawer').classList.remove('open');
+      document.body.classList.remove('no-scroll');
+    }
+
+    /* ===================== Header badges ===================== */
+    function updateBadges() {
+      var cCount = cartCount();
+      var cartEl = document.getElementById('cartCount');
+      cartEl.textContent = cCount;
+      cartEl.classList.toggle('zero', cCount === 0);
+
+      var couponEl = document.getElementById('couponCount');
+      var unused = claimed.length;
+      couponEl.textContent = unused;
+      couponEl.classList.toggle('zero', unused === 0);
+    }
+
+    /* ===================== Toast ===================== */
+    var toastTimer = null;
+    function showToast(msg, linkLabel, linkFn) {
+      var el = document.getElementById('toast');
+      el.innerHTML = msg + (linkLabel ? ' <a href="#" id="toastLink">' + linkLabel + '</a>' : '');
+      if (linkLabel && linkFn) {
+        document.getElementById('toastLink').addEventListener('click', function (e) { e.preventDefault(); linkFn(); });
+      }
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2600);
+    }
+
+    /* ===================== 7-day meal recommendation game ===================== */
     var MENU_POOL = [
       { emoji: '🥗', name: '시그니처 콥샐러드', kcal: 420, protein: 23 },
       { emoji: '🍗', name: '저당 닭가슴살 스테이크', kcal: 280, protein: 32 },
@@ -566,11 +1096,10 @@
     ];
     var DAY_LABELS = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
 
-    // 답변별로 가중치를 더 주는 메뉴 인덱스
     var BOOST = [
-      [[5, 3, 7], [4, 6, 2], [1, 2, 5]],   // Q1: 든든하게 / 가볍게 / 단백질
-      [[0, 2, 4], [3, 7, 5], [1, 5, 2]],   // Q2: 상큼한 채소 / 고소한 곡물 / 고단백
-      [[4, 6, 0], [1, 5, 2], [0, 3, 7]]    // Q3: 다이어트 / 근성장 / 잘챙겨먹기
+      [[5, 3, 7], [4, 6, 2], [1, 2, 5]],
+      [[0, 2, 4], [3, 7, 5], [1, 5, 2]],
+      [[4, 6, 0], [1, 5, 2], [0, 3, 7]]
     ];
 
     var answers = [];
@@ -584,11 +1113,8 @@
     }
 
     function setDots(step) {
-      // step: -1 (intro), 0,1,2 (questions)
       var dots = document.querySelectorAll('.game-dot');
-      dots.forEach(function (d, i) {
-        d.classList.toggle('active', i <= step);
-      });
+      dots.forEach(function (d, i) { d.classList.toggle('active', i <= step); });
     }
 
     function startGame() {
@@ -597,8 +1123,7 @@
       showScreen('q0');
     }
 
-    function answer(step, idx) {
-      // 시각 피드백
+    function answerGame(step, idx) {
       var qEl = document.querySelector('[data-screen="q' + step + '"]');
       var btns = qEl.querySelectorAll('.option-btn');
       btns.forEach(function (b, i) { b.classList.toggle('selected', i === idx); });
@@ -683,7 +1208,27 @@
       showScreen('intro');
     }
 
-    window.SB = { startGame: startGame, answer: answer, resetGame: resetGame };
+    /* ===================== Init ===================== */
+    document.addEventListener('DOMContentLoaded', function () {
+      loadState();
+      renderTabs();
+      renderGrid();
+      updateBadges();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAll();
+    });
+
+    window.SB = {
+      startGame: startGame,
+      answer: answerGame,
+      resetGame: resetGame,
+      addToCart: addToCart,
+      openCart: openCart,
+      openCoupons: openCoupons,
+      closeAll: closeAll
+    };
   })();
   </script>
 
