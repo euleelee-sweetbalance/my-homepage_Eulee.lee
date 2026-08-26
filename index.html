@@ -6,66 +6,215 @@
   <title>스윗밸런스 테스트 페이지</title>
   <style>
     :root {
-      --bg: #fdfcfa;
-      --fg: #1f2933;
-      --muted: #6b7280;
-      --accent: #e8734a;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #14171c;
-        --fg: #f3f4f6;
-        --muted: #9ca3af;
-        --accent: #ff9066;
-      }
+      --bg: #faf6f0;
+      --bg-soft: #f3ece1;
+      --fg: #2b2420;
+      --muted: #8a7d70;
+      --accent: #d98a5f;
+      --accent-soft: #f0d9c4;
+      --line: #e7ddd0;
     }
     * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
+    html, body { margin: 0; padding: 0; }
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      padding: 24px;
       background: var(--bg);
       color: var(--fg);
       font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
         "Malgun Gothic", "Noto Sans KR", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 상단 내비게이션 */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 28px 24px;
+    }
+    .logo {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+    nav {
+      display: flex;
+      gap: 28px;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* 히어로 */
+    .hero {
+      position: relative;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 64px 24px 96px;
       text-align: center;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 560px;
+      height: 560px;
+      background: radial-gradient(circle at 50% 50%, var(--accent-soft), transparent 70%);
+      filter: blur(4px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: var(--bg-soft);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 24px;
     }
     h1 {
-      margin: 0;
-      font-size: clamp(1.4rem, 5vw, 2.4rem);
-      font-weight: 700;
-      line-height: 1.4;
+      margin: 0 auto;
+      max-width: 720px;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
       word-break: keep-all;
     }
     h1 .accent { color: var(--accent); }
-    #today {
-      margin: 0;
-      font-size: clamp(1rem, 3vw, 1.25rem);
+    .sub {
+      margin: 24px auto 0;
+      max-width: 480px;
+      font-size: clamp(1rem, 2.4vw, 1.1rem);
       color: var(--muted);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+    .cta {
+      display: inline-block;
+      margin-top: 40px;
+      padding: 16px 40px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      box-shadow: 0 12px 24px -12px rgba(217, 138, 95, 0.6);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px -12px rgba(217, 138, 95, 0.65);
+    }
+
+    /* 하이라이트 3개 카드 */
+    .highlights {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 96px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: left;
+    }
+    .card .dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      margin-bottom: 18px;
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 640px) {
+      nav { display: none; }
+      .highlights { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <h1>안녕하세요, <span class="accent">[스윗밸런스 테스트 페이지]</span>입니다</h1>
-  <p id="today">오늘 날짜를 불러오는 중…</p>
+  <header>
+    <span class="logo">Sweet Balance</span>
+    <nav>
+      <a href="#about">소개</a>
+      <a href="#highlights">특징</a>
+      <a href="#contact">문의</a>
+    </nav>
+  </header>
 
-  <script>
-    (function () {
-      var now = new Date();
-      var text = new Intl.DateTimeFormat("ko-KR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        weekday: "long"
-      }).format(now);
-      var el = document.getElementById("today");
-      el.textContent = "오늘은 " + text + "입니다.";
-      el.setAttribute("datetime", now.toISOString().slice(0, 10));
-    })();
-  </script>
+  <section class="hero" id="about">
+    <div class="blob" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <span class="eyebrow">SWEET BALANCE TEST</span>
+      <h1>안녕하세요, <span class="accent">[스윗밸런스 테스트 페이지]</span>입니다</h1>
+      <p class="sub">
+        균형 잡힌 하루를 위한 스윗밸런스가 준비한 테스트 페이지입니다.
+        차분한 톤과 여유로운 레이아웃으로 편안하게 둘러보세요.
+      </p>
+      <a class="cta" href="#highlights">더 알아보기</a>
+    </div>
+  </section>
+
+  <section class="highlights" id="highlights">
+    <div class="card">
+      <div class="dot" aria-hidden="true"></div>
+      <h3>심플한 구성</h3>
+      <p>불필요한 요소를 덜어내고 꼭 필요한 메시지만 담았습니다.</p>
+    </div>
+    <div class="card">
+      <div class="dot" aria-hidden="true"></div>
+      <h3>따뜻한 톤앤매너</h3>
+      <p>내추럴한 컬러 팔레트로 편안하고 신뢰감 있는 분위기를 표현했습니다.</p>
+    </div>
+    <div class="card">
+      <div class="dot" aria-hidden="true"></div>
+      <h3>반응형 레이아웃</h3>
+      <p>모바일과 데스크톱 어디서든 자연스럽게 보이도록 구성했습니다.</p>
+    </div>
+  </section>
+
+  <footer id="contact">
+    © 2026 Sweet Balance. Test Page.
+  </footer>
 </body>
 </html>
