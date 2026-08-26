@@ -15,6 +15,7 @@
       --line: #e7ddd0;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     html, body { margin: 0; padding: 0; }
     body {
       background: var(--bg);
@@ -24,35 +25,70 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 상단 내비게이션 */
+    /* 상단 헤더 + 탭 내비게이션 */
     header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(250, 246, 240, 0.92);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line);
+    }
+    .header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
       max-width: 1080px;
       margin: 0 auto;
-      padding: 28px 24px;
+      padding: 18px 24px;
+      gap: 24px;
     }
     .logo {
+      flex-shrink: 0;
       font-size: 1.05rem;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--fg);
+      text-decoration: none;
     }
-    nav {
+    nav.tabs {
       display: flex;
-      gap: 28px;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
-    nav a {
+    nav.tabs::-webkit-scrollbar { display: none; }
+    nav.tabs a {
+      flex-shrink: 0;
+      position: relative;
+      padding: 8px 4px;
       color: var(--muted);
       text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 0.92rem;
+      font-weight: 600;
+      white-space: nowrap;
     }
-    nav a:hover { color: var(--accent); }
+    nav.tabs a + a { margin-left: 22px; }
+    nav.tabs a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.15s ease;
+    }
+    nav.tabs a:hover { color: var(--fg); }
+    nav.tabs a:hover::after,
+    nav.tabs a.active::after { transform: scaleX(1); }
+    nav.tabs a.active { color: var(--accent); }
 
-    /* 히어로 */
+    section { scroll-margin-top: 68px; }
+
+    /* 히어로 (홈) */
     .hero {
       position: relative;
       max-width: 1080px;
@@ -122,11 +158,32 @@
       box-shadow: 0 16px 28px -12px rgba(217, 138, 95, 0.65);
     }
 
-    /* 하이라이트 3개 카드 */
-    .highlights {
+    /* 공통 섹션 타이틀 */
+    .section-inner {
       max-width: 1080px;
       margin: 0 auto;
-      padding: 0 24px 96px;
+      padding: 80px 24px;
+    }
+    .section-head { text-align: center; margin-bottom: 40px; }
+    .section-head .eyebrow { margin-bottom: 16px; }
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      word-break: keep-all;
+    }
+    .section-head p {
+      margin: 12px auto 0;
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+    #brand .section-inner { background: var(--bg-soft); border-radius: 32px; }
+
+    /* 제품 카드 */
+    .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
@@ -158,6 +215,44 @@
       word-break: keep-all;
     }
 
+    /* 이벤트 배너 */
+    .event-banner {
+      background: linear-gradient(135deg, var(--accent) 0%, #c9713f 100%);
+      border-radius: 28px;
+      padding: 56px 32px;
+      text-align: center;
+      color: #fff;
+    }
+    .event-banner .eyebrow {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    .event-banner h2 { color: #fff; }
+    .event-banner p { color: rgba(255, 255, 255, 0.85); }
+    .event-banner .cta {
+      background: #fff;
+      color: var(--accent);
+      box-shadow: none;
+    }
+
+    /* 고객센터 */
+    .cs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .cs-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+    .cs-card .label { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+    .cs-card .value { font-size: 1.05rem; font-weight: 700; }
+
     footer {
       border-top: 1px solid var(--line);
       padding: 28px 24px;
@@ -167,22 +262,26 @@
     }
 
     @media (max-width: 640px) {
-      nav { display: none; }
-      .highlights { grid-template-columns: 1fr; }
+      .grid-3, .cs-grid { grid-template-columns: 1fr; }
+      .section-inner { padding: 56px 24px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <span class="logo">Sweet Balance</span>
-    <nav>
-      <a href="#about">소개</a>
-      <a href="#highlights">특징</a>
-      <a href="#contact">문의</a>
-    </nav>
+    <div class="header-inner">
+      <a class="logo" href="#home">Sweet Balance</a>
+      <nav class="tabs" aria-label="주요 메뉴">
+        <a href="#home" class="active">홈</a>
+        <a href="#brand">브랜드 소개</a>
+        <a href="#products">제품</a>
+        <a href="#events">이벤트</a>
+        <a href="#cs">고객센터</a>
+      </nav>
+    </div>
   </header>
 
-  <section class="hero" id="about">
+  <section class="hero" id="home">
     <div class="blob" aria-hidden="true"></div>
     <div class="hero-inner">
       <span class="eyebrow">SWEET BALANCE TEST</span>
@@ -191,29 +290,96 @@
         균형 잡힌 하루를 위한 스윗밸런스가 준비한 테스트 페이지입니다.
         차분한 톤과 여유로운 레이아웃으로 편안하게 둘러보세요.
       </p>
-      <a class="cta" href="#highlights">더 알아보기</a>
+      <a class="cta" href="#products">더 알아보기</a>
     </div>
   </section>
 
-  <section class="highlights" id="highlights">
-    <div class="card">
-      <div class="dot" aria-hidden="true"></div>
-      <h3>심플한 구성</h3>
-      <p>불필요한 요소를 덜어내고 꼭 필요한 메시지만 담았습니다.</p>
-    </div>
-    <div class="card">
-      <div class="dot" aria-hidden="true"></div>
-      <h3>따뜻한 톤앤매너</h3>
-      <p>내추럴한 컬러 팔레트로 편안하고 신뢰감 있는 분위기를 표현했습니다.</p>
-    </div>
-    <div class="card">
-      <div class="dot" aria-hidden="true"></div>
-      <h3>반응형 레이아웃</h3>
-      <p>모바일과 데스크톱 어디서든 자연스럽게 보이도록 구성했습니다.</p>
+  <section id="brand">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">BRAND</span>
+        <h2>브랜드 소개</h2>
+        <p>스윗밸런스는 몸과 마음의 균형 잡힌 하루를 돕는 브랜드입니다.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="dot" aria-hidden="true"></div>
+          <h3>심플한 구성</h3>
+          <p>불필요한 요소를 덜어내고 꼭 필요한 메시지만 담았습니다.</p>
+        </div>
+        <div class="card">
+          <div class="dot" aria-hidden="true"></div>
+          <h3>따뜻한 톤앤매너</h3>
+          <p>내추럴한 컬러 팔레트로 편안하고 신뢰감 있는 분위기를 표현했습니다.</p>
+        </div>
+        <div class="card">
+          <div class="dot" aria-hidden="true"></div>
+          <h3>반응형 레이아웃</h3>
+          <p>모바일과 데스크톱 어디서든 자연스럽게 보이도록 구성했습니다.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <footer id="contact">
+  <section id="products">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">PRODUCTS</span>
+        <h2>제품</h2>
+        <p>테스트 페이지용 예시 제품 카드입니다.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="dot" aria-hidden="true"></div>
+          <h3>제품 예시 1</h3>
+          <p>제품 소개 문구가 들어가는 자리입니다.</p>
+        </div>
+        <div class="card">
+          <div class="dot" aria-hidden="true"></div>
+          <h3>제품 예시 2</h3>
+          <p>제품 소개 문구가 들어가는 자리입니다.</p>
+        </div>
+        <div class="card">
+          <div class="dot" aria-hidden="true"></div>
+          <h3>제품 예시 3</h3>
+          <p>제품 소개 문구가 들어가는 자리입니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="events">
+    <div class="section-inner">
+      <div class="event-banner">
+        <span class="eyebrow">EVENT</span>
+        <h2>진행 중인 이벤트</h2>
+        <p>테스트 페이지용 이벤트 배너 영역입니다.</p>
+        <a class="cta" href="#">이벤트 보러가기</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="cs">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">CUSTOMER CENTER</span>
+        <h2>고객센터</h2>
+        <p>문의사항이 있으시면 아래로 연락해주세요.</p>
+      </div>
+      <div class="cs-grid">
+        <div class="cs-card">
+          <div class="label">전화 문의</div>
+          <div class="value">1544-0000</div>
+        </div>
+        <div class="cs-card">
+          <div class="label">이메일 문의</div>
+          <div class="value">help@sweetbalance.test</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
     © 2026 Sweet Balance. Test Page.
   </footer>
 </body>
