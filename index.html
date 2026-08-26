@@ -257,6 +257,52 @@
   .drawer-body { flex: 1; overflow-y: auto; padding: 18px 22px; }
   .drawer-foot { padding: 18px 22px 22px; border-top: 1px solid var(--div); }
 
+  /* ---------- Auth area (header) ---------- */
+  .auth-area { display: flex; align-items: center; gap: 6px; }
+  .auth-name { font-size: 13px; font-weight: 700; color: var(--char); white-space: nowrap; }
+  @media (max-width: 520px) { .auth-name { display: none; } }
+
+  /* ---------- Auth modal ---------- */
+  .modal {
+    position: fixed; top: 50%; left: 50%; width: min(430px, 92vw); max-height: 88vh;
+    background: #fff; border-radius: var(--r-xl); box-shadow: var(--sh-lg); z-index: 202;
+    display: flex; flex-direction: column; overflow: hidden;
+    opacity: 0; visibility: hidden; transform: translate(-50%, -46%);
+    transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%); }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px; border-bottom: 1px solid var(--div); flex-shrink: 0; }
+  .modal-body { padding: 20px 22px 24px; overflow-y: auto; }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; color: var(--char); margin-bottom: 6px; }
+  .field input {
+    width: 100%; padding: 11px 14px; border-radius: var(--r-md); border: 1.5px solid var(--border);
+    font-family: var(--kr); font-size: 13.5px; color: var(--ink); background: #fff;
+  }
+  .field input:focus { outline: none; border-color: var(--g); }
+
+  .consent-box { border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; margin: 6px 0 18px; background: var(--paper); }
+  .consent-all {
+    display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 800; color: var(--ink);
+    padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--border); cursor: pointer;
+  }
+  .consent-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--char); padding: 6px 0; cursor: pointer; }
+  .consent-row span { flex: 1; }
+  .consent-view { border: none; background: transparent; color: var(--slate); font-size: 11px; text-decoration: underline; cursor: pointer; flex-shrink: 0; padding: 4px; }
+  .consent-detail {
+    display: none; font-size: 11px; color: var(--slate); background: #fff; border: 1px solid var(--border);
+    border-radius: var(--r-sm); padding: 10px 12px; margin: -2px 0 8px; line-height: 1.6;
+  }
+  .consent-detail.open { display: block; }
+  .consent-detail table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .consent-detail th, .consent-detail td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--div); vertical-align: top; }
+
+  .form-error { font-size: 12px; color: var(--red); margin: -4px 0 12px; min-height: 0; word-break: keep-all; }
+  .form-switch { text-align: center; margin-top: 16px; font-size: 12.5px; color: var(--char); }
+  .form-switch a { color: var(--g); font-weight: 700; text-decoration: underline; cursor: pointer; }
+  .demo-hint { font-size: 11px; color: var(--g); background: rgba(0,97,78,.08); border-radius: var(--r-sm); padding: 9px 10px; margin-bottom: 16px; text-align: center; word-break: keep-all; }
+
   /* Cart items */
   .cart-empty { text-align: center; color: var(--slate); font-size: 14px; padding: 60px 0; }
   .cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--div); }
@@ -446,6 +492,7 @@
         <a href="#brand">브랜드</a>
       </nav>
       <div class="nav-actions">
+        <div class="auth-area" id="authArea"></div>
         <button class="icon-btn" type="button" aria-label="쿠폰함" onclick="SB.openCoupons()">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a1.5 1.5 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a1.5 1.5 0 0 0 0-3V9Z"/><path d="M9 7v10" stroke-dasharray="2 2.2"/></svg>
           <span class="icon-count zero" id="couponCount">0</span>
@@ -672,6 +719,17 @@
       </button>
     </div>
     <div class="drawer-body" id="couponBody"></div>
+  </div>
+
+  <!-- ===== Auth modal (login / signup) ===== -->
+  <div class="modal" id="authModal" aria-hidden="true">
+    <div class="modal-head">
+      <div class="drawer-title" id="authModalTitle">로그인</div>
+      <button class="drawer-close" type="button" aria-label="닫기" onclick="SB.closeAll()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="authModalBody"></div>
   </div>
 
   <!-- ===== Toast ===== -->
@@ -1035,12 +1093,190 @@
       showToast((c ? c.title : '쿠폰') + '을(를) 받았어요.');
     }
 
+    /* ===================== Auth (signup / login) ===================== */
+    var DEMO_USER = { name: '스윗밸런스', email: 'demo@sweetbalance.kr', password: 'demo1234', marketing: true };
+    var users = [];        // [{ name, email, password, marketing, consentAt }]
+    var currentUser = null; // email or null
+    var authMode = 'login';
+
+    function loadAuthState() {
+      try {
+        users = JSON.parse(localStorage.getItem('sb_users') || 'null') || [DEMO_USER];
+        currentUser = localStorage.getItem('sb_current_user') || null;
+      } catch (e) { users = [DEMO_USER]; currentUser = null; }
+      saveAuthState();
+    }
+    function saveAuthState() {
+      try {
+        localStorage.setItem('sb_users', JSON.stringify(users));
+        localStorage.setItem('sb_current_user', currentUser || '');
+      } catch (e) { /* storage unavailable */ }
+    }
+    function findUser(email) {
+      var lower = (email || '').trim().toLowerCase();
+      return users.filter(function (u) { return u.email.toLowerCase() === lower; })[0];
+    }
+
+    function renderAuthArea() {
+      var el = document.getElementById('authArea');
+      var user = currentUser ? findUser(currentUser) : null;
+      if (user) {
+        el.innerHTML =
+          '<span class="auth-name">' + user.name + '님</span>' +
+          '<button class="btn btn-ghost btn-sm" type="button" id="logoutBtn">로그아웃</button>';
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+      } else {
+        el.innerHTML =
+          '<button class="btn btn-ghost btn-sm" type="button" id="loginTrigger">로그인</button>' +
+          '<button class="btn btn-secondary btn-sm" type="button" id="signupTrigger">회원가입</button>';
+        document.getElementById('loginTrigger').addEventListener('click', function () { openAuth('login'); });
+        document.getElementById('signupTrigger').addEventListener('click', function () { openAuth('signup'); });
+      }
+    }
+
+    function loginFormHtml() {
+      return (
+        '<div class="demo-hint">데모 계정으로 바로 체험해보세요 · demo@sweetbalance.kr / demo1234</div>' +
+        '<form id="loginForm" novalidate>' +
+          '<div class="field"><label for="loginEmail">이메일</label><input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="username"></div>' +
+          '<div class="field"><label for="loginPassword">비밀번호</label><input type="password" id="loginPassword" placeholder="비밀번호" autocomplete="current-password"></div>' +
+          '<div class="form-error" id="loginError"></div>' +
+          '<button class="btn btn-primary btn-block" type="submit">로그인</button>' +
+        '</form>' +
+        '<div class="form-switch">아직 계정이 없으신가요? <a id="goSignup">회원가입</a></div>'
+      );
+    }
+
+    function signupFormHtml() {
+      return (
+        '<form id="signupForm" novalidate>' +
+          '<div class="field"><label for="signupName">이름</label><input type="text" id="signupName" placeholder="홍길동" autocomplete="name"></div>' +
+          '<div class="field"><label for="signupEmail">이메일</label><input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="username"></div>' +
+          '<div class="field"><label for="signupPassword">비밀번호</label><input type="password" id="signupPassword" placeholder="6자 이상" autocomplete="new-password"></div>' +
+          '<div class="field"><label for="signupPassword2">비밀번호 확인</label><input type="password" id="signupPassword2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>' +
+          '<div class="consent-box">' +
+            '<label class="consent-all"><input type="checkbox" id="consentAll"> 전체 동의</label>' +
+            '<label class="consent-row"><input type="checkbox" id="consentTerms"><span>[필수] 이용약관 동의</span><button type="button" class="consent-view" data-target="termsDetail">보기</button></label>' +
+            '<div class="consent-detail" id="termsDetail">스윗밸런스 서비스 이용약관(요약)<br>회원은 서비스를 부정한 목적으로 이용할 수 없으며, 주문·배송·구독 서비스는 각 상품 안내에 따릅니다. 회원 탈퇴는 마이페이지에서 언제든 신청할 수 있습니다.</div>' +
+            '<label class="consent-row"><input type="checkbox" id="consentPrivacy"><span>[필수] 개인정보 수집 및 이용 동의</span><button type="button" class="consent-view" data-target="privacyDetail">보기</button></label>' +
+            '<div class="consent-detail" id="privacyDetail">' +
+              '<table><tr><th>수집 항목</th><td>이름, 이메일, 비밀번호</td></tr>' +
+              '<tr><th>수집 목적</th><td>회원 식별, 주문/배송 처리, 쿠폰·구독 서비스 제공</td></tr>' +
+              '<tr><th>보유 기간</th><td>회원 탈퇴 시까지 (단, 관계 법령에 따라 별도 보관될 수 있음)</td></tr></table>' +
+              '동의를 거부할 수 있으며, 이 경우 회원가입 및 서비스 이용이 제한됩니다.' +
+            '</div>' +
+            '<label class="consent-row"><input type="checkbox" id="consentMarketing"><span>[선택] 이벤트·혜택 마케팅 정보 수신 동의 (이메일/SMS)</span></label>' +
+          '</div>' +
+          '<div class="form-error" id="signupError"></div>' +
+          '<button class="btn btn-primary btn-block" type="submit" id="signupSubmit" disabled>가입하기</button>' +
+        '</form>' +
+        '<div class="form-switch">이미 계정이 있으신가요? <a id="goLogin">로그인</a></div>'
+      );
+    }
+
+    function updateSignupSubmitState() {
+      var terms = document.getElementById('consentTerms');
+      var privacy = document.getElementById('consentPrivacy');
+      var marketing = document.getElementById('consentMarketing');
+      var all = document.getElementById('consentAll');
+      if (!terms) return;
+      all.checked = terms.checked && privacy.checked && marketing.checked;
+      document.getElementById('signupSubmit').disabled = !(terms.checked && privacy.checked);
+    }
+
+    function bindAuthEvents(mode) {
+      if (mode === 'login') {
+        document.getElementById('goSignup').addEventListener('click', function () { openAuth('signup'); });
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var email = document.getElementById('loginEmail').value;
+          var password = document.getElementById('loginPassword').value;
+          var errEl = document.getElementById('loginError');
+          var user = findUser(email);
+          if (!email || !password) { errEl.textContent = '이메일과 비밀번호를 입력해주세요.'; return; }
+          if (!user || user.password !== password) { errEl.textContent = '이메일 또는 비밀번호가 올바르지 않아요.'; return; }
+          errEl.textContent = '';
+          currentUser = user.email;
+          saveAuthState();
+          renderAuthArea();
+          closeAll();
+          showToast(user.name + '님, 환영해요! 로그인되었어요.');
+        });
+      } else {
+        document.getElementById('goLogin').addEventListener('click', function () { openAuth('login'); });
+
+        document.querySelectorAll('.consent-view').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            document.getElementById(btn.getAttribute('data-target')).classList.toggle('open');
+          });
+        });
+
+        var consentAll = document.getElementById('consentAll');
+        var terms = document.getElementById('consentTerms');
+        var privacy = document.getElementById('consentPrivacy');
+        var marketing = document.getElementById('consentMarketing');
+        consentAll.addEventListener('change', function () {
+          terms.checked = privacy.checked = marketing.checked = consentAll.checked;
+          updateSignupSubmitState();
+        });
+        [terms, privacy, marketing].forEach(function (cb) {
+          cb.addEventListener('change', updateSignupSubmitState);
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var name = document.getElementById('signupName').value.trim();
+          var email = document.getElementById('signupEmail').value.trim();
+          var password = document.getElementById('signupPassword').value;
+          var password2 = document.getElementById('signupPassword2').value;
+          var errEl = document.getElementById('signupError');
+          var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+          if (!name) { errEl.textContent = '이름을 입력해주세요.'; return; }
+          if (!emailOk) { errEl.textContent = '올바른 이메일 형식을 입력해주세요.'; return; }
+          if (password.length < 6) { errEl.textContent = '비밀번호는 6자 이상이어야 해요.'; return; }
+          if (password !== password2) { errEl.textContent = '비밀번호가 일치하지 않아요.'; return; }
+          if (!terms.checked || !privacy.checked) { errEl.textContent = '필수 약관에 동의해주세요.'; return; }
+          if (findUser(email)) { errEl.textContent = '이미 가입된 이메일이에요.'; return; }
+
+          errEl.textContent = '';
+          users.push({ name: name, email: email, password: password, marketing: marketing.checked, consentAt: new Date().toISOString() });
+          currentUser = email;
+          saveAuthState();
+          renderAuthArea();
+          closeAll();
+          showToast('회원가입이 완료됐어요. 반가워요, ' + name + '님!');
+        });
+      }
+    }
+
+    function openAuth(mode) {
+      authMode = mode;
+      document.getElementById('authModalTitle').textContent = mode === 'login' ? '로그인' : '회원가입';
+      document.getElementById('authModalBody').innerHTML = mode === 'login' ? loginFormHtml() : signupFormHtml();
+      bindAuthEvents(mode);
+
+      document.getElementById('overlay').classList.add('open');
+      document.getElementById('authModal').classList.add('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('couponDrawer').classList.remove('open');
+      document.body.classList.add('no-scroll');
+    }
+
+    function logout() {
+      currentUser = null;
+      saveAuthState();
+      renderAuthArea();
+      showToast('로그아웃되었어요.');
+    }
+
     /* ===================== Drawers / overlay ===================== */
     function openCart() {
       renderCart();
       document.getElementById('overlay').classList.add('open');
       document.getElementById('cartDrawer').classList.add('open');
       document.getElementById('couponDrawer').classList.remove('open');
+      document.getElementById('authModal').classList.remove('open');
       document.body.classList.add('no-scroll');
     }
     function openCoupons() {
@@ -1048,12 +1284,14 @@
       document.getElementById('overlay').classList.add('open');
       document.getElementById('couponDrawer').classList.add('open');
       document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('authModal').classList.remove('open');
       document.body.classList.add('no-scroll');
     }
     function closeAll() {
       document.getElementById('overlay').classList.remove('open');
       document.getElementById('cartDrawer').classList.remove('open');
       document.getElementById('couponDrawer').classList.remove('open');
+      document.getElementById('authModal').classList.remove('open');
       document.body.classList.remove('no-scroll');
     }
 
@@ -1211,9 +1449,11 @@
     /* ===================== Init ===================== */
     document.addEventListener('DOMContentLoaded', function () {
       loadState();
+      loadAuthState();
       renderTabs();
       renderGrid();
       updateBadges();
+      renderAuthArea();
     });
 
     document.addEventListener('keydown', function (e) {
@@ -1227,6 +1467,8 @@
       addToCart: addToCart,
       openCart: openCart,
       openCoupons: openCoupons,
+      openAuth: openAuth,
+      logout: logout,
       closeAll: closeAll
     };
   })();
