@@ -1,386 +1,688 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>스윗밸런스 테스트 페이지</title>
-  <style>
-    :root {
-      --bg: #faf6f0;
-      --bg-soft: #f3ece1;
-      --fg: #2b2420;
-      --muted: #8a7d70;
-      --accent: #d98a5f;
-      --accent-soft: #f0d9c4;
-      --line: #e7ddd0;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-        "Malgun Gothic", "Noto Sans KR", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SweetBalance | Eat fresh, be your Best.</title>
+<style>
+  :root {
+    --g: #00614E;
+    --g2: #007C5E;
+    --sw: #FDFFE6;
+    --seed: #84BA45;
+    --soil: #896431;
+    --sky: #50AADC;
+    --ink: #1B2A24;
+    --char: #3A4742;
+    --slate: #6B7571;
+    --mist: #C8CEC9;
+    --paper: #F6F4E8;
+    --white: #FFFFFF;
+    --border: rgba(0,97,78,.15);
+    --div: rgba(0,97,78,.09);
+    --red: #D64545;
 
-    /* 상단 헤더 + 탭 내비게이션 */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(250, 246, 240, 0.92);
-      backdrop-filter: blur(6px);
-      border-bottom: 1px solid var(--line);
-    }
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 18px 24px;
-      gap: 24px;
-    }
-    .logo {
-      flex-shrink: 0;
-      font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--fg);
-      text-decoration: none;
-    }
-    nav.tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    nav.tabs::-webkit-scrollbar { display: none; }
-    nav.tabs a {
-      flex-shrink: 0;
-      position: relative;
-      padding: 8px 4px;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.92rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    nav.tabs a + a { margin-left: 22px; }
-    nav.tabs a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -1px;
-      height: 2px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transition: transform 0.15s ease;
-    }
-    nav.tabs a:hover { color: var(--fg); }
-    nav.tabs a:hover::after,
-    nav.tabs a.active::after { transform: scaleX(1); }
-    nav.tabs a.active { color: var(--accent); }
+    --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-2xl: 36px; --r-pill: 999px;
 
-    section { scroll-margin-top: 68px; }
+    --sh-sm: 0 2px 8px rgba(27,42,36,.07);
+    --sh-md: 0 8px 24px rgba(27,42,36,.10);
+    --sh-brand: 0 10px 28px rgba(0,97,78,.22);
 
-    /* 히어로 (홈) */
-    .hero {
-      position: relative;
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 64px 24px 96px;
-      text-align: center;
-      overflow: hidden;
-    }
-    .blob {
-      position: absolute;
-      top: -120px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 560px;
-      height: 560px;
-      background: radial-gradient(circle at 50% 50%, var(--accent-soft), transparent 70%);
-      filter: blur(4px);
-      z-index: 0;
-      pointer-events: none;
-    }
-    .hero-inner { position: relative; z-index: 1; }
-    .eyebrow {
-      display: inline-block;
-      padding: 6px 16px;
-      border-radius: 999px;
-      background: var(--bg-soft);
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      margin-bottom: 24px;
-    }
-    h1 {
-      margin: 0 auto;
-      max-width: 720px;
-      font-size: clamp(2rem, 6vw, 3.4rem);
-      font-weight: 800;
-      line-height: 1.35;
-      letter-spacing: -0.01em;
-      word-break: keep-all;
-    }
-    h1 .accent { color: var(--accent); }
-    .sub {
-      margin: 24px auto 0;
-      max-width: 480px;
-      font-size: clamp(1rem, 2.4vw, 1.1rem);
-      color: var(--muted);
-      line-height: 1.7;
-      word-break: keep-all;
-    }
-    .cta {
-      display: inline-block;
-      margin-top: 40px;
-      padding: 16px 40px;
-      background: var(--accent);
-      color: #fff;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      letter-spacing: 0.01em;
-      box-shadow: 0 12px 24px -12px rgba(217, 138, 95, 0.6);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 28px -12px rgba(217, 138, 95, 0.65);
-    }
+    --en: 'Montserrat', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    --kr: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
 
-    /* 공통 섹션 타이틀 */
-    .section-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 80px 24px;
-    }
-    .section-head { text-align: center; margin-bottom: 40px; }
-    .section-head .eyebrow { margin-bottom: 16px; }
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 800;
-      word-break: keep-all;
-    }
-    .section-head p {
-      margin: 12px auto 0;
-      max-width: 480px;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.7;
-      word-break: keep-all;
-    }
-    #brand .section-inner { background: var(--bg-soft); border-radius: 32px; }
+    --ease-out: cubic-bezier(.22,.61,.36,1);
+    --dur-fast: 120ms; --dur-base: 220ms; --dur-slow: 420ms;
+  }
 
-    /* 제품 카드 */
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    .card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 32px 24px;
-      text-align: left;
-    }
-    .card .dot {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--accent-soft);
-      margin-bottom: 18px;
-    }
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
-    .card p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.6;
-      word-break: keep-all;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--sw);
+    color: var(--ink);
+    font-family: var(--kr);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .word-keep { word-break: keep-all; }
 
-    /* 이벤트 배너 */
-    .event-banner {
-      background: linear-gradient(135deg, var(--accent) 0%, #c9713f 100%);
-      border-radius: 28px;
-      padding: 56px 32px;
-      text-align: center;
-      color: #fff;
-    }
-    .event-banner .eyebrow {
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-    }
-    .event-banner h2 { color: #fff; }
-    .event-banner p { color: rgba(255, 255, 255, 0.85); }
-    .event-banner .cta {
-      background: #fff;
-      color: var(--accent);
-      box-shadow: none;
-    }
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    font-family: var(--en); font-weight: 600; font-size: 14px;
+    padding: 13px 26px; border-radius: var(--r-pill); cursor: pointer;
+    border: none; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+    text-decoration: none; white-space: nowrap;
+  }
+  .btn-primary { background: var(--g); color: var(--sw); box-shadow: var(--sh-brand); }
+  .btn-primary:hover { background: var(--g2); transform: translateY(-2px); }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-secondary { background: transparent; color: var(--g); border: 1.5px solid var(--g); }
+  .btn-secondary:hover { background: rgba(0,97,78,.06); transform: translateY(-2px); }
+  .btn-secondary:active { transform: scale(.98); }
+  .btn-ghost { background: transparent; color: var(--g); }
+  .btn-ghost:hover { background: rgba(0,97,78,.06); }
+  .btn:disabled { opacity: .4; cursor: default; box-shadow: none; }
 
-    /* 고객센터 */
-    .cs-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      max-width: 620px;
-      margin: 0 auto;
-    }
-    .cs-card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-    }
-    .cs-card .label { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
-    .cs-card .value { font-size: 1.05rem; font-weight: 700; }
+  /* ---------- Badges ---------- */
+  .badge {
+    display: inline-flex; align-items: center; padding: 5px 12px; border-radius: var(--r-pill);
+    font-size: 11px; font-weight: 700; font-family: var(--en); letter-spacing: .04em;
+  }
+  .badge-new { background: var(--g); color: var(--sw); }
+  .badge-best { background: var(--seed); color: #fff; }
+  .badge-soft { background: rgba(0,97,78,.1); color: var(--g); }
+  .badge-outline { background: #fff; color: var(--g); border: 1.5px solid var(--g); }
 
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 28px 24px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,255,230,.88); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--div);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
+  .logo { height: 28px; width: auto; display: block; }
+  .foot-logo { height: 24px; width: auto; display: block; margin: 0 auto 10px; opacity: .95; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { font-size: 14px; font-weight: 600; color: var(--char); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
+  .nav-links a:hover { color: var(--g); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
 
-    @media (max-width: 640px) {
-      .grid-3, .cs-grid { grid-template-columns: 1fr; }
-      .section-inner { padding: 56px 24px; }
-    }
-  </style>
+  /* ---------- Hero ---------- */
+  #hero { position: relative; overflow: hidden; padding: 96px 24px 88px; text-align: center; }
+  .blob { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
+  .blob-1 { width: 460px; height: 460px; top: -180px; left: -140px; background: radial-gradient(circle, rgba(132,186,69,.28), transparent 70%); }
+  .blob-2 { width: 380px; height: 380px; bottom: -160px; right: -120px; background: radial-gradient(circle, rgba(80,170,220,.18), transparent 70%); }
+  .hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+  .eyebrow-pill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: var(--r-pill);
+    background: rgba(0,97,78,.08); color: var(--g); font-size: 12px; font-weight: 700;
+    letter-spacing: .08em; margin-bottom: 28px; font-family: var(--en);
+  }
+  .hero-en {
+    font-family: var(--en); font-weight: 800; font-size: clamp(38px, 7vw, 76px);
+    line-height: 1.06; letter-spacing: -.03em; color: var(--g);
+  }
+  .hero-kr {
+    font-family: var(--kr); font-weight: 700; font-size: clamp(19px, 2.6vw, 26px);
+    color: var(--ink); margin-top: 18px;
+  }
+  .hero-sub {
+    font-size: 16px; color: var(--char); max-width: 480px; margin: 20px auto 0;
+    line-height: 1.75;
+  }
+  .hero-ctas { display: flex; gap: 12px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+  .hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+
+  /* ---------- Section shell ---------- */
+  .section { padding: 96px 24px; }
+  .section-alt { background: var(--paper); }
+  .section-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--g); margin-bottom: 12px; font-family: var(--en); text-align: center;
+  }
+  .section-title {
+    font-family: var(--en); font-weight: 800; font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -.02em; color: var(--ink); text-align: center; margin-bottom: 14px;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--char); text-align: center; max-width: 520px;
+    margin: 0 auto 56px; line-height: 1.75;
+  }
+
+  /* ---------- Product ---------- */
+  .product-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+    max-width: 980px; margin: 0 auto;
+  }
+  @media (max-width: 860px) { .product-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  .plate {
+    position: relative; width: 300px; height: 300px; margin: 0 auto;
+    border-radius: 50%; box-shadow: var(--sh-md);
+    background: radial-gradient(circle at 35% 30%, #EEF6DE, #CFE3B0 62%, #A9C983);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .plate-center { font-size: 76px; }
+  .ring-item {
+    position: absolute; font-size: 32px; top: 50%; left: 50%;
+    transform: rotate(calc(60deg * var(--i))) translate(122px) rotate(calc(-60deg * var(--i)));
+  }
+
+  .product-card { }
+  .product-badges { display: flex; gap: 8px; margin-bottom: 14px; }
+  .product-name { font-family: var(--en); font-weight: 700; font-size: 28px; color: var(--ink); }
+  .product-name-kr { font-size: 15px; color: var(--slate); margin-top: 4px; }
+  .product-desc { font-size: 15px; color: var(--char); line-height: 1.75; margin-top: 16px; }
+  .product-stats {
+    display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; font-size: 13px;
+    color: var(--g); font-weight: 700; font-family: var(--en);
+  }
+  .product-stats span { display: flex; align-items: center; gap: 6px; }
+  .product-price { font-family: var(--en); font-weight: 800; font-size: 26px; color: var(--g); margin-top: 20px; }
+  .product-ctas { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+
+  .mini-cards { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 56px; }
+  .mini-card {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
+    overflow: hidden; width: 190px; box-shadow: var(--sh-sm);
+  }
+  .mini-card-visual {
+    height: 120px; display: flex; align-items: center; justify-content: center;
+    font-size: 48px; position: relative;
+  }
+  .mini-card-body { padding: 14px; }
+  .mini-card-name { font-family: var(--en); font-weight: 600; font-size: 13px; color: var(--ink); }
+  .mini-card-sub { font-size: 11px; color: var(--slate); margin: 3px 0 8px; }
+  .mini-card-stat { font-size: 11px; color: var(--slate); }
+  .mini-card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .mini-card-price { font-family: var(--en); font-weight: 700; font-size: 14px; color: var(--g); }
+  .plus-btn {
+    width: 26px; height: 26px; border-radius: 999px; background: var(--g); color: var(--sw);
+    border: none; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer;
+  }
+
+  /* ---------- Week Game (star feature) ---------- */
+  #week-game { background: var(--g); color: var(--sw); }
+  #week-game .section-eyebrow { color: rgba(253,255,230,.75); }
+  #week-game .section-title { color: var(--sw); }
+  #week-game .section-sub { color: rgba(253,255,230,.8); }
+
+  .game-card {
+    max-width: 720px; margin: 0 auto; background: #fff; border-radius: var(--r-xl);
+    box-shadow: var(--sh-md); padding: 48px 40px; color: var(--ink); min-height: 340px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  @media (max-width: 640px) { .game-card { padding: 36px 22px; } }
+
+  .game-progress { display: flex; gap: 8px; justify-content: center; margin-bottom: 28px; }
+  .game-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--mist); transition: background var(--dur-base) var(--ease-out), width var(--dur-base) var(--ease-out); }
+  .game-dot.active { background: var(--g); width: 22px; }
+
+  .game-screen { display: none; }
+  .game-screen.visible { display: block; }
+
+  .game-intro { text-align: center; }
+  .game-intro .game-icon { font-size: 56px; margin-bottom: 18px; }
+  .game-intro h3 { font-family: var(--en); font-weight: 800; font-size: 24px; margin-bottom: 10px; }
+  .game-intro p { color: var(--char); font-size: 15px; max-width: 420px; margin: 0 auto 28px; line-height: 1.7; }
+
+  .game-q { text-align: center; }
+  .game-q .q-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: var(--seed); text-transform: uppercase; margin-bottom: 10px; font-family: var(--en); }
+  .game-q h3 { font-family: var(--kr); font-weight: 700; font-size: 22px; margin-bottom: 26px; word-break: keep-all; }
+  .game-options { display: flex; flex-direction: column; gap: 10px; max-width: 420px; margin: 0 auto; }
+  .option-btn {
+    text-align: left; padding: 15px 20px; border-radius: var(--r-md); border: 1.5px solid var(--border);
+    background: #fff; color: var(--char); font-size: 15px; font-family: var(--kr); font-weight: 500;
+    cursor: pointer; transition: all var(--dur-fast) var(--ease-out);
+  }
+  .option-btn:hover { border-color: var(--g); background: rgba(0,97,78,.04); }
+  .option-btn.selected { background: var(--g); color: var(--sw); border-color: var(--g); font-weight: 700; }
+
+  .game-loading { text-align: center; }
+  .game-loading p { font-size: 15px; color: var(--char); margin-top: 16px; }
+  .loading-dots { display: flex; gap: 8px; justify-content: center; }
+  .loading-dots span {
+    width: 10px; height: 10px; border-radius: 999px; background: var(--g);
+    animation: pulse-dot 900ms var(--ease-out) infinite;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 150ms; }
+  .loading-dots span:nth-child(3) { animation-delay: 300ms; }
+  @keyframes pulse-dot { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+  .game-result h3 { font-family: var(--en); font-weight: 800; font-size: 22px; text-align: center; margin-bottom: 6px; }
+  .game-result .result-sub { text-align: center; color: var(--slate); font-size: 13px; margin-bottom: 28px; }
+  .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+  .day-card {
+    background: var(--paper); border: 1px solid var(--border); border-radius: var(--r-md);
+    padding: 16px 12px; text-align: center; opacity: 0; transform: translateY(8px);
+    transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  .day-card.show { opacity: 1; transform: translateY(0); }
+  .day-label { font-family: var(--en); font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--seed); text-transform: uppercase; }
+  .day-emoji { font-size: 30px; margin: 10px 0 8px; }
+  .day-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.4; min-height: 32px; }
+  .day-stat { font-size: 10px; color: var(--slate); margin-top: 6px; font-family: var(--en); }
+
+  .game-summary {
+    display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .summary-pill {
+    background: rgba(0,97,78,.08); color: var(--g); font-size: 13px; font-weight: 700;
+    padding: 8px 16px; border-radius: var(--r-pill); font-family: var(--en);
+  }
+  .game-result-ctas { display: flex; gap: 10px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+
+  /* ---------- Brand section ---------- */
+  #brand { background: var(--g); color: var(--sw); }
+  .mission-box {
+    max-width: 720px; margin: 0 auto 56px; background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-xl); padding: 36px 40px; text-align: center;
+  }
+  .mission-box .mission-kr { font-family: var(--kr); font-weight: 700; font-size: 22px; line-height: 1.5; word-break: keep-all; }
+  .mission-box .mission-en { font-size: 14px; opacity: .75; font-style: italic; margin-top: 14px; }
+
+  .slogan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 0 auto 56px; }
+  @media (max-width: 640px) { .slogan-grid { grid-template-columns: 1fr; } }
+  .slogan-card {
+    background: rgba(255,255,230,.06); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-lg);
+    padding: 28px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 96px;
+  }
+  .slogan-card.en { font-family: var(--en); font-weight: 800; font-size: 22px; }
+  .slogan-card.kr { font-family: var(--kr); font-size: 18px; }
+
+  .personality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 860px; margin: 0 auto 48px; }
+  @media (max-width: 720px) { .personality-grid { grid-template-columns: 1fr; } }
+  .personality-card {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-lg);
+    padding: 24px;
+  }
+  .personality-card .p-en { font-family: var(--en); font-weight: 800; font-size: 22px; }
+  .personality-card .p-kr { font-size: 14px; opacity: .85; margin: 4px 0 10px; }
+  .personality-card .p-desc { font-size: 13px; line-height: 1.65; opacity: .8; }
+
+  .target-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .target-pill { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); padding: 8px 16px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; }
+
+  footer {
+    background: #004F40; color: rgba(253,255,230,.65); padding: 28px 24px; text-align: center; font-size: 12px;
+  }
+  footer .foot-tagline { font-family: var(--en); font-style: italic; margin-top: 6px; opacity: .8; }
+</style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <a class="logo" href="#home">Sweet Balance</a>
-      <nav class="tabs" aria-label="주요 메뉴">
-        <a href="#home" class="active">홈</a>
-        <a href="#brand">브랜드 소개</a>
-        <a href="#products">제품</a>
-        <a href="#events">이벤트</a>
-        <a href="#cs">고객센터</a>
+
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="#hero"><img class="logo" src="assets/logo-green.png" alt="SweetBalance"></a>
+      <nav class="nav-links">
+        <a href="#product">시그니처 메뉴</a>
+        <a href="#week-game">7일 식단 게임</a>
+        <a href="#brand">브랜드</a>
       </nav>
+      <a class="btn btn-primary" href="#week-game" style="padding:10px 20px;font-size:13px;">식단 뽑으러 가기</a>
     </div>
   </header>
 
-  <section class="hero" id="home">
-    <div class="blob" aria-hidden="true"></div>
+  <!-- ===== Hero ===== -->
+  <section id="hero">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
     <div class="hero-inner">
-      <span class="eyebrow">SWEET BALANCE TEST</span>
-      <h1>안녕하세요, <span class="accent">[스윗밸런스 테스트 페이지]</span>입니다</h1>
-      <p class="sub">
-        균형 잡힌 하루를 위한 스윗밸런스가 준비한 테스트 페이지입니다.
-        차분한 톤과 여유로운 레이아웃으로 편안하게 둘러보세요.
-      </p>
-      <a class="cta" href="#products">더 알아보기</a>
-    </div>
-  </section>
-
-  <section id="brand">
-    <div class="section-inner">
-      <div class="section-head">
-        <span class="eyebrow">BRAND</span>
-        <h2>브랜드 소개</h2>
-        <p>스윗밸런스는 몸과 마음의 균형 잡힌 하루를 돕는 브랜드입니다.</p>
+      <span class="eyebrow-pill">🥗 SWEET BALANCE · 자취생의 한 끼</span>
+      <h1 class="hero-en">Eat fresh,<br>be your Best.</h1>
+      <p class="hero-kr word-keep">혼자 사는 날에도, 오늘 한 끼는 제대로.</p>
+      <p class="hero-sub word-keep">장 보고 다듬고 요리할 시간이 없는 날에도 괜찮아요.<br>스윗밸런스가 신선한 재료로 오늘의 균형을 채워드릴게요.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#product">시그니처 콥샐러드 보기</a>
+        <a class="btn btn-secondary" href="#week-game">7일 식단 뽑기</a>
       </div>
-      <div class="grid-3">
-        <div class="card">
-          <div class="dot" aria-hidden="true"></div>
-          <h3>심플한 구성</h3>
-          <p>불필요한 요소를 덜어내고 꼭 필요한 메시지만 담았습니다.</p>
-        </div>
-        <div class="card">
-          <div class="dot" aria-hidden="true"></div>
-          <h3>따뜻한 톤앤매너</h3>
-          <p>내추럴한 컬러 팔레트로 편안하고 신뢰감 있는 분위기를 표현했습니다.</p>
-        </div>
-        <div class="card">
-          <div class="dot" aria-hidden="true"></div>
-          <h3>반응형 레이아웃</h3>
-          <p>모바일과 데스크톱 어디서든 자연스럽게 보이도록 구성했습니다.</p>
-        </div>
+      <div class="hero-badges">
+        <span class="badge badge-soft">저당</span>
+        <span class="badge badge-soft">고단백</span>
+        <span class="badge badge-soft">새벽배송</span>
+        <span class="badge badge-soft">1인분 소분</span>
       </div>
     </div>
   </section>
 
-  <section id="products">
-    <div class="section-inner">
-      <div class="section-head">
-        <span class="eyebrow">PRODUCTS</span>
-        <h2>제품</h2>
-        <p>테스트 페이지용 예시 제품 카드입니다.</p>
+  <!-- ===== Product ===== -->
+  <section id="product" class="section">
+    <div class="wrap">
+      <div class="section-eyebrow">Our Signature</div>
+      <h2 class="section-title">오늘의 초록, 콥샐러드</h2>
+      <p class="section-sub word-keep">생생한 초록빛 재료를 그대로 담았어요. 스윗밸런스를 처음 만난다면, 여기서 시작하세요.</p>
+
+      <div class="product-grid">
+        <div class="plate" aria-hidden="true">
+          <span class="ring-item" style="--i:0">🍅</span>
+          <span class="ring-item" style="--i:1">🥒</span>
+          <span class="ring-item" style="--i:2">🫑</span>
+          <span class="ring-item" style="--i:3">🫘</span>
+          <span class="ring-item" style="--i:4">🥑</span>
+          <span class="ring-item" style="--i:5">🍗</span>
+          <div class="plate-center">🥗</div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-soft">저당</span>
+            <span class="badge badge-soft">고단백</span>
+          </div>
+          <div class="product-name">Signature Cobb Salad</div>
+          <div class="product-name-kr">시그니처 콥샐러드</div>
+          <p class="product-desc word-keep">닭가슴살 120g · 신선 채소 5종 · 저당 발사믹 드레싱.<br>한 그릇에 담은 오늘의 균형이에요.</p>
+          <div class="product-stats">
+            <span>🔥 420kcal</span>
+            <span>💪 단백질 23g</span>
+            <span>🧂 나트륨 610mg</span>
+          </div>
+          <div class="product-price">₩9,900</div>
+          <div class="product-ctas">
+            <button class="btn btn-primary" type="button">메뉴 자세히 보기</button>
+            <button class="btn btn-ghost" type="button">♡ 찜하기</button>
+          </div>
+        </div>
       </div>
-      <div class="grid-3">
-        <div class="card">
-          <div class="dot" aria-hidden="true"></div>
-          <h3>제품 예시 1</h3>
-          <p>제품 소개 문구가 들어가는 자리입니다.</p>
+
+      <div class="mini-cards">
+        <div class="mini-card">
+          <div class="mini-card-visual" style="background:linear-gradient(135deg,#D6ECF5,#9CCBE0);">🐟</div>
+          <div class="mini-card-body">
+            <div class="mini-card-name">Salmon Poke Bowl</div>
+            <div class="mini-card-sub">연어 포케 보울</div>
+            <div class="mini-card-stat">390kcal · 단백질 27g</div>
+            <div class="mini-card-foot">
+              <span class="mini-card-price">₩11,900</span>
+              <button class="plus-btn" type="button" aria-label="담기">+</button>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <div class="dot" aria-hidden="true"></div>
-          <h3>제품 예시 2</h3>
-          <p>제품 소개 문구가 들어가는 자리입니다.</p>
+        <div class="mini-card">
+          <div class="mini-card-visual" style="background:linear-gradient(135deg,#EFE6D2,#D8C39A);">🍱</div>
+          <div class="mini-card-body">
+            <div class="mini-card-name">Tofu Steak Set</div>
+            <div class="mini-card-sub">두부 스테이크 정식</div>
+            <div class="mini-card-stat">330kcal · 단백질 21g</div>
+            <div class="mini-card-foot">
+              <span class="mini-card-price">₩8,900</span>
+              <button class="plus-btn" type="button" aria-label="담기">+</button>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <div class="dot" aria-hidden="true"></div>
-          <h3>제품 예시 3</h3>
-          <p>제품 소개 문구가 들어가는 자리입니다.</p>
+        <div class="mini-card">
+          <div class="mini-card-visual" style="background:linear-gradient(135deg,#F1EAD8,#DCC98B);">🥣</div>
+          <div class="mini-card-body">
+            <div class="mini-card-name">Greek Yogurt Bowl</div>
+            <div class="mini-card-sub">그릭요거트 그래놀라 보울</div>
+            <div class="mini-card-stat">260kcal · 단백질 19g</div>
+            <div class="mini-card-foot">
+              <span class="mini-card-price">₩6,900</span>
+              <button class="plus-btn" type="button" aria-label="담기">+</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="events">
-    <div class="section-inner">
-      <div class="event-banner">
-        <span class="eyebrow">EVENT</span>
-        <h2>진행 중인 이벤트</h2>
-        <p>테스트 페이지용 이벤트 배너 영역입니다.</p>
-        <a class="cta" href="#">이벤트 보러가기</a>
+  <!-- ===== Star feature: Week Meal Game ===== -->
+  <section id="week-game" class="section">
+    <div class="wrap">
+      <div class="section-eyebrow">Play · 7-Day Meal Game</div>
+      <h2 class="section-title">이번 주, 나만의 균형을 뽑아보세요</h2>
+      <p class="section-sub word-keep">3가지 질문에 답하면 7일치 식단을 바로 짜드려요. 자취생의 냉장고 고민, 오늘로 끝.</p>
+
+      <div class="game-card">
+        <div class="game-progress" id="gameProgress">
+          <span class="game-dot active" data-dot="0"></span>
+          <span class="game-dot" data-dot="1"></span>
+          <span class="game-dot" data-dot="2"></span>
+        </div>
+
+        <!-- Intro -->
+        <div class="game-screen visible" data-screen="intro">
+          <div class="game-intro">
+            <div class="game-icon">🗓️</div>
+            <h3>7일 균형 식단, 30초면 뽑혀요</h3>
+            <p class="word-keep">오늘 컨디션, 좋아하는 맛, 이번 주 목표만 알려주시면<br>스윗밸런스 메뉴로 월~일 식단을 짜드릴게요.</p>
+            <button class="btn btn-primary" type="button" onclick="SB.startGame()">식단 뽑으러 가기</button>
+          </div>
+        </div>
+
+        <!-- Q1 -->
+        <div class="game-screen" data-screen="q0">
+          <div class="game-q">
+            <div class="q-label">Question 1 / 3</div>
+            <h3>오늘 컨디션은 어떤가요?</h3>
+            <div class="game-options">
+              <button class="option-btn" type="button" onclick="SB.answer(0,0)">든든하게 채우고 싶어요</button>
+              <button class="option-btn" type="button" onclick="SB.answer(0,1)">가볍게 즐기고 싶어요</button>
+              <button class="option-btn" type="button" onclick="SB.answer(0,2)">운동한 날, 단백질이 필요해요</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="game-screen" data-screen="q1">
+          <div class="game-q">
+            <div class="q-label">Question 2 / 3</div>
+            <h3>어떤 맛이 끌리나요?</h3>
+            <div class="game-options">
+              <button class="option-btn" type="button" onclick="SB.answer(1,0)">상큼한 채소</button>
+              <button class="option-btn" type="button" onclick="SB.answer(1,1)">고소한 곡물</button>
+              <button class="option-btn" type="button" onclick="SB.answer(1,2)">든든한 고단백</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="game-screen" data-screen="q2">
+          <div class="game-q">
+            <div class="q-label">Question 3 / 3</div>
+            <h3>이번 주 목표는 무엇인가요?</h3>
+            <div class="game-options">
+              <button class="option-btn" type="button" onclick="SB.answer(2,0)">다이어트 관리</button>
+              <button class="option-btn" type="button" onclick="SB.answer(2,1)">근성장 서포트</button>
+              <button class="option-btn" type="button" onclick="SB.answer(2,2)">그냥 잘 챙겨먹기</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="game-screen" data-screen="loading">
+          <div class="game-loading">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <p>당신에게 맞는 균형을 계산하고 있어요...</p>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="game-screen" data-screen="result">
+          <div class="game-result">
+            <h3>당신의 7일 균형 식단이에요</h3>
+            <div class="result-sub">월요일부터 일요일까지, 매일 다른 균형으로 준비했어요.</div>
+            <div class="week-grid" id="weekGrid"></div>
+            <div class="game-summary" id="gameSummary"></div>
+            <div class="game-result-ctas">
+              <button class="btn btn-ghost" type="button" onclick="SB.resetGame()">다시 뽑기</button>
+              <a class="btn btn-secondary" href="#product">전체 메뉴 보러가기</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="cs">
-    <div class="section-inner">
-      <div class="section-head">
-        <span class="eyebrow">CUSTOMER CENTER</span>
-        <h2>고객센터</h2>
-        <p>문의사항이 있으시면 아래로 연락해주세요.</p>
+  <!-- ===== Brand ===== -->
+  <section id="brand" class="section">
+    <div class="wrap">
+      <div class="section-eyebrow">Brand</div>
+      <h2 class="section-title">스윗밸런스를 소개합니다</h2>
+
+      <div class="mission-box">
+        <div class="mission-kr">진정으로 건강한 식사를 통해,<br>누구나 목표와 행복을 이룰 수 있는 삶을 만듭니다.</div>
+        <div class="mission-en">"Through truly healthy meals, we help everyone build a life where they can reach their goals and find happiness."</div>
       </div>
-      <div class="cs-grid">
-        <div class="cs-card">
-          <div class="label">전화 문의</div>
-          <div class="value">1544-0000</div>
+
+      <div class="slogan-grid">
+        <div class="slogan-card en">Eat fresh, be your Best.</div>
+        <div class="slogan-card kr">진정으로 건강한 한 끼,<br>오늘도 균형있게.</div>
+      </div>
+
+      <div class="personality-grid">
+        <div class="personality-card">
+          <div class="p-en">Warm</div>
+          <div class="p-kr">따뜻한</div>
+          <div class="p-desc word-keep">건강을 훈계하지 않고 응원해요. 음식처럼, 브랜드도 사람을 품습니다.</div>
         </div>
-        <div class="cs-card">
-          <div class="label">이메일 문의</div>
-          <div class="value">help@sweetbalance.test</div>
+        <div class="personality-card">
+          <div class="p-en">Fresh</div>
+          <div class="p-kr">신선한</div>
+          <div class="p-desc word-keep">재료처럼 언어와 디자인도 가볍고 선명하게, 군더더기 없이.</div>
         </div>
+        <div class="personality-card">
+          <div class="p-en">Honest</div>
+          <div class="p-kr">정직한</div>
+          <div class="p-desc word-keep">칼로리와 영양소를 숨기지 않아요. 숫자가 곧 신뢰입니다.</div>
+        </div>
+      </div>
+
+      <div class="target-pills">
+        <span class="target-pill">편의를 중시하는 1인 가구 · 자취생</span>
+        <span class="target-pill">건강을 챙기고 싶은 직장인 (25–40대)</span>
+        <span class="target-pill">운동·다이어트 루틴 유지자</span>
+        <span class="target-pill">저당·고단백 식단 관심자</span>
       </div>
     </div>
   </section>
 
   <footer>
-    © 2026 Sweet Balance. Test Page.
+    <img class="foot-logo" src="assets/logo-white.png" alt="SweetBalance">
+    <div>© 2026 SweetBalance. All rights reserved.</div>
+    <div class="foot-tagline">Eat fresh, be your Best.</div>
   </footer>
+
+  <script>
+  (function () {
+    // ---- 7-day meal recommendation game ----
+    var MENU_POOL = [
+      { emoji: '🥗', name: '시그니처 콥샐러드', kcal: 420, protein: 23 },
+      { emoji: '🍗', name: '저당 닭가슴살 스테이크', kcal: 280, protein: 32 },
+      { emoji: '🐟', name: '연어 포케 보울', kcal: 390, protein: 27 },
+      { emoji: '🫘', name: '병아리콩 후무스 보울', kcal: 350, protein: 18 },
+      { emoji: '🌾', name: '퀴노아 채소 보울', kcal: 310, protein: 14 },
+      { emoji: '🍱', name: '두부 스테이크 정식', kcal: 330, protein: 21 },
+      { emoji: '🥣', name: '그릭요거트 그래놀라 보울', kcal: 260, protein: 19 },
+      { emoji: '🍄', name: '저당 버섯 리조또', kcal: 300, protein: 16 }
+    ];
+    var DAY_LABELS = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+
+    // 답변별로 가중치를 더 주는 메뉴 인덱스
+    var BOOST = [
+      [[5, 3, 7], [4, 6, 2], [1, 2, 5]],   // Q1: 든든하게 / 가볍게 / 단백질
+      [[0, 2, 4], [3, 7, 5], [1, 5, 2]],   // Q2: 상큼한 채소 / 고소한 곡물 / 고단백
+      [[4, 6, 0], [1, 5, 2], [0, 3, 7]]    // Q3: 다이어트 / 근성장 / 잘챙겨먹기
+    ];
+
+    var answers = [];
+    var screens = ['intro', 'q0', 'q1', 'q2', 'loading', 'result'];
+
+    function showScreen(name) {
+      screens.forEach(function (s) {
+        var el = document.querySelector('[data-screen="' + s + '"]');
+        if (el) el.classList.toggle('visible', s === name);
+      });
+    }
+
+    function setDots(step) {
+      // step: -1 (intro), 0,1,2 (questions)
+      var dots = document.querySelectorAll('.game-dot');
+      dots.forEach(function (d, i) {
+        d.classList.toggle('active', i <= step);
+      });
+    }
+
+    function startGame() {
+      answers = [];
+      setDots(0);
+      showScreen('q0');
+    }
+
+    function answer(step, idx) {
+      // 시각 피드백
+      var qEl = document.querySelector('[data-screen="q' + step + '"]');
+      var btns = qEl.querySelectorAll('.option-btn');
+      btns.forEach(function (b, i) { b.classList.toggle('selected', i === idx); });
+
+      answers[step] = idx;
+
+      setTimeout(function () {
+        if (step < 2) {
+          setDots(step + 1);
+          showScreen('q' + (step + 1));
+        } else {
+          showScreen('loading');
+          setTimeout(function () {
+            renderResult();
+            showScreen('result');
+          }, 700);
+        }
+      }, 300);
+    }
+
+    function pickWeek() {
+      var weight = MENU_POOL.map(function () { return 1; });
+      [0, 1, 2].forEach(function (q) {
+        var boosted = BOOST[q][answers[q]] || [];
+        boosted.forEach(function (idx) { weight[idx] += 3; });
+      });
+
+      var pool = [];
+      weight.forEach(function (w, idx) {
+        for (var k = 0; k < w; k++) pool.push(idx);
+      });
+
+      var week = [];
+      var last = -1;
+      for (var d = 0; d < 7; d++) {
+        var pick, tries = 0;
+        do {
+          pick = pool[Math.floor(Math.random() * pool.length)];
+          tries++;
+        } while (pick === last && tries < 12);
+        week.push(pick);
+        last = pick;
+      }
+      return week;
+    }
+
+    function renderResult() {
+      var week = pickWeek();
+      var grid = document.getElementById('weekGrid');
+      grid.innerHTML = '';
+
+      var totalKcal = 0, totalProtein = 0;
+
+      week.forEach(function (menuIdx, i) {
+        var m = MENU_POOL[menuIdx];
+        totalKcal += m.kcal;
+        totalProtein += m.protein;
+
+        var card = document.createElement('div');
+        card.className = 'day-card';
+        card.innerHTML =
+          '<div class="day-label">' + DAY_LABELS[i] + '</div>' +
+          '<div class="day-emoji">' + m.emoji + '</div>' +
+          '<div class="day-name">' + m.name + '</div>' +
+          '<div class="day-stat">' + m.kcal + 'kcal · 단백질 ' + m.protein + 'g</div>';
+        grid.appendChild(card);
+
+        setTimeout(function () { card.classList.add('show'); }, i * 60);
+      });
+
+      var avgKcal = Math.round(totalKcal / 7);
+      var avgProtein = Math.round(totalProtein / 7);
+      document.getElementById('gameSummary').innerHTML =
+        '<span class="summary-pill">평균 ' + avgKcal + 'kcal</span>' +
+        '<span class="summary-pill">평균 단백질 ' + avgProtein + 'g</span>';
+    }
+
+    function resetGame() {
+      answers = [];
+      setDots(-1);
+      document.querySelectorAll('.option-btn').forEach(function (b) { b.classList.remove('selected'); });
+      showScreen('intro');
+    }
+
+    window.SB = { startGame: startGame, answer: answer, resetGame: resetGame };
+  })();
+  </script>
+
 </body>
 </html>

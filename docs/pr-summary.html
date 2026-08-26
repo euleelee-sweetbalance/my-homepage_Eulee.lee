@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>스윗밸런스 홈페이지 PR 요약</title>
+<style>
+  :root {
+    --g: #00614E; --g2: #007C5E; --sw: #FDFFE6;
+    --seed: #84BA45; --soil: #896431; --sky: #50AADC;
+    --ink: #1B2A24; --char: #3A4742; --slate: #6B7571;
+    --mist: #C8CEC9; --paper: #F6F4E8; --white: #FFFFFF;
+    --border: rgba(0,97,78,.15); --div: rgba(0,97,78,.09); --red: #D64545;
+    --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
+    --sh-sm: 0 2px 8px rgba(27,42,36,.07);
+    --sh-md: 0 8px 24px rgba(27,42,36,.10);
+    --en: 'Montserrat','Poppins',-apple-system,BlinkMacSystemFont,sans-serif;
+    --kr: 'Pretendard','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--sw); color: var(--ink); font-family: var(--kr); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+  .word-keep { word-break: keep-all; }
+
+  header.doc-head { background: var(--g); color: var(--sw); padding: 64px 24px 56px; text-align: center; }
+  .doc-eyebrow { font-family: var(--en); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; opacity: .75; margin-bottom: 14px; }
+  .doc-title { font-family: var(--en); font-weight: 800; font-size: clamp(28px,4vw,42px); letter-spacing: -.02em; }
+  .doc-sub { font-size: 15px; opacity: .85; margin-top: 12px; }
+  .doc-meta { display: flex; gap: 18px; justify-content: center; margin-top: 24px; flex-wrap: wrap; font-size: 12px; opacity: .7; }
+
+  .section { padding: 56px 24px; border-bottom: 1px solid var(--div); }
+  .section-title { font-family: var(--en); font-weight: 800; font-size: 26px; color: var(--ink); margin-bottom: 8px; }
+  .section-sub { font-size: 14px; color: var(--slate); margin-bottom: 32px; }
+
+  .as-to-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .as-to-grid { grid-template-columns: 1fr; } }
+  .at-card { border-radius: var(--r-lg); padding: 24px; border: 1px solid var(--border); }
+  .at-card.as-is { background: var(--paper); }
+  .at-card.to-be { background: rgba(0,97,78,.06); border-color: rgba(0,97,78,.3); }
+  .at-label { font-family: var(--en); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .as-is .at-label { color: var(--slate); }
+  .to-be .at-label { color: var(--g); }
+  .at-card ul { padding-left: 18px; font-size: 14px; color: var(--char); line-height: 1.8; }
+
+  .screen-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .screen-grid { grid-template-columns: repeat(2, 1fr); } }
+  .screen-card { background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px 16px; box-shadow: var(--sh-sm); }
+  .screen-num { font-family: var(--en); font-size: 11px; font-weight: 700; color: var(--seed); letter-spacing: .1em; }
+  .screen-emoji { font-size: 28px; margin: 10px 0 8px; }
+  .screen-name { font-family: var(--en); font-weight: 700; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+  .screen-desc { font-size: 12px; color: var(--char); line-height: 1.6; }
+
+  .flow { display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; }
+  .flow-step { flex: 1; min-width: 150px; background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); padding: 16px; box-shadow: var(--sh-sm); }
+  .flow-step .fs-num { display: inline-flex; align-items:center; justify-content:center; width:22px;height:22px;border-radius:999px;background:var(--g);color:var(--sw);font-family:var(--en);font-size:11px;font-weight:700; margin-bottom: 10px; }
+  .flow-step .fs-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .flow-step .fs-desc { font-size: 12px; color: var(--char); line-height: 1.6; }
+  .flow-arrow { display: flex; align-items: center; color: var(--mist); font-size: 18px; }
+  @media (max-width: 760px) { .flow { flex-direction: column; } .flow-arrow { display: none; } }
+
+  table.answers { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.answers th { text-align: left; padding: 10px 12px; background: rgba(0,97,78,.06); color: var(--g); font-weight: 700; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  table.answers td { padding: 12px; border-bottom: 1px solid var(--div); color: var(--char); vertical-align: top; }
+  table.answers tr:last-child td { border-bottom: none; }
+  table.answers td.q { font-weight: 700; color: var(--ink); width: 26%; }
+  table.answers td.a { color: var(--g); font-weight: 600; width: 22%; }
+
+  .file-list { display: flex; flex-direction: column; gap: 10px; }
+  .file-row { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; }
+  .file-tag { font-family: var(--en); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-pill); letter-spacing: .06em; }
+  .file-tag.mod { background: rgba(80,170,220,.15); color: #2c7ba6; }
+  .file-tag.new { background: rgba(132,186,69,.18); color: #3d7a18; }
+  .file-path { font-family: ui-monospace, Menlo, monospace; font-size: 13px; color: var(--ink); }
+  .file-desc { font-size: 12px; color: var(--slate); margin-left: auto; text-align: right; }
+
+  footer.doc-foot { background: #004F40; color: rgba(253,255,230,.65); padding: 28px 24px; text-align: center; font-size: 12px; }
+  footer.doc-foot a { color: var(--sw); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+  <header class="doc-head">
+    <div class="doc-eyebrow">PR Summary</div>
+    <h1 class="doc-title">스윗밸런스 홈페이지 리디자인</h1>
+    <p class="doc-sub word-keep">인터뷰 답변 5가지 + SweetBalance Design System Manual 기반으로 index.html을 새로 설계했습니다.</p>
+    <div class="doc-meta">
+      <span>Branch: claude/sweetbalance-homepage-3g7fh4</span>
+      <span>File: index.html</span>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title">AS-IS → TO-BE</h2>
+    <p class="section-sub">기존 테스트 페이지에서 브랜드 디자인 시스템 기반의 실제 홈페이지로 전환했습니다.</p>
+    <div class="as-to-grid">
+      <div class="at-card as-is">
+        <div class="at-label">AS-IS</div>
+        <ul>
+          <li>브랜드 톤과 무관한 베이지·테라코타 색상(#d98a5f)</li>
+          <li>"[스윗밸런스 테스트 페이지]" placeholder 문구</li>
+          <li>히어로 + 특징 카드 3개뿐인 단순 소개 페이지</li>
+          <li>실제 제품·기능 없이 정적인 텍스트만 존재</li>
+        </ul>
+      </div>
+      <div class="at-card to-be">
+        <div class="at-label">TO-BE</div>
+        <ul>
+          <li>디자인 시스템 컬러(Vital Green #00614E · Sunshine White #FDFFE6) 적용</li>
+          <li>"Eat fresh, be your Best." 공식 슬로건을 히어로 메인 카피로 사용</li>
+          <li>대표 제품(시그니처 콥샐러드) 소개 섹션 신설</li>
+          <li>실제 클릭해서 작동하는 <strong>7일 식단 추천 게임</strong> 신설 (주인공 기능)</li>
+          <li>브랜드 미션·슬로건·퍼스널리티 소개 섹션 신설</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">화면 구성</h2>
+    <p class="section-sub">한 페이지(index.html)에 4개 섹션이 순서대로 배치됩니다.</p>
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="screen-num">01 · HERO</div>
+        <div class="screen-emoji">🥗</div>
+        <div class="screen-name">첫 화면</div>
+        <div class="screen-desc word-keep">"Eat fresh, be your Best." 슬로건과 자취생 타겟 카피, 저당·고단백 뱃지</div>
+      </div>
+      <div class="screen-card">
+        <div class="screen-num">02 · PRODUCT</div>
+        <div class="screen-emoji">🍅</div>
+        <div class="screen-name">대표 제품</div>
+        <div class="screen-desc word-keep">시그니처 콥샐러드 — 이모지 재료 링 비주얼 + 영양 정보 카드</div>
+      </div>
+      <div class="screen-card">
+        <div class="screen-num">03 · GAME</div>
+        <div class="screen-emoji">🗓️</div>
+        <div class="screen-name">7일 식단 게임</div>
+        <div class="screen-desc word-keep">이 페이지의 주인공 기능. 퀴즈로 나만의 7일 식단을 뽑아요</div>
+      </div>
+      <div class="screen-card">
+        <div class="screen-num">04 · BRAND</div>
+        <div class="screen-emoji">💚</div>
+        <div class="screen-name">브랜드 소개</div>
+        <div class="screen-desc word-keep">미션, 슬로건, Warm·Fresh·Honest 퍼스널리티, 타겟 고객</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">주인공 기능 — 7일 식단 추천 게임</h2>
+    <p class="section-sub word-keep">인터뷰 4번 답변("일주일 식단 추천 게임")을 실제로 작동하는 인터랙션으로 구현했습니다.</p>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="fs-num">1</span>
+        <div class="fs-title">퀴즈 시작</div>
+        <div class="fs-desc">"식단 뽑으러 가기" 클릭 시 3문항 퀴즈 시작</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="fs-num">2</span>
+        <div class="fs-title">3가지 질문</div>
+        <div class="fs-desc word-keep">오늘 컨디션 · 끌리는 맛 · 이번 주 목표를 선택</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="fs-num">3</span>
+        <div class="fs-title">가중치 계산</div>
+        <div class="fs-desc word-keep">답변마다 메뉴 8종에 가중치를 부여해 취향을 반영</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="fs-num">4</span>
+        <div class="fs-title">7일 식단 공개</div>
+        <div class="fs-desc word-keep">월~일 식단 카드가 순차 등장, 평균 kcal·단백질 표시</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">반영된 나의 답변</h2>
+    <p class="section-sub">인터뷰에서 주신 답변이 실제로 어디에, 어떻게 들어갔는지 정리했습니다.</p>
+    <table class="answers">
+      <thead><tr><th>질문</th><th>내 답변</th><th>반영된 곳</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="q">1. 손님</td>
+          <td class="a">20대 여성 자취생</td>
+          <td>히어로 카피 "혼자 사는 날에도, 오늘 한 끼는 제대로." / 브랜드 섹션 타겟 칩에 "자취생" 추가</td>
+        </tr>
+        <tr>
+          <td class="q">2. 첫 화면 한 문장</td>
+          <td class="a">"Eat fresh, be your Best"</td>
+          <td>히어로 메인 헤드라인으로 그대로 사용 (디자인 시스템 공식 슬로건과 일치)</td>
+        </tr>
+        <tr>
+          <td class="q">3. 대표 제품</td>
+          <td class="a">생생한 초록색 · 웰니스 느낌</td>
+          <td>시그니처 콥샐러드를 대표 제품으로 선정, 이모지 재료로 만든 "초록 접시" 비주얼로 표현</td>
+        </tr>
+        <tr>
+          <td class="q">4. 아이디어 기능</td>
+          <td class="a">일주일 식단 추천 게임</td>
+          <td>3문항 퀴즈 → 7일 식단 결과가 실제로 작동하는 <strong>주인공 기능</strong>으로 구현</td>
+        </tr>
+        <tr>
+          <td class="q">5. 분위기</td>
+          <td class="a">미니멀 화이트 + 신선한 초록</td>
+          <td>배경 #FDFFE6(Sunshine White), 브랜드 그린 #00614E을 그대로 사용 — 디자인 시스템과 충돌 없이 반영</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section" style="border-bottom: none;">
+    <h2 class="section-title">변경 파일 목록</h2>
+    <div class="file-list">
+      <div class="file-row">
+        <span class="file-tag mod">MODIFIED</span>
+        <span class="file-path">index.html</span>
+        <span class="file-desc">홈페이지 전체 재설계 (HTML/CSS/JS 단일 파일)</span>
+      </div>
+      <div class="file-row">
+        <span class="file-tag new">NEW</span>
+        <span class="file-path">docs/pr-summary.html</span>
+        <span class="file-desc">이 PR 설명 자료용 원페이저</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="doc-foot">
+    <div>SweetBalance · Eat fresh, be your Best.</div>
+  </footer>
+
+</body>
+</html>
