@@ -3104,7 +3104,7 @@
 
     /* ===================== Catch game ===================== */
     var CG = {
-      ROUND_MS: 12000,
+      ROUND_MS: 10000,
       ITEM_W: 52,
       ITEM_H: 52,
       PLATE_W: 100,
@@ -3209,11 +3209,11 @@
       els.time.textContent = Math.ceil(remain / 1000);
       els.bar.style.width = (remain / CG.ROUND_MS * 100) + '%';
 
-      /* spawn faster as the round goes on */
+      /* 한 라운드 낙하량 약 10개 - 5~7개가 자연스러운 목표치가 되도록 */
       if (CG.elapsed < CG.ROUND_MS - 400 && CG.elapsed >= CG.nextSpawn) {
         cgSpawn();
         var progress = CG.elapsed / CG.ROUND_MS;
-        CG.nextSpawn = CG.elapsed + (640 - progress * 180);
+        CG.nextSpawn = CG.elapsed + (1050 - progress * 200);
       }
 
       var catchTop = CG.h - CG.PLATE_BOTTOM - CG.PLATE_H;
@@ -3329,13 +3329,13 @@
       return after.filter(function (id) { return before.indexOf(id) === -1; });
     }
 
-    /* 4개 이하는 실패, 8개 이상은 영양 과다 - 균형은 알맞게 담는 것 */
+    /* 4개 이하는 영양 부족, 8개 이상은 영양 과다 - 균형은 알맞게 담는 것 */
     function cgGrade(n) {
       if (n <= 4) {
         return {
-          key: 'fail', emoji: '😢', badge: '실패',
-          title: '재료 ' + n + '개 · 실패!',
-          sub: '한 끼를 차리기엔 재료가 부족했어요.<br>괜찮아요, 다음 기회에 다시 채워봐요.'
+          key: 'fail', emoji: '😢', badge: '영양 부족',
+          title: '영양 부족! 주의!',
+          sub: '재료 ' + n + '개를 받았어요. 한 끼를 차리기엔 부족해요.<br>괜찮아요, 다음 기회에 다시 채워봐요.'
         };
       }
       if (n >= 8) {
