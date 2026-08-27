@@ -130,10 +130,8 @@
     background: rgba(0,97,78,.08); color: var(--g); font-size: 12px; font-weight: 700;
     letter-spacing: .08em; margin-bottom: 28px; font-family: var(--en);
   }
-  .hero-en {
-    font-family: var(--en); font-weight: 800; font-size: clamp(38px, 7vw, 76px);
-    line-height: 1.06; letter-spacing: -.03em; color: var(--g);
-  }
+  .hero-slogan { margin: 0 auto; max-width: 620px; }
+  .hero-slogan img { width: 100%; height: auto; }
   .hero-kr {
     font-family: var(--kr); font-weight: 700; font-size: clamp(19px, 2.6vw, 26px);
     color: var(--ink); margin-top: 18px;
@@ -513,6 +511,11 @@
   }
 
   /* character */
+  .br-char-intro { display: flex; gap: 26px; align-items: flex-start; }
+  @media (max-width: 720px) { .br-char-intro { flex-direction: column; align-items: center; text-align: center; gap: 16px; } }
+  .br-char-img { width: 150px; flex-shrink: 0; height: auto; }
+  @media (max-width: 720px) { .br-char-img { width: 120px; } }
+  .br-char-intro-text { flex: 1; min-width: 0; }
   .br-char-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
   @media (max-width: 640px) { .br-char-cols { grid-template-columns: 1fr; } }
   .br-char-box { background: var(--paper); border-radius: var(--r-md); padding: 16px 18px; }
@@ -1172,7 +1175,7 @@
   <section id="hero">
     <div class="hero-inner">
       <span class="eyebrow-pill">🥗 SWEET BALANCE · 자취생의 한 끼</span>
-      <h1 class="hero-en">Eat fresh,<br>be your Best.</h1>
+      <h1 class="hero-slogan"><img src="assets/slogan.png" alt="Eat fresh, be your Best."></h1>
       <p class="hero-kr word-keep">혼자 사는 날에도, 오늘 한 끼는 제대로.</p>
       <p class="hero-sub word-keep">장 보고 다듬고 요리할 시간이 없는 날에도 괜찮아요.<br>스윗밸런스가 신선한 재료로 오늘의 균형을 채워드릴게요.</p>
       <div class="hero-ctas">
@@ -1603,14 +1606,14 @@
       <div class="br-block">
         <div class="br-label">Character</div>
         <div class="br-sheet">
-          <div class="br-sheet-head">
-            <span class="br-sheet-avatar">🐰</span>
-            <div>
+          <div class="br-char-intro">
+            <img class="br-char-img" src="assets/sweeny.png" alt="스윗밸런스 캐릭터 미식가 토끼 스위니">
+            <div class="br-char-intro-text">
               <div class="br-sheet-title">맛과 균형 사이, 관습을 깬 미식가 토끼 ‘스위니’</div>
               <div class="br-sheet-en">Sweeny · Moon Forest</div>
+              <p class="br-sheet-body" style="margin-top:14px;">Moon Forest(달숲)에서 태어나 야채만 먹고 자란 토끼. 미식의 세계에 눈뜨며 더 다양한 식재료를 몰래 접하게 되었고, 결국 기존(달숲)의 식사 규칙에서 벗어나게 됐다. ‘정해진 방식’이 아닌 ‘나에게 맞는 감각’을 믿기로 결심하고, 달숲을 뛰쳐나와 스스로의 기준으로 건강식을 탐구하는 여정에 나섰다. 지금은 인간 세상에서 자신만의 미감과 철학을 사람들과 나누며 살아가는 미식가로 활동 중이다.</p>
             </div>
           </div>
-          <p class="br-sheet-body">Moon Forest(달숲)에서 태어나 야채만 먹고 자란 토끼. 미식의 세계에 눈뜨며 더 다양한 식재료를 몰래 접하게 되었고, 결국 기존(달숲)의 식사 규칙에서 벗어나게 됐다. ‘정해진 방식’이 아닌 ‘나에게 맞는 감각’을 믿기로 결심하고, 달숲을 뛰쳐나와 스스로의 기준으로 건강식을 탐구하는 여정에 나섰다. 지금은 인간 세상에서 자신만의 미감과 철학을 사람들과 나누며 살아가는 미식가로 활동 중이다.</p>
 
           <div class="br-char-cols">
             <div class="br-char-box">
