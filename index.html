@@ -309,6 +309,11 @@
   .shop-count { font-family: var(--en); font-size: 11.5px; color: var(--slate); }
   .shop-empty { text-align: center; color: var(--slate); font-size: 14px; padding: 40px 0; display: none; }
   .shop-empty.visible { display: block; }
+  /* 위시리스트 탭 */
+  .tab-btn.tab-wish { border-color: rgba(214,69,69,.45); color: var(--red); }
+  .tab-btn.tab-wish:hover { border-color: var(--red); color: var(--red); }
+  .tab-btn.tab-wish.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .tab-btn .tab-num { font-family: var(--en); font-weight: 700; opacity: .75; margin-left: 5px; }
 
   /* ---------- Overlay / Drawer ---------- */
   .overlay {
@@ -603,6 +608,16 @@
   .foot-links a:hover { color: var(--sw); text-decoration: underline; }
   .foot-info { font-size: 11.5px; opacity: .7; margin-top: 10px; line-height: 1.8; }
   footer .foot-tagline { font-family: var(--en); font-style: italic; margin-top: 10px; opacity: .8; }
+
+  /* 방문 카운터 */
+  .foot-visits { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .fv-item {
+    display: inline-flex; align-items: baseline; gap: 6px; font-size: 11.5px;
+    background: rgba(253,255,230,.1); border: 1px solid rgba(253,255,230,.16);
+    color: rgba(253,255,230,.75); padding: 6px 13px; border-radius: var(--r-pill);
+  }
+  .fv-item b { font-family: var(--en); font-size: 13.5px; font-weight: 800; color: var(--sw); }
+  .foot-visits-note { font-size: 11px; opacity: .5; margin-bottom: 18px; word-break: keep-all; }
 
   /* ---------- Wellness Challenge: intro popup ---------- */
   .wl-pop-overlay {
@@ -1222,6 +1237,10 @@
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a1.5 1.5 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a1.5 1.5 0 0 0 0-3V9Z"/><path d="M9 7v10" stroke-dasharray="2 2.2"/></svg>
           <span class="icon-count zero" id="couponCount">0</span>
         </button>
+        <button class="icon-btn" type="button" aria-label="위시리스트" onclick="SB.openWishlist()">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-7-9.5A4 4 0 0 1 12 7a4 4 0 0 1 7 3.5c0 5-7 9.5-7 9.5Z"/></svg>
+          <span class="icon-count zero" id="wishCount">0</span>
+        </button>
         <button class="icon-btn" type="button" aria-label="장바구니" onclick="SB.openCart()">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 8Z"/><path d="M9 8a3 3 0 1 1 6 0"/></svg>
           <span class="icon-count zero" id="cartCount">0</span>
@@ -1692,6 +1711,13 @@
       <a href="#brand">브랜드 소개</a>
       <a href="#" onclick="SB.openCustomerCenter(); return false;">고객센터 · 1:1 문의</a>
     </div>
+    <div class="foot-visits">
+      <span class="fv-item">오늘 방문 <b id="fvToday">0</b></span>
+      <span class="fv-item">누적 방문 <b id="fvTotal">0</b></span>
+      <span class="fv-item">방문한 날 <span><b id="fvDays">0</b>일</span></span>
+    </div>
+    <div class="foot-visits-note">※ 서버가 없는 데모 페이지라, 이 브라우저의 방문만 집계합니다. 브라우저 탭을 새로 열 때 1회로 세요.</div>
+
     <div>© 2026 <img class="inline-logo" src="assets/logo-white.png" alt="SweetBalance"> All rights reserved.</div>
     <div class="foot-info">고객센터 1522-0390 · 평일 09:00–17:00 (점심 12:00–13:00) · 이 페이지는 데모용 쇼핑몰 UI입니다.</div>
     <div class="foot-tagline">Eat fresh, be your Best.</div>
@@ -2098,6 +2124,7 @@
     var claimed = [];         // [couponId]
     var appliedCoupon = null; // couponId or null
     var activeCat = 'all';
+    var WISH_CAT = 'wish';   /* 카테고리가 아닌 위시리스트 전용 탭 키 */
     var PAGE_SIZE = 12;
     var shown = PAGE_SIZE;
     var wished = {};
@@ -2158,6 +2185,27 @@
         btn.onclick = function () { setCategory(c.key); };
         bar.appendChild(btn);
       });
+
+      /* 카테고리와 성격이 달라 CATEGORIES에 넣지 않고 맨 끝에 따로 붙인다 */
+      var wishBtn = document.createElement('button');
+      wishBtn.type = 'button';
+      wishBtn.id = 'wishTab';
+      wishBtn.className = 'tab-btn tab-wish' + (activeCat === WISH_CAT ? ' active' : '');
+      wishBtn.setAttribute('data-cat', WISH_CAT);
+      wishBtn.onclick = function () { setCategory(WISH_CAT); };
+      bar.appendChild(wishBtn);
+      renderWishTab();
+    }
+
+    function wishedProducts() {
+      return CATALOG.filter(function (p) { return wished[p.id]; });
+    }
+
+    function renderWishTab() {
+      var btn = document.getElementById('wishTab');
+      if (!btn) return;
+      var n = wishedProducts().length;
+      btn.innerHTML = '\u2661 \uB098\uC758 \uC704\uC2DC\uB9AC\uC2A4\uD2B8' + (n ? '<span class="tab-num">' + n + '</span>' : '');
     }
 
     function setCategory(key) {
@@ -2193,10 +2241,15 @@
     function renderGrid() {
       var grid = document.getElementById('shopGrid');
       var empty = document.getElementById('shopEmpty');
-      var list = activeCat === 'all' ? CATALOG : CATALOG.filter(function (p) { return p.cat === activeCat; });
+      var list = activeCat === WISH_CAT
+        ? wishedProducts()
+        : (activeCat === 'all' ? CATALOG : CATALOG.filter(function (p) { return p.cat === activeCat; }));
       var page = list.slice(0, shown);
 
       grid.innerHTML = '';
+      empty.textContent = activeCat === WISH_CAT
+        ? '아직 찜한 상품이 없어요. 상품 카드의 \u2661 를 눌러 담아보세요.'
+        : '상품을 준비 중이에요. 곧 만나보실 수 있어요.';
       empty.classList.toggle('visible', list.length === 0);
 
       page.forEach(function (p) {
@@ -2211,7 +2264,7 @@
           '<div class="shop-card-visual"' + (isImg ? '' : ' style="background:linear-gradient(135deg,#EEF6DE,#CFE3B0);"') + '>' +
             visualMarkup(p) +
             '<div class="shop-card-badges">' + badgesHtml + '</div>' +
-            '<button class="wish-btn' + (wished[p.id] ? ' active' : '') + '" type="button" aria-label="찜하기" data-wish="' + p.id + '">♡</button>' +
+            '<button class="wish-btn' + (wished[p.id] ? ' active' : '') + '" type="button" aria-label="' + (wished[p.id] ? '찜 해제' : '찜하기') + '" aria-pressed="' + (wished[p.id] ? 'true' : 'false') + '" data-wish="' + p.id + '">' + (wished[p.id] ? '♥' : '♡') + '</button>' +
           '</div>' +
           '<div class="shop-card-body">' +
             '<div class="shop-card-name">' + p.name + '</div>' +
@@ -2250,9 +2303,23 @@
 
     function toggleWish(id, btn) {
       wished[id] = !wished[id];
-      btn.classList.toggle('active', wished[id]);
+      if (!wished[id]) delete wished[id];
+      btn.classList.toggle('active', !!wished[id]);
       btn.textContent = wished[id] ? '♥' : '♡';
+      btn.setAttribute('aria-pressed', wished[id] ? 'true' : 'false');
+      btn.setAttribute('aria-label', wished[id] ? '찜 해제' : '찜하기');
       saveState();
+      renderWishTab();
+      updateBadges();
+      /* 위시리스트 탭에서 해제하면 목록에서도 바로 빠져야 한다 */
+      if (activeCat === WISH_CAT) renderGrid();
+    }
+
+    function openWishlist() {
+      setCategory(WISH_CAT);
+      var shop = document.getElementById('shop');
+      if (shop) shop.scrollIntoView({ behavior: 'smooth' });
+      if (!wishedProducts().length) showToast('아직 찜한 상품이 없어요. 상품 카드의 \u2661 를 눌러보세요.');
     }
 
     /* ===================== Cart ===================== */
@@ -2470,7 +2537,75 @@
       var unused = claimed.length;
       couponEl.textContent = unused;
       couponEl.classList.toggle('zero', unused === 0);
+
+      var wCount = wishedProducts().length;
+      var wishEl = document.getElementById('wishCount');
+      if (wishEl) {
+        wishEl.textContent = wCount;
+        wishEl.classList.toggle('zero', wCount === 0);
+      }
     }
+
+    /* ===================== 방문 카운터 =====================
+       정적 페이지라 서버가 없다. 따라서 '이 브라우저의 방문'만 셀 수 있고,
+       전체 방문자 집계는 서버나 애널리틱스가 있어야 가능하다.
+       한 세션(탭)당 1회만 카운트해서 새로고침으로 부풀지 않게 한다. */
+    var VISIT_KEY = 'sb_visits';
+    var VISIT_SESSION_KEY = 'sb_visit_counted';
+
+    function todayStamp() {
+      var d = new Date();
+      return d.getFullYear() + '-' +
+        ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+        ('0' + d.getDate()).slice(-2);
+    }
+
+    function loadVisits() {
+      try {
+        var v = JSON.parse(localStorage.getItem(VISIT_KEY) || 'null');
+        if (v && typeof v === 'object') {
+          return {
+            day: typeof v.day === 'string' ? v.day : '',
+            today: v.today > 0 ? v.today : 0,
+            total: v.total > 0 ? v.total : 0,
+            days: v.days > 0 ? v.days : 0
+          };
+        }
+      } catch (e) { /* storage unavailable */ }
+      return { day: '', today: 0, total: 0, days: 0 };
+    }
+
+    function countVisit() {
+      var v = loadVisits();
+      var today = todayStamp();
+
+      /* 날짜가 바뀌면 오늘 카운트를 0으로 리셋하고 방문한 날을 하루 늘린다 */
+      var newDay = v.day !== today;
+      if (newDay) { v.day = today; v.today = 0; }
+
+      var counted = false;
+      try { counted = sessionStorage.getItem(VISIT_SESSION_KEY) === today; } catch (e) {}
+
+      if (!counted) {
+        v.today += 1;
+        v.total += 1;
+        if (newDay) v.days += 1;
+        try { sessionStorage.setItem(VISIT_SESSION_KEY, today); } catch (e) {}
+      }
+
+      try { localStorage.setItem(VISIT_KEY, JSON.stringify(v)); } catch (e) {}
+      return v;
+    }
+
+    function renderVisits(v) {
+      var map = { fvToday: v.today, fvTotal: v.total, fvDays: v.days };
+      Object.keys(map).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = map[id].toLocaleString('ko-KR');
+      });
+    }
+
+    function initVisits() { renderVisits(countVisit()); }
 
     /* ===================== Toast ===================== */
     var toastTimer = null;
@@ -3869,6 +4004,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       loadState();
       initBanner();
+      initVisits();
       renderTabs();
       renderGrid();
       updateBadges();
@@ -3896,6 +4032,7 @@
       addToCart: addToCart,
       openCart: openCart,
       openCoupons: openCoupons,
+      openWishlist: openWishlist,
       closeAll: closeAll,
       openChallenge: openChallenge,
       closeChallenge: closeChallenge,
