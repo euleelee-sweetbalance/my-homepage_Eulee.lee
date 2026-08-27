@@ -462,6 +462,33 @@
 
   .game-intro { text-align: center; }
   .game-intro .game-icon { font-size: 56px; margin-bottom: 18px; }
+
+  /* 뽑기 기계(가챠퐁) 아이콘 - 유리 안에 색색의 캡슐 볼이 담긴 모습 */
+  .gacha-machine { width: 96px; margin: 0 auto 20px; }
+  .gacha-globe {
+    width: 84px; height: 84px; margin: 0 auto; border-radius: 50%; position: relative; overflow: hidden;
+    background: radial-gradient(circle at 32% 26%, rgba(255,255,255,.95), rgba(255,255,255,.14) 45%, rgba(255,255,255,.04) 75%);
+    border: 2px solid rgba(255,255,255,.8);
+    box-shadow: inset 0 -10px 16px rgba(0,0,0,.08), inset 0 6px 10px rgba(255,255,255,.6), 0 4px 10px rgba(0,0,0,.1);
+  }
+  .gacha-ball {
+    position: absolute; width: 17px; height: 17px; border-radius: 50%; background: var(--bc, var(--seed));
+    box-shadow: inset -2px -2px 3px rgba(0,0,0,.15), inset 2px 2px 3px rgba(255,255,255,.5);
+  }
+  .gacha-ball:nth-child(1) { top: 12px; left: 12px; }
+  .gacha-ball:nth-child(2) { top: 8px; left: 40px; }
+  .gacha-ball:nth-child(3) { top: 34px; left: 18px; }
+  .gacha-ball:nth-child(4) { top: 28px; left: 50px; }
+  .gacha-ball:nth-child(5) { top: 52px; left: 8px; }
+  .gacha-ball:nth-child(6) { top: 50px; left: 42px; }
+  .gacha-base {
+    width: 62px; height: 30px; margin: -4px auto 0; background: var(--g); border-radius: 8px 8px 16px 16px;
+    position: relative; box-shadow: 0 3px 6px rgba(0,0,0,.15);
+  }
+  .gacha-knob {
+    position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--sw);
+    left: 50%; top: 6px; transform: translateX(-50%); box-shadow: inset 0 0 0 2px rgba(0,0,0,.12);
+  }
   .game-intro h3 { font-family: var(--en); font-weight: 800; font-size: 24px; margin-bottom: 10px; }
   .game-intro p { color: var(--char); font-size: 15px; max-width: 420px; margin: 0 auto 28px; line-height: 1.7; }
 
@@ -505,16 +532,31 @@
   .day-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.45; min-height: 52px; word-break: keep-all; }
   .day-stat { font-size: 10.5px; color: var(--slate); margin-top: 6px; }
 
-  /* 캡슐 뽑기(갓챠) 연출 */
+  /* 캡슐 뽑기(갓챠) 연출 - 투명한 캡슐 안에 색색의 서프라이즈 볼이 든 모습 */
   .day-card.capsule { cursor: pointer; }
-  .day-card.capsule:hover .capsule-ball { transform: translateY(-3px) rotate(4deg); }
+  .day-card.capsule:hover .capsule-ball { transform: translateY(-3px) scale(1.05); }
   .capsule-ball {
-    font-size: 32px; line-height: 1; margin: 12px 0 6px; display: inline-block;
-    animation: capsule-bob 1.6s ease-in-out infinite;
+    width: 46px; height: 46px; margin: 10px auto 8px; border-radius: 50%; position: relative;
+    background: radial-gradient(circle at 32% 26%, rgba(255,255,255,.95), rgba(255,255,255,.12) 45%, rgba(255,255,255,.03) 75%);
+    border: 1.5px solid rgba(255,255,255,.75);
+    box-shadow: inset 0 -7px 11px rgba(0,0,0,.07), inset 0 5px 9px rgba(255,255,255,.55), 0 3px 7px rgba(0,0,0,.1);
+    animation: capsule-bob 1.8s ease-in-out infinite;
+  }
+  .capsule-ball::before {
+    /* 캡슐 이음매 라인 */
+    content: ''; position: absolute; left: -1.5px; right: -1.5px; top: 50%; height: 2px;
+    background: rgba(255,255,255,.65); transform: translateY(-1px);
+  }
+  .capsule-ball::after {
+    /* 안에 담긴 서프라이즈 볼 */
+    content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    left: 50%; top: 60%; transform: translate(-50%, -50%);
+    background: var(--capsule-color, var(--seed));
+    box-shadow: inset -2px -2px 3px rgba(0,0,0,.18), inset 2px 2px 3px rgba(255,255,255,.5);
   }
   @keyframes capsule-bob {
-    0%, 100% { transform: translateY(0) rotate(-4deg); }
-    50% { transform: translateY(-5px) rotate(4deg); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
   }
   .capsule-hint { font-size: 10.5px; color: var(--slate); font-weight: 600; margin-top: 2px; }
   .day-card.cracking .capsule-ball { animation: capsule-shake .42s ease-in-out; }
@@ -1541,7 +1583,7 @@
     <div class="wrap">
       <div class="section-eyebrow">Play · 7-Day Meal Gacha</div>
       <h2 class="section-title">이번 주, 나만의 균형을 뽑아보세요</h2>
-      <p class="section-sub word-keep">3가지 질문에 답하면 7일치 메뉴 캡슐이 준비돼요. 캡슐을 하나씩 뽑아 이번 주 균형을 확인해보세요.</p>
+      <p class="section-sub word-keep">3가지 질문에 답하면 뽑기 기계에 캡슐 7개가 채워져요. 캡슐 안 서프라이즈 볼을 하나씩 뽑아 이번 주 균형을 확인해보세요.</p>
 
       <div class="game-card">
         <div class="game-progress" id="gameProgress">
@@ -1553,9 +1595,19 @@
         <!-- Intro -->
         <div class="game-screen visible" data-screen="intro">
           <div class="game-intro">
-            <div class="game-icon">🎁</div>
+            <div class="gacha-machine" aria-hidden="true">
+              <div class="gacha-globe">
+                <span class="gacha-ball" style="--bc:var(--seed);"></span>
+                <span class="gacha-ball" style="--bc:var(--sky);"></span>
+                <span class="gacha-ball" style="--bc:var(--soil);"></span>
+                <span class="gacha-ball" style="--bc:var(--g2);"></span>
+                <span class="gacha-ball" style="--bc:var(--seed);"></span>
+                <span class="gacha-ball" style="--bc:var(--sky);"></span>
+              </div>
+              <div class="gacha-base"><span class="gacha-knob"></span></div>
+            </div>
             <h3>7일 균형 식단, 캡슐 뽑기로 만나요</h3>
-            <p class="word-keep">오늘 컨디션, 좋아하는 맛, 이번 주 목표만 알려주시면<br>스윗밸런스 메뉴로 월~일 캡슐 7개를 채워드릴게요.</p>
+            <p class="word-keep">오늘 컨디션, 좋아하는 맛, 이번 주 목표만 알려주시면<br>뽑기 기계에서 스윗밸런스 캡슐 7개를 뽑아드릴게요.</p>
             <button class="btn btn-primary" type="button" onclick="SB.startGame()">캡슐 뽑으러 가기</button>
           </div>
         </div>
@@ -3205,10 +3257,11 @@
       return c ? c.label : '';
     }
 
-    /* 7일 식단 뽑기 = 갓챠 캡슐 연출. 결과 자체는 pickWeek()가 그대로 정하고,
-       화면에는 처음에 닫힌 캡슐 7개만 보여준 뒤 탭할 때마다 하나씩 열어 보여준다. */
+    /* 7일 식단 뽑기 = 뽑기 기계 캡슐 연출. 결과 자체는 pickWeek()가 그대로 정하고,
+       화면에는 처음에 투명한 캡슐(안에 서프라이즈 볼) 7개만 보여준 뒤 탭할 때마다 하나씩 열어 보여준다. */
     var gachaWeek = [];   // [{ product, day }] 이번 판에 뽑힌 7일치 결과
     var gachaOpened = {}; // { dayIndex: true } 이미 연 캡슐
+    var CAPSULE_COLORS = ['var(--seed)', 'var(--sky)', 'var(--soil)', 'var(--g2)', 'var(--g)', 'var(--seed)', 'var(--sky)'];
 
     function renderResult() {
       var week = pickWeek();
@@ -3227,9 +3280,10 @@
         card.className = 'day-card capsule';
         card.setAttribute('data-day', i);
         card.setAttribute('aria-label', DAY_LABELS[i] + ' 캡슐 뽑기');
+        card.style.setProperty('--capsule-color', CAPSULE_COLORS[i % CAPSULE_COLORS.length]);
         card.innerHTML =
           '<div class="day-label">' + DAY_LABELS[i] + '</div>' +
-          '<div class="capsule-ball">🎁</div>' +
+          '<div class="capsule-ball"></div>' +
           '<div class="capsule-hint">탭해서 뽑기</div>';
         card.addEventListener('click', function () { openCapsule(i); });
         grid.appendChild(card);
