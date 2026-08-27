@@ -93,7 +93,7 @@
   }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; gap: 20px; }
   .logo { height: 28px; width: auto; display: block; }
-  .foot-logo { height: 24px; width: auto; display: block; margin: 0 auto 10px; opacity: .95; }
+  .foot-logo { height: 60px; width: auto; display: block; margin: 0 auto 6px; opacity: .95; }
   .nav-links { display: flex; gap: 26px; }
   .nav-links a { font-size: 14px; font-weight: 600; color: var(--char); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
   .nav-links a:hover { color: var(--g); }
@@ -114,6 +114,87 @@
   }
   .icon-count.zero { display: none; }
 
+  /* 본문 안에서 브랜드명을 로고 워드마크로 노출할 때 */
+  .inline-logo { height: 30px; width: auto; display: inline-block; vertical-align: -10px; }
+
+  /* ---------- Top rolling banner ---------- */
+  .rb { position: relative; overflow: hidden; height: clamp(320px, 31vw, 420px); background: #B01A3A; }
+  .rb-slide {
+    position: absolute; inset: 0; display: flex; align-items: center;
+    background-position: center right; background-size: cover; background-repeat: no-repeat;
+    opacity: 0; visibility: hidden;
+    transition: opacity 240ms var(--ease-out), visibility 240ms var(--ease-out);
+  }
+  .rb-slide.on { opacity: 1; visibility: visible; }
+  /* 사진 왼쪽 여백을 사진과 같은 색으로 덮어 문구 가독성을 확보한다 */
+  .rb-slide::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--rb-c) 0%, var(--rb-c) 28%, transparent 58%);
+  }
+  /* 여백 없이 꽉 찬 사진에는 어두운 스크림을 얹는다 */
+  .rb-slide.dim::before {
+    background: linear-gradient(90deg, rgba(18,26,21,.84) 0%, rgba(18,26,21,.6) 40%, rgba(18,26,21,0) 74%);
+  }
+  .rb-inner { position: relative; z-index: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .rb-copy { max-width: 460px; color: #fff; }
+  .rb-slide.ink .rb-copy { color: #2A2320; }
+  /* 찢어진 종이 라벨 (브랜드 SNS 카드 톤) */
+  .rb-label {
+    display: inline-block; background: #F6F2E6; color: #2A2320;
+    font-size: 13px; font-weight: 800; padding: 8px 18px 9px; margin-bottom: 16px;
+    transform: rotate(-1.2deg);
+    clip-path: polygon(0 7%, 5% 0, 27% 6%, 52% 0, 79% 7%, 100% 2%, 98% 95%, 73% 100%, 46% 94%, 21% 100%, 2% 93%);
+  }
+  .rb-title {
+    font-size: clamp(23px, 3.2vw, 40px); font-weight: 800; line-height: 1.34; word-break: keep-all;
+    text-shadow: 0 2px 14px rgba(0,0,0,.22);
+  }
+  .rb-slide.ink .rb-title { text-shadow: none; }
+  .rb-title em { font-style: normal; background: rgba(0,0,0,.3); padding: 0 10px; border-radius: 6px; }
+  .rb-slide.ink .rb-title em { background: rgba(255,255,255,.62); }
+  .rb-sub { margin-top: 12px; font-size: clamp(14px, 1.5vw, 17px); opacity: .9; word-break: keep-all; }
+  .rb-sub em { font-style: normal; font-weight: 800; opacity: 1; }
+  .rb-cta {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 22px;
+    background: var(--sw); color: #2A2320; font-weight: 700; font-size: 13px;
+    padding: 11px 22px; border-radius: var(--r-pill); text-decoration: none;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .rb-slide.ink .rb-cta { background: var(--g); color: var(--sw); }
+  .rb-cta:hover { transform: translateY(-2px); }
+  .rb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+    width: 40px; height: 40px; border-radius: 999px; border: none; cursor: pointer;
+    background: rgba(255,255,255,.22); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .rb-nav:hover { background: rgba(255,255,255,.4); }
+  .rb-prev { left: 16px; }
+  .rb-next { right: 16px; }
+  .rb-dots { position: absolute; left: 0; right: 0; bottom: 18px; z-index: 3; display: flex; gap: 7px; justify-content: center; }
+  .rb-dot {
+    width: 7px; height: 7px; padding: 0; border: none; border-radius: 999px; cursor: pointer;
+    background: rgba(255,255,255,.42);
+    transition: width var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+  }
+  .rb-dot.on { width: 22px; background: #fff; }
+  .rb-pause {
+    position: absolute; right: 16px; bottom: 14px; z-index: 3;
+    background: rgba(0,0,0,.28); color: #fff; border: none; cursor: pointer;
+    font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 6px 12px; border-radius: 999px;
+  }
+  .rb-pause:hover { background: rgba(0,0,0,.45); }
+  @media (max-width: 860px) {
+    .rb { height: 380px; }
+    /* 좁은 화면에서는 사진을 아래로 두고 문구를 위에서 덮는다 */
+    .rb-slide { align-items: flex-start; padding-top: 30px; background-position: 72% bottom; }
+    .rb-slide::before { background: linear-gradient(180deg, var(--rb-c) 0%, var(--rb-c) 36%, transparent 72%); }
+    .rb-slide.dim::before { background: linear-gradient(180deg, rgba(18,26,21,.86) 0%, rgba(18,26,21,.6) 38%, rgba(18,26,21,0) 74%); }
+    .rb-copy { max-width: none; }
+    .rb-nav { display: none; }
+  }
+
   /* ---------- Hero ---------- */
   #hero {
     position: relative; overflow: hidden; padding: 108px 24px 88px; text-align: center;
@@ -125,11 +206,7 @@
     background-repeat: no-repeat;
   }
   .hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
-  .eyebrow-pill {
-    display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: var(--r-pill);
-    background: rgba(0,97,78,.08); color: var(--g); font-size: 12px; font-weight: 700;
-    letter-spacing: .08em; margin-bottom: 28px; font-family: var(--en);
-  }
+  .hero-logo { height: clamp(112px, 13vw, 158px); width: auto; margin: 0 auto 4px; }
   .hero-slogan { margin: 0 auto; max-width: 620px; }
   .hero-slogan img { width: 100%; height: auto; }
   .hero-kr {
@@ -382,9 +459,10 @@
   }
   .day-card.show { opacity: 1; transform: translateY(0); }
   .day-label { font-family: var(--en); font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--seed); text-transform: uppercase; }
-  .day-emoji { font-size: 30px; margin: 10px 0 8px; }
-  .day-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.4; min-height: 32px; }
-  .day-stat { font-size: 10px; color: var(--slate); margin-top: 6px; font-family: var(--en); }
+  .day-emoji { font-size: 30px; line-height: 1.1; margin: 10px 0 8px; }
+  .day-emoji img { width: 46px; height: 46px; object-fit: cover; border-radius: var(--r-sm); margin: 0 auto; }
+  .day-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.45; min-height: 52px; word-break: keep-all; }
+  .day-stat { font-size: 10.5px; color: var(--slate); margin-top: 6px; }
 
   .game-summary {
     display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 28px;
@@ -1171,10 +1249,82 @@
     </div>
   </header>
 
+  <!-- ===== Top rolling banner (0.5초마다 자동 전환) ===== -->
+  <section class="rb" id="topBanner" aria-label="타코랩 프로모션 배너" aria-roledescription="carousel">
+    <div class="rb-slide on" data-rb-slide
+         style="--rb-c:#981B33;background-image:url('assets/banner-01.jpg'),linear-gradient(#981B33,#981B33)">
+      <div class="rb-inner">
+        <div class="rb-copy">
+          <span class="rb-label">NEW · 타코랩</span>
+          <div class="rb-title">한 손에 감아 먹는<br>멕시칸 한 끼</div>
+          <p class="rb-sub">생 토마토와 아삭한 채소를 듬뿍 채웠어요.</p>
+          <a class="rb-cta" href="#shop">제품 보러가기 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rb-slide ink" data-rb-slide
+         style="--rb-c:#F6D6A7;background-image:url('assets/banner-02.jpg'),linear-gradient(#F6D6A7,#F6D6A7)">
+      <div class="rb-inner">
+        <div class="rb-copy">
+          <span class="rb-label">MORNING</span>
+          <div class="rb-title">아침을 여는<br>스크램블 에그 타코랩</div>
+          <p class="rb-sub">간식으로, 아침식사로, 야식으로도 간편하게.</p>
+          <a class="rb-cta" href="#shop">제품 보러가기 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rb-slide ink" data-rb-slide
+         style="--rb-c:#B4C444;background-image:url('assets/banner-03.jpg'),linear-gradient(#B4C444,#B4C444)">
+      <div class="rb-inner">
+        <div class="rb-copy">
+          <span class="rb-label">치폴레 소스</span>
+          <div class="rb-title">바삭한 치킨과<br>아삭한 채소 듬뿍</div>
+          <p class="rb-sub">매콤하게 맛있는 <em>타코랩 8종</em>을 소개해요.</p>
+          <a class="rb-cta" href="#shop">8종 보러가기 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rb-slide dim" data-rb-slide
+         style="--rb-c:#2E7A5E;background-image:url('assets/banner-04.jpg'),linear-gradient(#2E7A5E,#2E7A5E)">
+      <div class="rb-inner">
+        <div class="rb-copy">
+          <span class="rb-label">DIP &amp; ROLL</span>
+          <div class="rb-title">찍어 먹는 재미까지<br>크리미 딥 샐러드 랩</div>
+          <p class="rb-sub">돌돌 감아 소스에 푹, 한 손으로 즐기는 한 끼.</p>
+          <a class="rb-cta" href="#shop">제품 보러가기 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rb-slide dim" data-rb-slide
+         style="--rb-c:#484F00;background-image:url('assets/banner-05.jpg'),linear-gradient(#484F00,#484F00)">
+      <div class="rb-inner">
+        <div class="rb-copy">
+          <span class="rb-label">PICNIC</span>
+          <div class="rb-title">가볍게 챙겨 나가는<br>오늘의 피크닉 한 끼</div>
+          <p class="rb-sub">담아 가기 좋은 1인분 소분 구성으로 준비했어요.</p>
+          <a class="rb-cta" href="#shop">제품 보러가기 →</a>
+        </div>
+      </div>
+    </div>
+
+    <button class="rb-nav rb-prev" type="button" aria-label="이전 배너">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <button class="rb-nav rb-next" type="button" aria-label="다음 배너">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="rb-dots" id="rbDots" role="tablist" aria-label="배너 선택"></div>
+    <button class="rb-pause" id="rbPause" type="button" aria-pressed="false">❙❙ 정지</button>
+  </section>
+
   <!-- ===== Hero ===== -->
   <section id="hero">
     <div class="hero-inner">
-      <span class="eyebrow-pill">🥗 SWEET BALANCE · 자취생의 한 끼</span>
+      <img class="hero-logo" src="assets/logo-green.png" alt="SweetBalance">
       <h1 class="hero-slogan"><img src="assets/slogan.png" alt="Eat fresh, be your Best."></h1>
       <p class="hero-kr word-keep">혼자 사는 날에도, 오늘 한 끼는 제대로.</p>
       <p class="hero-sub word-keep">장 보고 다듬고 요리할 시간이 없는 날에도 괜찮아요.<br>스윗밸런스가 신선한 재료로 오늘의 균형을 채워드릴게요.</p>
@@ -1664,7 +1814,7 @@
       <a href="#brand">브랜드 소개</a>
       <a href="#" onclick="SB.openCustomerCenter(); return false;">고객센터 · 1:1 문의</a>
     </div>
-    <div>© 2026 SweetBalance. All rights reserved.</div>
+    <div>© 2026 <img class="inline-logo" src="assets/logo-white.png" alt="SweetBalance"> All rights reserved.</div>
     <div class="foot-info">고객센터 1522-0390 · 평일 09:00–17:00 (점심 12:00–13:00) · 이 페이지는 데모용 쇼핑몰 UI입니다.</div>
     <div class="foot-tagline">Eat fresh, be your Best.</div>
   </footer>
@@ -1702,7 +1852,7 @@
         <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <div class="wl-pop-visual">
-        <span class="wl-pop-eyebrow">SWEET BALANCE · 30 DAYS</span>
+        <span class="wl-pop-eyebrow"><img class="inline-logo" style="height:36px;vertical-align:-13px;" src="assets/logo-white.png" alt="SweetBalance"> · 30 DAYS</span>
         <div class="wl-pop-emoji">🌱</div>
         <div class="wl-pop-title" id="wlPopTitle">30일 <em>웰니스 라이프</em><br>챌린지</div>
         <p class="wl-pop-desc word-keep">건강해야 한다가 아니라,<br>조금씩 더 균형 잡아간다는 것.</p>
@@ -2457,23 +2607,116 @@
       toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2600);
     }
 
+    /* ===================== Top rolling banner ===================== */
+    var RB_MS = 500;  /* 0.5초마다 다음 배너 */
+    var RB = { i: 0, timer: 0, paused: false, slides: [], dots: [] };
+
+    function rbShow(n) {
+      var len = RB.slides.length;
+      if (!len) return;
+      RB.i = ((n % len) + len) % len;
+      RB.slides.forEach(function (s, k) { s.classList.toggle('on', k === RB.i); });
+      RB.dots.forEach(function (d, k) {
+        d.classList.toggle('on', k === RB.i);
+        d.setAttribute('aria-selected', k === RB.i ? 'true' : 'false');
+      });
+    }
+
+    function rbHalt() { clearInterval(RB.timer); RB.timer = 0; }
+    function rbResume() {
+      rbHalt();
+      if (RB.paused || RB.slides.length < 2) return;
+      RB.timer = setInterval(function () { rbShow(RB.i + 1); }, RB_MS);
+    }
+    function rbGo(n) { rbShow(n); rbResume(); }
+
+    function rbSyncPauseBtn() {
+      var btn = document.getElementById('rbPause');
+      if (!btn) return;
+      btn.textContent = RB.paused ? '▶ 재생' : '❙❙ 정지';
+      btn.setAttribute('aria-pressed', RB.paused ? 'true' : 'false');
+    }
+    function rbTogglePause() {
+      RB.paused = !RB.paused;
+      rbSyncPauseBtn();
+      if (RB.paused) rbHalt(); else rbResume();
+    }
+
+    function initBanner() {
+      var root = document.getElementById('topBanner');
+      if (!root) return;
+      RB.slides = Array.prototype.slice.call(root.querySelectorAll('[data-rb-slide]'));
+      if (!RB.slides.length) return;
+
+      var dotBox = document.getElementById('rbDots');
+      RB.slides.forEach(function (s, k) {
+        var d = document.createElement('button');
+        d.type = 'button';
+        d.className = 'rb-dot';
+        d.setAttribute('role', 'tab');
+        d.setAttribute('aria-label', (k + 1) + '번 배너 보기');
+        d.addEventListener('click', function () { rbGo(k); });
+        dotBox.appendChild(d);
+        RB.dots.push(d);
+      });
+
+      root.querySelector('.rb-prev').addEventListener('click', function () { rbGo(RB.i - 1); });
+      root.querySelector('.rb-next').addEventListener('click', function () { rbGo(RB.i + 1); });
+      document.getElementById('rbPause').addEventListener('click', rbTogglePause);
+
+      /* 0.5초는 읽거나 누르기엔 짧으니, 마우스를 올리거나 포커스가 들어오면 멈춘다 */
+      root.addEventListener('mouseenter', rbHalt);
+      root.addEventListener('mouseleave', rbResume);
+      root.addEventListener('focusin', rbHalt);
+      root.addEventListener('focusout', rbResume);
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) rbHalt(); else rbResume();
+      });
+
+      var mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mq && mq.matches) RB.paused = true;
+
+      rbShow(0);
+      rbSyncPauseBtn();
+      rbResume();
+    }
+
     /* ===================== 7-day meal recommendation game ===================== */
-    var MENU_POOL = [
-      { emoji: '🥗', name: '시그니처 콥샐러드', kcal: 420, protein: 23 },
-      { emoji: '🍗', name: '저당 닭가슴살 스테이크', kcal: 280, protein: 32 },
-      { emoji: '🐟', name: '연어 포케 보울', kcal: 390, protein: 27 },
-      { emoji: '🫘', name: '병아리콩 후무스 보울', kcal: 350, protein: 18 },
-      { emoji: '🌾', name: '퀴노아 채소 보울', kcal: 310, protein: 14 },
-      { emoji: '🍱', name: '두부 스테이크 정식', kcal: 330, protein: 21 },
-      { emoji: '🥣', name: '그릭요거트 그래놀라 보울', kcal: 260, protein: 19 },
-      { emoji: '🍄', name: '저당 버섯 리조또', kcal: 300, protein: 16 }
-    ];
+    /* 식단은 상점 '전체' 탭(CATALOG)에 실제로 있는 제품에서만 뽑는다.
+       드레싱은 한 끼가 아니므로 제외한다. */
+    var MEAL_CATS = ['salad', 'saladwrap', 'meal', 'burgersandwich'];
+
+    /* 제품명/설명에서 성격을 읽어내는 키워드 - CATALOG만 고치면 자동으로 따라온다 */
+    var TAG_WORDS = {
+      hearty:  ['도시락', '브리또볼', '볶음밥', '파스타', '버거', '샌드위치', '든든', '영양밥', '현미밥', '나물밥', '한 끼', '피자', '랩'],
+      light:   ['채소 믹스', '심플', '가볍게', '상큼', '새콤', '요거트', '카프레제', '담백', '두부', '곤약', '리코타'],
+      protein: ['닭가슴살', '단백', '새우', '오징어', '훈제오리', '훈제목살', '소불고기', '불고기', '너비아니', '차돌', '풀드포크', '비프', '에그', '달걀', '참치', '살라미', '비엔나', '만두', '포크', '치킨', '너겟', '소시지', '페퍼로니', '햄', '오리'],
+      veg:     ['채소', '루꼴라', '라디치오', '양상추', '양배추', '토마토', '당근', '라페', '버섯', '시금치', '케일'],
+      grain:   ['곡물', '귀리', '보리', '퀴노아', '렌틸', '병아리콩', '강낭콩', '현미', '메밀', '쌀국수', '두부면', '고구마', '단호박', '감자', '옥수수'],
+      diet:    ['저당', '담백', '가볍게', '심플', '채소 믹스', '두부', '곤약', '온샐러드']
+    };
+
+    function mealTags(p) {
+      var txt = p.name + ' ' + p.desc;
+      return Object.keys(TAG_WORDS).filter(function (tag) {
+        return TAG_WORDS[tag].some(function (w) { return txt.indexOf(w) !== -1; });
+      });
+    }
+
+    function buildMealPool() {
+      return CATALOG
+        .filter(function (p) { return MEAL_CATS.indexOf(p.cat) !== -1; })
+        .map(function (p) { return { id: p.id, tags: mealTags(p) }; });
+    }
+    var MEAL_POOL = buildMealPool();
+
     var DAY_LABELS = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
 
-    var BOOST = [
-      [[5, 3, 7], [4, 6, 2], [1, 2, 5]],
-      [[0, 2, 4], [3, 7, 5], [1, 5, 2]],
-      [[4, 6, 0], [1, 5, 2], [0, 3, 7]]
+    /* 질문 > 보기 > 가중치를 더할 태그 */
+    var BOOST_TAGS = [
+      [['hearty', 'grain'], ['light', 'veg'], ['protein']],        /* Q1 오늘 컨디션 */
+      [['veg', 'light'], ['grain'], ['protein', 'hearty']],        /* Q2 끌리는 맛 */
+      [['diet', 'light'], ['protein', 'grain'], ['hearty', 'veg']] /* Q3 이번 주 목표 */
     ];
 
     var answers = [];
@@ -2519,29 +2762,31 @@
     }
 
     function pickWeek() {
-      var weight = MENU_POOL.map(function () { return 1; });
-      [0, 1, 2].forEach(function (q) {
-        var boosted = BOOST[q][answers[q]] || [];
-        boosted.forEach(function (idx) { weight[idx] += 3; });
+      /* 답변과 겹치는 태그마다 가중치를 더한다 */
+      var scored = MEAL_POOL.map(function (m) {
+        var w = 1;
+        [0, 1, 2].forEach(function (q) {
+          var tags = (BOOST_TAGS[q] || [])[answers[q]] || [];
+          tags.forEach(function (t) { if (m.tags.indexOf(t) !== -1) w += 3; });
+        });
+        return { id: m.id, w: w };
       });
 
-      var pool = [];
-      weight.forEach(function (w, idx) {
-        for (var k = 0; k < w; k++) pool.push(idx);
-      });
-
-      var week = [];
-      var last = -1;
-      for (var d = 0; d < 7; d++) {
-        var pick, tries = 0;
-        do {
-          pick = pool[Math.floor(Math.random() * pool.length)];
-          tries++;
-        } while (pick === last && tries < 12);
-        week.push(pick);
-        last = pick;
+      /* 한 주에 같은 메뉴가 두 번 나오지 않게 뽑은 항목은 후보에서 뺀다 */
+      var week = [], remaining = scored.slice();
+      for (var d = 0; d < 7 && remaining.length; d++) {
+        var total = remaining.reduce(function (s, m) { return s + m.w; }, 0);
+        var r = Math.random() * total, k = 0;
+        while (k < remaining.length - 1 && (r -= remaining[k].w) > 0) k++;
+        week.push(remaining[k].id);
+        remaining.splice(k, 1);
       }
       return week;
+    }
+
+    function catLabel(key) {
+      var c = CATEGORIES.filter(function (x) { return x.key === key; })[0];
+      return c ? c.label : '';
     }
 
     function renderResult() {
@@ -2549,30 +2794,30 @@
       var grid = document.getElementById('weekGrid');
       grid.innerHTML = '';
 
-      var totalKcal = 0, totalProtein = 0;
+      var byCat = {};
 
-      week.forEach(function (menuIdx, i) {
-        var m = MENU_POOL[menuIdx];
-        totalKcal += m.kcal;
-        totalProtein += m.protein;
+      week.forEach(function (id, i) {
+        var p = findProduct(id);
+        if (!p) return;
+        byCat[p.cat] = (byCat[p.cat] || 0) + 1;
 
+        var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
         var card = document.createElement('div');
         card.className = 'day-card';
         card.innerHTML =
           '<div class="day-label">' + DAY_LABELS[i] + '</div>' +
-          '<div class="day-emoji">' + m.emoji + '</div>' +
-          '<div class="day-name">' + m.name + '</div>' +
-          '<div class="day-stat">' + m.kcal + 'kcal · 단백질 ' + m.protein + 'g</div>';
+          '<div class="day-emoji">' + (isImg ? '<img src="' + p.img + '" alt="' + p.name + '">' : p.img) + '</div>' +
+          '<div class="day-name">' + p.name + '</div>' +
+          '<div class="day-stat">' + catLabel(p.cat) + '</div>';
         grid.appendChild(card);
 
         setTimeout(function () { card.classList.add('show'); }, i * 60);
       });
 
-      var avgKcal = Math.round(totalKcal / 7);
-      var avgProtein = Math.round(totalProtein / 7);
       document.getElementById('gameSummary').innerHTML =
-        '<span class="summary-pill">평균 ' + avgKcal + 'kcal</span>' +
-        '<span class="summary-pill">평균 단백질 ' + avgProtein + 'g</span>';
+        CATEGORIES.filter(function (c) { return c.key !== 'all' && byCat[c.key]; })
+          .map(function (c) { return '<span class="summary-pill">' + c.label + ' ' + byCat[c.key] + '일</span>'; })
+          .join('');
     }
 
     function resetGame() {
@@ -2948,15 +3193,15 @@
 
     var NEED_PER_ING = 3;
 
-    /* every recipe maps to a real product in the shop catalog */
+    /* 모든 레시피는 상점 '전체' 탭에 실제로 있는 제품(CATALOG id)을 가리킨다 */
     var RECIPES = [
-      { id: 'cobb-salad',       ings: ['frillice', 'chicken', 'tomato'] },
-      { id: 'chicken-steak',    ings: ['chicken', 'potato', 'mushroom'] },
-      { id: 'quinoa-bowl',      ings: ['quinoa', 'carrot', 'corn'] },
-      { id: 'mushroom-risotto', ings: ['mushroom', 'angel', 'potato'] },
-      { id: 'hummus-bowl',      ings: ['lentil', 'tomato', 'sweetpo'] },
-      { id: 'basil-wrap-single',ings: ['frillice', 'basilric', 'pork'] },
-      { id: 'yogurt-bowl',      ings: ['honeyric', 'sweetpo', 'quinoa'] }
+      { id: 'sal-06',  ings: ['frillice', 'chicken', 'tomato'] },   /* 케이준 치킨 샐러드 */
+      { id: 'sal-08',  ings: ['chicken', 'sweetpo', 'frillice'] },  /* 닭가슴살 고구마 샐러드 */
+      { id: 'sal-46',  ings: ['carrot', 'honeyric', 'frillice'] },  /* 당근라페 리코타 샐러드 */
+      { id: 'sal-36',  ings: ['pork', 'mushroom', 'angel'] },       /* 스파이시랜치 포크밀 */
+      { id: 'sal-35',  ings: ['lentil', 'chicken', 'quinoa'] },     /* 렌틸콩 닭가슴살 온샐러드 */
+      { id: 'wrap-08', ings: ['basilric', 'frillice', 'tomato'] },  /* 바질리코타치즈 요거트 샐러드 랩 */
+      { id: 'wrap-13', ings: ['potato', 'angel', 'corn'] }          /* 화이트 케이준 포테이토 피자랩 */
     ];
 
     function findIngredient(id) { return INGREDIENTS.filter(function (i) { return i.id === id; })[0]; }
@@ -3745,6 +3990,7 @@
     /* ===================== Init ===================== */
     document.addEventListener('DOMContentLoaded', function () {
       loadState();
+      initBanner();
       renderTabs();
       renderGrid();
       updateBadges();
