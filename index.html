@@ -396,34 +396,137 @@
 
   /* ---------- Brand section ---------- */
   #brand { background: var(--g); color: var(--sw); }
-  .mission-box {
-    max-width: 720px; margin: 0 auto 56px; background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-xl); padding: 36px 40px; text-align: center;
-  }
-  .mission-box .mission-kr { font-family: var(--kr); font-weight: 700; font-size: 22px; line-height: 1.5; word-break: keep-all; }
-  .mission-box .mission-en { font-size: 14px; opacity: .75; font-style: italic; margin-top: 14px; }
+  #brand .section-eyebrow { color: rgba(253,255,230,.72); }
+  #brand .section-title { color: var(--sw); }
 
-  .slogan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 0 auto 56px; }
-  @media (max-width: 640px) { .slogan-grid { grid-template-columns: 1fr; } }
-  .slogan-card {
-    background: rgba(255,255,230,.06); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-lg);
-    padding: 28px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 96px;
+  .br-block { max-width: 900px; margin: 0 auto 64px; }
+  .br-block:last-child { margin-bottom: 0; }
+  .br-label {
+    display: flex; align-items: center; gap: 10px; font-family: var(--en); font-size: 11px;
+    font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+    color: rgba(253,255,230,.62); margin-bottom: 18px;
   }
-  .slogan-card.en { font-family: var(--en); font-weight: 800; font-size: 22px; }
-  .slogan-card.kr { font-family: var(--kr); font-size: 18px; }
+  .br-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.16); }
 
-  .personality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 860px; margin: 0 auto 48px; }
-  @media (max-width: 720px) { .personality-grid { grid-template-columns: 1fr; } }
-  .personality-card {
-    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-lg);
-    padding: 24px;
+  /* mission */
+  .br-mission {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    border-radius: var(--r-2xl); padding: 42px 44px; text-align: center;
   }
-  .personality-card .p-en { font-family: var(--en); font-weight: 800; font-size: 22px; }
-  .personality-card .p-kr { font-size: 14px; opacity: .85; margin: 4px 0 10px; }
-  .personality-card .p-desc { font-size: 13px; line-height: 1.65; opacity: .8; }
+  @media (max-width: 640px) { .br-mission { padding: 30px 22px; } }
+  .br-mission-kr {
+    font-family: var(--kr); font-weight: 800; font-size: clamp(20px, 3.2vw, 28px);
+    line-height: 1.55; word-break: keep-all;
+  }
+  .br-mission-kr em { font-style: normal; color: #D9F27E; }
 
-  .target-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .target-pill { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); padding: 8px 16px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; }
+  /* essence */
+  .br-essence {
+    background: rgba(255,255,230,.06); border: 1px solid rgba(255,255,255,.16);
+    border-radius: var(--r-xl); padding: 32px 34px;
+  }
+  @media (max-width: 640px) { .br-essence { padding: 24px 20px; } }
+  .br-essence-word {
+    font-family: var(--en); font-weight: 800; font-size: clamp(30px, 5vw, 44px);
+    letter-spacing: -.02em; color: #D9F27E; line-height: 1;
+  }
+  .br-essence-sub { font-size: 14px; font-weight: 700; margin-top: 10px; word-break: keep-all; }
+  .br-essence-body { font-size: 14px; line-height: 1.85; opacity: .82; margin-top: 14px; word-break: keep-all; }
+
+  /* generic translucent cards */
+  .br-cards { display: grid; gap: 14px; }
+  .br-cards.c3 { grid-template-columns: repeat(3, 1fr); }
+  .br-cards.c2 { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 800px) { .br-cards.c3, .br-cards.c2 { grid-template-columns: 1fr; } }
+  .br-card {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    border-radius: var(--r-lg); padding: 24px 24px 22px;
+  }
+  .br-card-num {
+    font-family: var(--en); font-weight: 800; font-size: 12px; letter-spacing: .1em; color: #D9F27E;
+  }
+  .br-card-title { font-size: 15px; font-weight: 700; margin: 6px 0 10px; word-break: keep-all; line-height: 1.5; }
+  .br-card-desc { font-size: 13px; line-height: 1.75; opacity: .8; word-break: keep-all; }
+
+  /* benefits: two stacked lists */
+  .br-benefit-head {
+    display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 800;
+    background: rgba(255,255,255,.12); padding: 7px 15px; border-radius: var(--r-pill); margin-bottom: 14px;
+  }
+  .br-benefit-list { display: flex; flex-direction: column; gap: 10px; }
+  .br-benefit {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+    border-radius: var(--r-md); padding: 16px 18px;
+  }
+  .br-benefit-title { font-size: 14px; font-weight: 700; word-break: keep-all; }
+  .br-benefit-desc { font-size: 12.5px; line-height: 1.7; opacity: .78; margin-top: 6px; word-break: keep-all; }
+
+  /* white content cards (persona / colors / character) */
+  .br-sheet {
+    background: #fff; color: var(--ink); border-radius: var(--r-2xl); padding: 34px 36px;
+    box-shadow: var(--sh-md);
+  }
+  @media (max-width: 640px) { .br-sheet { padding: 24px 20px; } }
+  .br-sheet-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .br-sheet-avatar {
+    width: 62px; height: 62px; border-radius: 999px; background: var(--paper); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 31px;
+  }
+  .br-sheet-title { font-size: 20px; font-weight: 800; color: var(--ink); word-break: keep-all; }
+  .br-sheet-en { font-family: var(--en); font-size: 12.5px; font-weight: 700; color: var(--seed); letter-spacing: .04em; margin-top: 3px; }
+  .br-sheet-body { font-size: 13.5px; line-height: 1.9; color: var(--char); word-break: keep-all; }
+
+  .br-attrs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 22px; }
+  @media (max-width: 640px) { .br-attrs { grid-template-columns: 1fr; } }
+  .br-attr { background: var(--paper); border-radius: var(--r-md); padding: 14px 16px; }
+  .br-attr.wide { grid-column: 1 / -1; }
+  .br-attr-k { font-size: 11px; font-weight: 800; color: var(--g); letter-spacing: .04em; }
+  .br-attr-v { font-size: 13px; color: var(--char); margin-top: 5px; line-height: 1.7; word-break: keep-all; }
+  .br-attr.accent { background: rgba(0,97,78,.07); border: 1.5px solid rgba(0,97,78,.18); }
+
+  .br-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .br-chip {
+    background: var(--paper); border: 1px solid var(--border); color: var(--char);
+    font-size: 11.5px; font-weight: 600; padding: 6px 12px; border-radius: var(--r-pill);
+  }
+  .br-chips-label { font-size: 11px; font-weight: 800; color: var(--slate); letter-spacing: .1em; margin-top: 22px; }
+
+  /* colour system */
+  .br-color-note { font-size: 13.5px; line-height: 1.9; color: var(--char); word-break: keep-all; margin-bottom: 24px; }
+  .br-color-group { font-size: 12.5px; font-weight: 800; color: var(--ink); margin: 0 0 12px; }
+  .br-color-group span { font-family: var(--en); font-weight: 700; color: var(--slate); margin-left: 6px; }
+  .br-swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+  @media (max-width: 760px) { .br-swatches { grid-template-columns: 1fr; } }
+  .br-swatch { border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
+  .br-swatch-chip { height: 76px; }
+  .br-swatch-body { padding: 13px 14px 14px; }
+  .br-swatch-kr { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .br-swatch-en { font-family: var(--en); font-size: 11px; font-weight: 700; color: var(--seed); margin-top: 2px; }
+  .br-swatch-desc { font-size: 11.5px; color: var(--slate); margin-top: 7px; line-height: 1.6; word-break: keep-all; }
+  .br-swatch-spec {
+    font-family: var(--en); font-size: 10.5px; color: var(--char); margin-top: 9px; line-height: 1.7;
+    padding-top: 9px; border-top: 1px solid var(--div);
+  }
+
+  /* character */
+  .br-char-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
+  @media (max-width: 640px) { .br-char-cols { grid-template-columns: 1fr; } }
+  .br-char-box { background: var(--paper); border-radius: var(--r-md); padding: 16px 18px; }
+  .br-char-box h4 { font-size: 12px; font-weight: 800; color: var(--g); margin-bottom: 9px; letter-spacing: .02em; }
+  .br-char-box ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .br-char-box li { font-size: 12.5px; color: var(--char); line-height: 1.65; padding-left: 12px; position: relative; word-break: keep-all; }
+  .br-char-box li::before { content: '·'; position: absolute; left: 2px; color: var(--seed); font-weight: 800; }
+  .br-char-msg {
+    background: linear-gradient(160deg, #0B6E58, var(--g)); color: var(--sw); border-radius: var(--r-lg);
+    padding: 22px 24px; margin-top: 22px; text-align: center;
+  }
+  .br-char-msg h4 { font-size: 11px; font-weight: 800; letter-spacing: .14em; opacity: .7; margin-bottom: 12px; font-family: var(--en); }
+  .br-char-msg p { font-size: 15px; font-weight: 700; line-height: 1.9; word-break: keep-all; }
+
+  .br-source {
+    max-width: 900px; margin: 56px auto 0; text-align: center; font-size: 11.5px;
+    color: rgba(253,255,230,.5); line-height: 1.7; word-break: keep-all;
+  }
 
   footer {
     background: #004F40; color: rgba(253,255,230,.65); padding: 40px 24px 28px; text-align: center; font-size: 12px;
@@ -913,6 +1016,10 @@
   .rcp-ing.full .rcp-ing-bar i { background: var(--g); }
   .rcp-ing.full .rcp-ing-num { color: var(--g); }
   .rcp-foot { margin-top: auto; }
+  .rcp-pending {
+    grid-column: 1 / -1; text-align: center; font-size: 13px; color: var(--slate); line-height: 1.8;
+    background: #fff; border: 1.5px dashed var(--border); border-radius: var(--r-lg); padding: 34px 20px;
+  }
   .rcp-locked { font-size: 11.5px; color: var(--slate); text-align: center; padding: 9px 0; word-break: keep-all; }
 
   /* ---------- Catch game ---------- */
@@ -1075,7 +1182,7 @@
     <div class="wrap">
       <div class="section-eyebrow">Shop</div>
       <h2 class="section-title">스윗밸런스 전체 상품</h2>
-      <p class="section-sub word-keep">샐러드부터 도시락 세트, 다이어트식, 정기구독까지. 카테고리별로 오늘의 균형을 골라보세요.</p>
+      <p class="section-sub word-keep">샐러드부터 샐러드 랩, 도시락, 미니버거&amp;샌드위치, 드레싱까지. 카테고리별로 오늘의 균형을 골라보세요.</p>
 
       <div class="coupon-strip">
         <div class="coupon-strip-text">
@@ -1091,7 +1198,7 @@
       <div class="tab-bar" id="tabBar"></div>
 
       <div class="shop-grid" id="shopGrid"></div>
-      <p class="shop-empty" id="shopEmpty">이 카테고리의 상품은 준비 중이에요.</p>
+      <p class="shop-empty" id="shopEmpty">상품을 준비 중이에요. 곧 만나보실 수 있어요.</p>
     </div>
   </section>
 
@@ -1273,41 +1380,260 @@
     <div class="wrap">
       <div class="section-eyebrow">Brand</div>
       <h2 class="section-title">스윗밸런스를 소개합니다</h2>
+      <p class="section-sub word-keep" style="color:rgba(253,255,230,.78);">스윗밸런스 브랜드 가이드 [2025 Ver.]를 기준으로 정리한 브랜드 코어, 베네핏, 타겟 페르소나, 컬러 시스템, 캐릭터입니다.</p>
 
-      <div class="mission-box">
-        <div class="mission-kr">진정으로 건강한 식사를 통해,<br>누구나 목표와 행복을 이룰 수 있는 삶을 만듭니다.</div>
-        <div class="mission-en">"Through truly healthy meals, we help everyone build a life where they can reach their goals and find happiness."</div>
-      </div>
-
-      <div class="slogan-grid">
-        <div class="slogan-card en">Eat fresh, be your Best.</div>
-        <div class="slogan-card kr">진정으로 건강한 한 끼,<br>오늘도 균형있게.</div>
-      </div>
-
-      <div class="personality-grid">
-        <div class="personality-card">
-          <div class="p-en">Warm</div>
-          <div class="p-kr">따뜻한</div>
-          <div class="p-desc word-keep">건강을 훈계하지 않고 응원해요. 음식처럼, 브랜드도 사람을 품습니다.</div>
-        </div>
-        <div class="personality-card">
-          <div class="p-en">Fresh</div>
-          <div class="p-kr">신선한</div>
-          <div class="p-desc word-keep">재료처럼 언어와 디자인도 가볍고 선명하게, 군더더기 없이.</div>
-        </div>
-        <div class="personality-card">
-          <div class="p-en">Honest</div>
-          <div class="p-kr">정직한</div>
-          <div class="p-desc word-keep">칼로리와 영양소를 숨기지 않아요. 숫자가 곧 신뢰입니다.</div>
+      <!-- Brand core -->
+      <div class="br-block">
+        <div class="br-label">Brand core · Mission</div>
+        <div class="br-mission">
+          <div class="br-mission-kr">건강한 식사를 즐기는 것이<br><em>모두에게 당연한 세상</em>을 만드는 것</div>
         </div>
       </div>
 
-      <div class="target-pills">
-        <span class="target-pill">편의를 중시하는 1인 가구 · 자취생</span>
-        <span class="target-pill">건강을 챙기고 싶은 직장인 (25–40대)</span>
-        <span class="target-pill">운동·다이어트 루틴 유지자</span>
-        <span class="target-pill">저당·고단백 식단 관심자</span>
+      <div class="br-block">
+        <div class="br-label">Brand core · Essence</div>
+        <div class="br-essence">
+          <div class="br-essence-word">Reframe</div>
+          <div class="br-essence-sub word-keep">우리는 건강식에 대한 고정관념을 새롭게 바라보는 관점의 전환(Reframe)을 제안합니다.</div>
+          <p class="br-essence-body">‘건강식은 맛없고 지루하다’는 인식을 넘어, 건강한 식사가 맛있고 즐거운 일상으로 자리잡을 수 있도록 유도합니다. 단순한 식사가 아닌, 새로운 라이프스타일을 제안하는 브랜드로서 건강식의 기준을 다시 쓰고자 합니다.</p>
+        </div>
       </div>
+
+      <div class="br-block">
+        <div class="br-label">Brand core · Core value</div>
+        <div class="br-cards c3">
+          <div class="br-card">
+            <div class="br-card-num">01</div>
+            <div class="br-card-title">창의적이고 다양한 레시피</div>
+            <div class="br-card-desc">100가지 이상의 토핑과 16가지 이상의 드레싱을 조합한 다채로운 제품력.</div>
+          </div>
+          <div class="br-card">
+            <div class="br-card-num">02</div>
+            <div class="br-card-title">뛰어난 접근성</div>
+            <div class="br-card-desc">핵심 온라인 유통 채널, 전국구 편의점과 대형 마트에서도 판매하는 유통 경쟁력.</div>
+          </div>
+          <div class="br-card">
+            <div class="br-card-num">03</div>
+            <div class="br-card-title">고객 맞춤형 정보 제공</div>
+            <div class="br-card-desc">타협없는 품질 경쟁력(3번 세척 공정)을 바탕으로 기능성 제품(탄단지, 프로틴, 저당, 저칼로리) 및 뚜렷한 소구 포인트(테이스티, 오늘의 채소)를 제공하여 목표와 취향에 따라 손쉽게 제품을 선택할 수 있도록 한다.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brand benefits -->
+      <div class="br-block">
+        <div class="br-label">Brand benefits</div>
+        <div class="br-cards c2">
+          <div>
+            <div class="br-benefit-head">⚙️ Functional Benefit</div>
+            <div class="br-benefit-list">
+              <div class="br-benefit">
+                <div class="br-benefit-title">1. 매일 먹어도 질리지 않는 다양함</div>
+                <div class="br-benefit-desc">다채로운 제품을 제공하여 매일 먹어도 질릴 틈 없는 다양함을 제공한다.</div>
+              </div>
+              <div class="br-benefit">
+                <div class="br-benefit-title">2. 원할 때 바로 먹을 수 있는 간편함</div>
+                <div class="br-benefit-desc">다양한 유통 채널 입점을 통해 뛰어난 접근성을 유지하여 소비자가 빠르고 간편하게 제품을 구매할 수 있도록 한다.</div>
+              </div>
+              <div class="br-benefit">
+                <div class="br-benefit-title">3. 목적에 따른 손쉬운 선택</div>
+                <div class="br-benefit-desc">제품 정보와 소구 포인트를 명확하게 기재하여 목적에 따라 누구든 쉽게 제품을 선택할 수 있도록 한다.</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="br-benefit-head">💚 Emotional Benefit</div>
+            <div class="br-benefit-list">
+              <div class="br-benefit">
+                <div class="br-benefit-title">1. 매일이 기대되는 식사 시간</div>
+                <div class="br-benefit-desc">반복되는 식사 속에서도 매번 새롭게 느껴지는 즐거움으로 건강한 식사 루틴이 지루하지 않게 이어진다.</div>
+              </div>
+              <div class="br-benefit">
+                <div class="br-benefit-title">2. 마음까지 가벼운 선택</div>
+                <div class="br-benefit-desc">바쁜 일상 속에서 건강식 준비 혹은 선택에 대한 불편함을 해소한다. 선택을 빠르고 쉽게 할 수 있도록 지원하여 건강을 쉽게 챙길 수 있는 삶을 가능하게 만든다.</div>
+              </div>
+              <div class="br-benefit">
+                <div class="br-benefit-title">3. 자존감 향상</div>
+                <div class="br-benefit-desc">스스로에게 좋은 결정을 내리고 있다는 믿음을 심어줌으로써, 자존감과 자기 돌봄의 감각을 함께 자라게 한다.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Target persona -->
+      <div class="br-block">
+        <div class="br-label">Target persona</div>
+        <div class="br-sheet">
+          <div class="br-sheet-head">
+            <span class="br-sheet-avatar">🙌</span>
+            <div>
+              <div class="br-sheet-title">유쾌한 열정가들</div>
+              <div class="br-sheet-en">Joyful Enthusiasts</div>
+            </div>
+          </div>
+          <p class="br-sheet-body">‘유쾌한 열정가들’은 조화로운 삶과 자기 만족을 위한 성취를 동시에 추구하는 다채로운 인물입니다. 이들은 일과 개인적 삶의 균형을 맞추려 하며, 목표를 향해 주도적으로 나아가는 추진력을 지니고 있습니다. 건강한 삶과 지속가능성에 대해 깊이 공감하고 실천하면서도 유머와 여유를 잃지 않고 성취를 향한 과정 속의 삶 자체를 즐기려 합니다. 뛰어난 감성 지능과 자기 확신을 바탕으로 협력과 도전을 결합하며, 긍정적인 에너지를 주변에 전파하는 것을 중요하게 생각합니다. 이성과 감성, 도전과 조화 사이에서 균형을 이루며, 무엇보다 풍요롭고 즐거운 삶을 지향합니다.</p>
+
+          <div class="br-attrs">
+            <div class="br-attr">
+              <div class="br-attr-k">연령</div>
+              <div class="br-attr-v">20대 후반 ~ 50대</div>
+            </div>
+            <div class="br-attr">
+              <div class="br-attr-k">직업</div>
+              <div class="br-attr-v">사무직, 전문가, 프리랜서</div>
+            </div>
+            <div class="br-attr accent wide">
+              <div class="br-attr-k">욕망</div>
+              <div class="br-attr-v">어떤 상황에서든 건강한 식사를 놓치고 싶지 않다.</div>
+            </div>
+            <div class="br-attr">
+              <div class="br-attr-k">라이프 스타일</div>
+              <div class="br-attr-v">건강함의 기준이 있고 그것을 영위하는 사람들. 풍요롭고 즐거운 삶을 지향함.</div>
+            </div>
+            <div class="br-attr">
+              <div class="br-attr-k">행동</div>
+              <div class="br-attr-v">맛있고 균형있는 음식을 선호하며, 미식 경험을 좋아함.</div>
+            </div>
+            <div class="br-attr wide">
+              <div class="br-attr-k">평가</div>
+              <div class="br-attr-v">건강한 식습관의 중요성을 충분히 이해하고 있는 사람들로, 바쁜 일상 중 언제 어디서든 건강식을 쉽게 섭취하고자 하는 니즈가 있다. 구매력이 있어 가격에 크게 구애 받지 않는다.</div>
+            </div>
+          </div>
+
+          <div class="br-chips-label">KEYWORDS</div>
+          <div class="br-chips">
+            <span class="br-chip">유쾌한</span><span class="br-chip">정열적인</span><span class="br-chip">열정적인</span>
+            <span class="br-chip">성취</span><span class="br-chip">성공</span><span class="br-chip">목표</span>
+            <span class="br-chip">유머</span><span class="br-chip">즐거운</span><span class="br-chip">도파민</span>
+            <span class="br-chip">성실</span><span class="br-chip">꾸준함</span><span class="br-chip">영리한</span>
+            <span class="br-chip">효율적인</span><span class="br-chip">가치</span><span class="br-chip">도전정신</span>
+            <span class="br-chip">조화로운</span><span class="br-chip">균형</span><span class="br-chip">주도적</span>
+            <span class="br-chip">실천</span><span class="br-chip">여유</span><span class="br-chip">과정을 즐기는</span>
+            <span class="br-chip">협력</span><span class="br-chip">긍정적</span><span class="br-chip">추진력</span>
+            <span class="br-chip">몰입</span><span class="br-chip">집중</span><span class="br-chip">흥분</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Color system -->
+      <div class="br-block">
+        <div class="br-label">Color system</div>
+        <div class="br-sheet">
+          <p class="br-color-note">스윗밸런스의 컬러는 자연의 색채에서 출발합니다. 신선한 푸른 채소, 따스하게 내리쬐는 햇살, 촉촉하고 비옥한 토양에서 피어오르는 생명력, 청명한 하늘의 투명함. 이 컬러 조합을 통해 건강한 삶과 자연의 균형을 표현합니다.</p>
+
+          <h3 class="br-color-group">메인 컬러 <span>Primary Colors</span></h3>
+          <div class="br-swatches">
+            <div class="br-swatch">
+              <div class="br-swatch-chip" style="background:#00614E;"></div>
+              <div class="br-swatch-body">
+                <div class="br-swatch-kr">바이탈 그린</div>
+                <div class="br-swatch-en">Vital Green</div>
+                <div class="br-swatch-desc">신선하고 건강한 삶의 본질을 상징하는 스윗밸런스의 코어 컬러입니다.</div>
+                <div class="br-swatch-spec">PANTONE 336C<br>HEX #00614E<br>RGB 0 / 97 / 78<br>CMYK 100 / 50 / 80 / 2</div>
+              </div>
+            </div>
+            <div class="br-swatch">
+              <div class="br-swatch-chip" style="background:#007C5E;"></div>
+              <div class="br-swatch-body">
+                <div class="br-swatch-kr">하모니 그린</div>
+                <div class="br-swatch-en">Harmony Green</div>
+                <div class="br-swatch-desc">보다 밝고 경쾌한 뉘앙스로 건강한 에너지를 확장하는 보조 그린입니다.</div>
+                <div class="br-swatch-spec">PANTONE 341C<br>HEX #007C5E<br>RGB 0 / 124 / 94<br>CMYK 92 / 32 / 76 / 0</div>
+              </div>
+            </div>
+            <div class="br-swatch">
+              <div class="br-swatch-chip" style="background:#FDFFE6;border-bottom:1px solid var(--border);"></div>
+              <div class="br-swatch-body">
+                <div class="br-swatch-kr">선샤인 화이트</div>
+                <div class="br-swatch-en">Sunshine White</div>
+                <div class="br-swatch-desc">햇살처럼 부드럽고 따스한 안정감을 전해주는 베이스 컬러입니다.</div>
+                <div class="br-swatch-spec">PANTONE 9064C<br>HEX #FDFFE6<br>RGB 253 / 255 / 230<br>CMYK 3 / 0 / 14 / 0</div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="br-color-group">서브 컬러 <span>Secondary Colors</span></h3>
+          <div class="br-swatches" style="margin-bottom:0;">
+            <div class="br-swatch">
+              <div class="br-swatch-chip" style="background:#84BA45;"></div>
+              <div class="br-swatch-body">
+                <div class="br-swatch-kr">씨드 그린</div>
+                <div class="br-swatch-en">Seed Green</div>
+                <div class="br-swatch-desc">새싹이 움트는 생명력을 담은 연두빛 컬러로 시작과 성장을 암시합니다.</div>
+                <div class="br-swatch-spec">PANTONE 2299C<br>HEX #84BA45<br>RGB 132 / 186 / 69<br>CMYK 53 / 2 / 90 / 0</div>
+              </div>
+            </div>
+            <div class="br-swatch">
+              <div class="br-swatch-chip" style="background:#896431;"></div>
+              <div class="br-swatch-body">
+                <div class="br-swatch-kr">소일 브라운</div>
+                <div class="br-swatch-en">Soil Brown</div>
+                <div class="br-swatch-desc">촉촉한 흙의 온기와 안정감을 담아 자연의 순환을 표현합니다.</div>
+                <div class="br-swatch-spec">PANTONE 4027C<br>HEX #896431<br>RGB 137 / 100 / 49<br>CMYK 42 / 55 / 85 / 20</div>
+              </div>
+            </div>
+            <div class="br-swatch">
+              <div class="br-swatch-chip" style="background:#50AADC;"></div>
+              <div class="br-swatch-body">
+                <div class="br-swatch-kr">스카이 블루</div>
+                <div class="br-swatch-en">Sky Blue</div>
+                <div class="br-swatch-desc">청량한 하늘의 투명함을 담아 브랜드에 시원하고 깨끗한 인상을 더합니다.</div>
+                <div class="br-swatch-spec">PANTONE 298C<br>HEX #50AADC<br>RGB 80 / 170 / 220<br>CMYK 68 / 7 / 4 / 0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Character -->
+      <div class="br-block">
+        <div class="br-label">Character</div>
+        <div class="br-sheet">
+          <div class="br-sheet-head">
+            <span class="br-sheet-avatar">🐰</span>
+            <div>
+              <div class="br-sheet-title">맛과 균형 사이, 관습을 깬 미식가 토끼 ‘스위니’</div>
+              <div class="br-sheet-en">Sweeny · Moon Forest</div>
+            </div>
+          </div>
+          <p class="br-sheet-body">Moon Forest(달숲)에서 태어나 야채만 먹고 자란 토끼. 미식의 세계에 눈뜨며 더 다양한 식재료를 몰래 접하게 되었고, 결국 기존(달숲)의 식사 규칙에서 벗어나게 됐다. ‘정해진 방식’이 아닌 ‘나에게 맞는 감각’을 믿기로 결심하고, 달숲을 뛰쳐나와 스스로의 기준으로 건강식을 탐구하는 여정에 나섰다. 지금은 인간 세상에서 자신만의 미감과 철학을 사람들과 나누며 살아가는 미식가로 활동 중이다.</p>
+
+          <div class="br-char-cols">
+            <div class="br-char-box">
+              <h4>캐릭터 성격</h4>
+              <ul>
+                <li>호기심 많고 직관적</li>
+                <li>감각에 진심이고 표현이 풍부함</li>
+                <li>기존 틀에 얽매이기보다, 자신만의 철학과 미감을 따름</li>
+                <li>누구든 자기 기준으로 먹을 자유가 있다고 믿음</li>
+              </ul>
+            </div>
+            <div class="br-char-box">
+              <h4>핵심 역할</h4>
+              <ul>
+                <li>맛과 균형이 공존하는 건강한 식사를 큐레이션</li>
+                <li>미각, 기분, 계절, 리듬 등을 고려해 ‘나만의 기준’을 제안</li>
+                <li>정해진 방식이 아니라, ‘나다운 한 끼’를 찾아주는 안내자</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="br-char-msg">
+            <h4>MESSAGE</h4>
+            <p>남들과 비교하느라 위축되지 마.<br>너의 세계는 따로 있어.<br>너가 존중받는 세상이 있어.</p>
+          </div>
+
+          <div class="br-chips-label">KEYWORDS</div>
+          <div class="br-chips">
+            <span class="br-chip">달숲</span><span class="br-chip">미식의 각성</span><span class="br-chip">규칙 파괴</span>
+            <span class="br-chip">감각적 자율성</span><span class="br-chip">균형의 재정의</span>
+            <span class="br-chip">자기 존중</span><span class="br-chip">유쾌한 실천</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="br-source">출처: 스윗밸런스 브랜드 가이드 [2025 Ver.] — Brand core · Brand benefits · Target persona · Color system · Character</p>
     </div>
   </section>
 
@@ -1606,36 +1932,8 @@
       { key: 'dressing', label: '드레싱' }
     ];
 
-    var CATALOG = [
-      { id: 'cobb-salad', cat: 'salad', img: '🥗', badges: ['new', 'diet'], name: 'Signature Cobb Salad', kr: '시그니처 콥샐러드', stat: '420kcal · 단백질 23g', price: 9900 },
-      { id: 'salmon-poke', cat: 'salad', img: '🐟', badges: ['best'], name: 'Salmon Poke Bowl', kr: '연어 포케 보울', stat: '390kcal · 단백질 27g', price: 11900 },
-      { id: 'yogurt-bowl', cat: 'salad', img: '🥣', badges: [], name: 'Greek Yogurt Bowl', kr: '그릭요거트 그래놀라 보울', stat: '260kcal · 단백질 19g', price: 6900 },
-      { id: 'tofu-steak', cat: 'meal', img: '🍱', badges: [], name: 'Tofu Steak Set', kr: '두부 스테이크 정식', stat: '330kcal · 단백질 21g', price: 8900 },
-      { id: 'chicken-steak', cat: 'meal', img: '🍗', badges: ['diet'], name: 'Low-Sugar Chicken Steak', kr: '저당 닭가슴살 스테이크', stat: '280kcal · 단백질 32g', price: 7900 },
-      { id: 'mushroom-risotto', cat: 'meal', img: '🍄', badges: [], name: 'Low-Sugar Mushroom Risotto', kr: '저당 버섯 리조또', stat: '300kcal · 단백질 16g', price: 9500 },
-      {
-        id: 'basil-wrap-party', cat: 'saladwrap', img: 'assets/product-basil-wrap-party.png', badges: ['best', 'sale'],
-        name: 'Basil Pesto Salad Wrap Party Pack', kr: '바질페스토 샐러드랩 파티팩', stat: '4인분 · 모임/파티용', price: 24900, originalPrice: 29900
-      },
-      {
-        id: 'basil-wrap-single', cat: 'saladwrap', img: 'assets/product-basil-wrap-single.png', badges: ['new'],
-        name: 'Basil Pesto Salad Wrap', kr: '바질페스토 샐러드랩', stat: '340kcal · 단백질 15g', price: 6900
-      },
-      { id: 'hummus-bowl', cat: 'salad', img: '🫘', badges: ['diet'], name: 'Chickpea Hummus Bowl', kr: '병아리콩 후무스 보울', stat: '350kcal · 단백질 18g', price: 8500 },
-      { id: 'quinoa-bowl', cat: 'salad', img: '🌾', badges: ['diet'], name: 'Quinoa Veggie Bowl', kr: '퀴노아 채소 보울', stat: '310kcal · 단백질 14g', price: 8300 },
-      { id: 'nut-mix', cat: 'etc', img: '🥜', badges: [], name: 'Low-Sugar Nut Mix', kr: '저당 견과 믹스', stat: '150kcal · 소분 스낵', price: 4900 },
-      { id: 'granola-bar', cat: 'etc', img: '🍫', badges: [], name: 'Low-Sugar Granola Bar', kr: '저당 그래놀라바', stat: '130kcal · 1개입', price: 3300 },
-      { id: 'green-juice', cat: 'etc', img: '🥤', badges: ['new'], name: 'Cold-Pressed Green Juice', kr: '콜드프레스 그린주스', stat: '90kcal · 채소 5종', price: 5900 },
-      { id: 'protein-smoothie', cat: 'etc', img: '🧃', badges: ['diet'], name: 'Low-Sugar Protein Smoothie', kr: '저당 프로틴 스무디', stat: '160kcal · 단백질 20g', price: 6200 },
-      {
-        id: 'week-subscribe', cat: 'etc', img: '🗓️', badges: ['best', 'sale'],
-        name: '7-Day Balance Subscription', kr: '7일 균형 식단 구독팩', stat: '주 7끼 · 새벽배송', price: 59000, originalPrice: 69000
-      },
-      {
-        id: 'month-subscribe', cat: 'etc', img: '📦', badges: ['sale'],
-        name: '4-Week Subscription Plan', kr: '4주 정기구독 플랜', stat: '4주 28끼 · 새벽배송', price: 219000, originalPrice: 249000
-      }
-    ];
+    /* 실제 제품 데이터 등록 예정 (sweetbalance.kr 기준) */
+    var CATALOG = [];
 
     var BADGE_LABEL = { new: 'NEW', best: 'BEST', diet: '저당', sale: 'SALE' };
     var BADGE_CLASS = { new: 'badge-new', best: 'badge-best', diet: 'badge-soft', sale: 'badge-sale' };
@@ -1645,7 +1943,6 @@
       { id: 'welcome10', title: '신규 회원 10% 할인', desc: '전 상품 10% 할인 (최대 5,000원 할인)', minOrder: 10000, type: 'percent', value: 10, cap: 5000 },
       { id: 'first3000', title: '첫 구매 3,000원 즉시할인', desc: '첫 구매 시 주문금액에서 바로 할인돼요', minOrder: 15000, type: 'amount', value: 3000 },
       { id: 'freeship', title: '무료배송 쿠폰', desc: '배송비 3,000원이 무료가 돼요', minOrder: 20000, type: 'freeship', value: 3000 },
-      { id: 'sub5000', title: '정기구독 5,000원 할인', desc: '정기구독 상품 구매 시 5,000원 할인', minOrder: 50000, type: 'amount', value: 5000 },
       { id: 'wellness7', title: '7일 연속 달성 쿠폰', desc: '웰니스 챌린지 7일 연속 달성 리워드 · 전 상품 15% 할인 (최대 6,000원)', minOrder: 15000, type: 'percent', value: 15, cap: 6000, lock: true, lockText: '챌린지 7일 연속 달성 시 오픈' },
       { id: 'wellness15', title: '신제품 체험권', desc: '웰니스 챌린지 15일 달성 리워드 · 6,900원 즉시할인', minOrder: 20000, type: 'amount', value: 6900, lock: true, lockText: '챌린지 15일 달성 시 오픈' },
       { id: 'wellness30', title: '웰니스 마스터 리워드', desc: '30일 완주 인증 · 새로운 샐러드 증정 (9,900원 즉시할인)', minOrder: 0, type: 'amount', value: 9900, lock: true, lockText: '챌린지 30일 달성 시 오픈' },
@@ -2233,7 +2530,10 @@
     }
 
     function isRewardUnlocked(id) {
-      if (id === 'tablemaster') return cookedCount() >= RECIPES.length;
+      if (id === 'tablemaster') {
+        var open = availableRecipes();
+        return open.length > 0 && cookedCount() >= open.length;
+      }
       var reward = REWARDS.filter(function (r) { return r.id === id; })[0];
       if (!reward) return true;
       return rewardProgress(reward, tally()) >= reward.goal;
@@ -2538,7 +2838,11 @@
     function recipeDone(r) {
       return r.ings.every(function (id) { return pantryCount(id) >= NEED_PER_ING; });
     }
-    function cookedCount() { return RECIPES.filter(recipeDone).length; }
+    /* a recipe is only playable while its product is in the catalog */
+    function availableRecipes() {
+      return RECIPES.filter(function (r) { return !!findProduct(r.id); });
+    }
+    function cookedCount() { return availableRecipes().filter(recipeDone).length; }
 
     /* one catch round is earned per completed mission (plus one welcome round) */
     function ticketsLeft() {
@@ -2553,7 +2857,7 @@
       document.querySelectorAll('[data-tbl-kinds]').forEach(function (el) { el.textContent = totals.kinds; });
       document.querySelectorAll('[data-tbl-cooked]').forEach(function (el) { el.textContent = cookedCount(); });
       document.querySelectorAll('[data-tbl-kindtotal]').forEach(function (el) { el.textContent = INGREDIENTS.length; });
-      document.querySelectorAll('[data-tbl-cookedtotal]').forEach(function (el) { el.textContent = RECIPES.length; });
+      document.querySelectorAll('[data-tbl-cookedtotal]').forEach(function (el) { el.textContent = availableRecipes().length; });
 
       document.querySelectorAll('[data-tbl-items]').forEach(function (box) {
         var owned = INGREDIENTS.filter(function (i) { return pantryCount(i.id) > 0; });
@@ -2599,9 +2903,14 @@
 
     function renderRecipes() {
       document.querySelectorAll('[data-tbl-recipes]').forEach(function (box) {
-        box.innerHTML = RECIPES.map(function (r) {
+        var open = availableRecipes();
+        if (!open.length) {
+          box.innerHTML =
+            '<div class="rcp-pending word-keep">상품이 등록되면 모은 재료로 완성할 수 있는 메뉴가 열려요.<br>지금은 재료를 차곡차곡 모아두세요 🌾</div>';
+          return;
+        }
+        box.innerHTML = open.map(function (r) {
           var p = findProduct(r.id);
-          if (!p) return '';
           var done = recipeDone(r);
           var haveKinds = r.ings.filter(function (id) { return pantryCount(id) >= NEED_PER_ING; }).length;
           var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
@@ -2649,7 +2958,8 @@
     /* 6 recipes complete -> bonus coupon */
     function grantTableReward() {
       if (wellness.rewards.indexOf('tablemaster') !== -1) return;
-      if (cookedCount() < RECIPES.length) return;
+      var openRecipes = availableRecipes();
+      if (!openRecipes.length || cookedCount() < openRecipes.length) return;
       wellness.rewards.push('tablemaster');
       if (claimed.indexOf('tablemaster') === -1) claimed.push('tablemaster');
       saveState();
@@ -2876,12 +3186,12 @@
     /* move everything caught this round onto the table */
     function cgCommit() {
       if (!wellness.pantry) wellness.pantry = {};
-      var before = RECIPES.filter(recipeDone).map(function (r) { return r.id; });
+      var before = availableRecipes().filter(recipeDone).map(function (r) { return r.id; });
       Object.keys(CG.caught || {}).forEach(function (id) {
         wellness.pantry[id] = (wellness.pantry[id] || 0) + CG.caught[id];
       });
       saveState();
-      var after = RECIPES.filter(recipeDone).map(function (r) { return r.id; });
+      var after = availableRecipes().filter(recipeDone).map(function (r) { return r.id; });
       return after.filter(function (id) { return before.indexOf(id) === -1; });
     }
 
@@ -2978,7 +3288,7 @@
       {
         key: 'coupon', chip: '🎟 쿠폰 · 리워드',
         kw: ['쿠폰', '할인', '적립', '리워드', '프로모션', '이벤트', '무료배송'],
-        answer: '쿠폰함에서 받아둔 쿠폰은 장바구니에서 바로 적용돼요 🎟\n· 신규 회원 10% 할인\n· 첫 구매 3,000원 즉시할인\n· 무료배송 쿠폰\n· 30일 챌린지 리워드 (7 · 15 · 30일)\n쿠폰은 주문 1건당 1장 적용됩니다.',
+        answer: '쿠폰함에서 받아둔 쿠폰은 장바구니에서 바로 적용돼요 🎟\n· 신규 회원 10% 할인\n· 첫 구매 3,000원 즉시할인\n· 무료배송 쿠폰\n· 30일 챌린지 리워드 (7 · 15 · 30일)\n· 건강 식탁 완성 리워드\n쿠폰은 주문 1건당 1장 적용됩니다.',
         actions: [{ label: '쿠폰함 열기', fn: 'coupons' }]
       },
       {
@@ -3002,8 +3312,8 @@
       {
         key: 'subscribe', chip: '📦 정기구독',
         kw: ['구독', '정기', '플랜', '매주', '주기', '해지'],
-        answer: '정기구독은 두 가지가 있어요 📦\n· <b>7일 균형 식단 구독팩</b> 59,000원 (주 7끼)\n· <b>4주 정기구독 플랜</b> 219,000원 (28끼)\n· 배송 요일 변경과 일시정지는 언제든 가능하고, 해지 수수료는 없어요.',
-        actions: [{ label: '구독 상품 보기', fn: 'shop' }]
+        answer: '정기구독 상품은 현재 준비 중이에요 📦\n오픈하면 배송 요일 변경과 일시정지를 자유롭게 설정할 수 있도록 준비하고 있어요.\n먼저 오픈 소식을 받고 싶으시면 1:1 문의로 남겨주세요.',
+        actions: [{ label: '고객센터 연결', fn: 'cs' }]
       },
       {
         key: 'agent', chip: '👩‍💼 상담원 연결',
