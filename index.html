@@ -1091,7 +1091,7 @@
       <div class="tab-bar" id="tabBar"></div>
 
       <div class="shop-grid" id="shopGrid"></div>
-      <p class="shop-empty" id="shopEmpty">해당 카테고리에 상품이 없어요.</p>
+      <p class="shop-empty" id="shopEmpty">이 카테고리의 상품은 준비 중이에요.</p>
     </div>
   </section>
 
@@ -1596,43 +1596,43 @@
   <script>
   (function () {
     /* ===================== Shop catalog ===================== */
+    /* sweetbalance.kr 제품 라인 기준 카테고리 */
     var CATEGORIES = [
       { key: 'all', label: '전체' },
       { key: 'salad', label: '샐러드' },
-      { key: 'lunchbox', label: '도시락 세트' },
-      { key: 'diet', label: '다이어트식' },
-      { key: 'snack', label: '스낵' },
-      { key: 'drink', label: '음료' },
-      { key: 'subscribe', label: '정기구독' }
+      { key: 'saladwrap', label: '샐러드 랩' },
+      { key: 'meal', label: '도시락' },
+      { key: 'burgersandwich', label: '미니버거&샌드위치' },
+      { key: 'dressing', label: '드레싱' }
     ];
 
     var CATALOG = [
       { id: 'cobb-salad', cat: 'salad', img: '🥗', badges: ['new', 'diet'], name: 'Signature Cobb Salad', kr: '시그니처 콥샐러드', stat: '420kcal · 단백질 23g', price: 9900 },
       { id: 'salmon-poke', cat: 'salad', img: '🐟', badges: ['best'], name: 'Salmon Poke Bowl', kr: '연어 포케 보울', stat: '390kcal · 단백질 27g', price: 11900 },
       { id: 'yogurt-bowl', cat: 'salad', img: '🥣', badges: [], name: 'Greek Yogurt Bowl', kr: '그릭요거트 그래놀라 보울', stat: '260kcal · 단백질 19g', price: 6900 },
-      { id: 'tofu-steak', cat: 'lunchbox', img: '🍱', badges: [], name: 'Tofu Steak Set', kr: '두부 스테이크 정식', stat: '330kcal · 단백질 21g', price: 8900 },
-      { id: 'chicken-steak', cat: 'lunchbox', img: '🍗', badges: ['diet'], name: 'Low-Sugar Chicken Steak', kr: '저당 닭가슴살 스테이크', stat: '280kcal · 단백질 32g', price: 7900 },
-      { id: 'mushroom-risotto', cat: 'lunchbox', img: '🍄', badges: [], name: 'Low-Sugar Mushroom Risotto', kr: '저당 버섯 리조또', stat: '300kcal · 단백질 16g', price: 9500 },
+      { id: 'tofu-steak', cat: 'meal', img: '🍱', badges: [], name: 'Tofu Steak Set', kr: '두부 스테이크 정식', stat: '330kcal · 단백질 21g', price: 8900 },
+      { id: 'chicken-steak', cat: 'meal', img: '🍗', badges: ['diet'], name: 'Low-Sugar Chicken Steak', kr: '저당 닭가슴살 스테이크', stat: '280kcal · 단백질 32g', price: 7900 },
+      { id: 'mushroom-risotto', cat: 'meal', img: '🍄', badges: [], name: 'Low-Sugar Mushroom Risotto', kr: '저당 버섯 리조또', stat: '300kcal · 단백질 16g', price: 9500 },
       {
-        id: 'basil-wrap-party', cat: 'lunchbox', img: 'assets/product-basil-wrap-party.png', badges: ['best', 'sale'],
+        id: 'basil-wrap-party', cat: 'saladwrap', img: 'assets/product-basil-wrap-party.png', badges: ['best', 'sale'],
         name: 'Basil Pesto Salad Wrap Party Pack', kr: '바질페스토 샐러드랩 파티팩', stat: '4인분 · 모임/파티용', price: 24900, originalPrice: 29900
       },
       {
-        id: 'basil-wrap-single', cat: 'snack', img: 'assets/product-basil-wrap-single.png', badges: ['new'],
+        id: 'basil-wrap-single', cat: 'saladwrap', img: 'assets/product-basil-wrap-single.png', badges: ['new'],
         name: 'Basil Pesto Salad Wrap', kr: '바질페스토 샐러드랩', stat: '340kcal · 단백질 15g', price: 6900
       },
-      { id: 'hummus-bowl', cat: 'diet', img: '🫘', badges: ['diet'], name: 'Chickpea Hummus Bowl', kr: '병아리콩 후무스 보울', stat: '350kcal · 단백질 18g', price: 8500 },
-      { id: 'quinoa-bowl', cat: 'diet', img: '🌾', badges: ['diet'], name: 'Quinoa Veggie Bowl', kr: '퀴노아 채소 보울', stat: '310kcal · 단백질 14g', price: 8300 },
-      { id: 'nut-mix', cat: 'snack', img: '🥜', badges: [], name: 'Low-Sugar Nut Mix', kr: '저당 견과 믹스', stat: '150kcal · 소분 스낵', price: 4900 },
-      { id: 'granola-bar', cat: 'snack', img: '🍫', badges: [], name: 'Low-Sugar Granola Bar', kr: '저당 그래놀라바', stat: '130kcal · 1개입', price: 3300 },
-      { id: 'green-juice', cat: 'drink', img: '🥤', badges: ['new'], name: 'Cold-Pressed Green Juice', kr: '콜드프레스 그린주스', stat: '90kcal · 채소 5종', price: 5900 },
-      { id: 'protein-smoothie', cat: 'drink', img: '🧃', badges: ['diet'], name: 'Low-Sugar Protein Smoothie', kr: '저당 프로틴 스무디', stat: '160kcal · 단백질 20g', price: 6200 },
+      { id: 'hummus-bowl', cat: 'salad', img: '🫘', badges: ['diet'], name: 'Chickpea Hummus Bowl', kr: '병아리콩 후무스 보울', stat: '350kcal · 단백질 18g', price: 8500 },
+      { id: 'quinoa-bowl', cat: 'salad', img: '🌾', badges: ['diet'], name: 'Quinoa Veggie Bowl', kr: '퀴노아 채소 보울', stat: '310kcal · 단백질 14g', price: 8300 },
+      { id: 'nut-mix', cat: 'etc', img: '🥜', badges: [], name: 'Low-Sugar Nut Mix', kr: '저당 견과 믹스', stat: '150kcal · 소분 스낵', price: 4900 },
+      { id: 'granola-bar', cat: 'etc', img: '🍫', badges: [], name: 'Low-Sugar Granola Bar', kr: '저당 그래놀라바', stat: '130kcal · 1개입', price: 3300 },
+      { id: 'green-juice', cat: 'etc', img: '🥤', badges: ['new'], name: 'Cold-Pressed Green Juice', kr: '콜드프레스 그린주스', stat: '90kcal · 채소 5종', price: 5900 },
+      { id: 'protein-smoothie', cat: 'etc', img: '🧃', badges: ['diet'], name: 'Low-Sugar Protein Smoothie', kr: '저당 프로틴 스무디', stat: '160kcal · 단백질 20g', price: 6200 },
       {
-        id: 'week-subscribe', cat: 'subscribe', img: '🗓️', badges: ['best', 'sale'],
+        id: 'week-subscribe', cat: 'etc', img: '🗓️', badges: ['best', 'sale'],
         name: '7-Day Balance Subscription', kr: '7일 균형 식단 구독팩', stat: '주 7끼 · 새벽배송', price: 59000, originalPrice: 69000
       },
       {
-        id: 'month-subscribe', cat: 'subscribe', img: '📦', badges: ['sale'],
+        id: 'month-subscribe', cat: 'etc', img: '📦', badges: ['sale'],
         name: '4-Week Subscription Plan', kr: '4주 정기구독 플랜', stat: '4주 28끼 · 새벽배송', price: 219000, originalPrice: 249000
       }
     ];
