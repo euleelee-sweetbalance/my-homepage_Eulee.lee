@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>SweetBalance | Eat fresh, be your Best.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
     --g: #00614E;
@@ -30,8 +33,10 @@
     --sh-lg: 0 16px 48px rgba(27,42,36,.18);
     --sh-brand: 0 10px 28px rgba(0,97,78,.22);
 
-    --en: 'Montserrat', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-    --kr: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+    /* Google Sans는 라틴/숫자 전용 폰트라 한글 글리프가 없다. 한글 문자는
+       자동으로 다음 폰트로 넘어가므로 --kr 맨 앞에 둬도 안전하다. */
+    --en: 'Google Sans', 'Montserrat', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    --kr: 'Google Sans', 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
 
     --ease-out: cubic-bezier(.22,.61,.36,1);
     --dur-fast: 120ms; --dur-base: 220ms; --dur-slow: 420ms;
@@ -270,8 +275,10 @@
     background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
     overflow: hidden; box-shadow: var(--sh-sm); display: flex; flex-direction: column;
     transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+    cursor: pointer;
   }
   .shop-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+  .shop-card:focus-visible { outline: 2px solid var(--g); outline-offset: 2px; }
   .shop-card-visual {
     position: relative; height: 168px; display: flex; align-items: center; justify-content: center;
     font-size: 56px; overflow: hidden;
@@ -314,6 +321,33 @@
   .tab-btn.tab-wish:hover { border-color: var(--red); color: var(--red); }
   .tab-btn.tab-wish.active { background: var(--red); border-color: var(--red); color: #fff; }
   .tab-btn .tab-num { font-family: var(--en); font-weight: 700; opacity: .75; margin-left: 5px; }
+
+  /* ---------- Shop: 프로모션 (요일별 식단 구성 세트) ---------- */
+  .shop-grid.shop-grid-promo { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  .promo-card {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--sh-sm); padding: 18px; display: flex; flex-direction: column; gap: 12px;
+    transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  .promo-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+  .promo-card-head { display: flex; align-items: center; justify-content: space-between; }
+  .promo-day {
+    font-family: var(--en); font-weight: 800; font-size: 12px; color: var(--g);
+    background: rgba(0,97,78,.08); padding: 4px 10px; border-radius: 999px;
+  }
+  .promo-badge {
+    font-family: var(--en); font-weight: 800; font-size: 11.5px; color: #fff;
+    background: var(--red); padding: 4px 10px; border-radius: 999px;
+  }
+  .promo-thumbs { display: flex; gap: 6px; }
+  .promo-thumb {
+    width: 48px; height: 48px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+    background: linear-gradient(135deg,#EEF6DE,#CFE3B0); display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .promo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .promo-card-body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .promo-card-name { font-family: var(--kr); font-weight: 800; font-size: 16px; color: var(--ink); line-height: 1.4; word-break: keep-all; }
+  .promo-card-desc { font-size: 12px; color: var(--slate); line-height: 1.6; word-break: keep-all; }
 
   /* ---------- Overlay / Drawer ---------- */
   .overlay {
@@ -461,6 +495,8 @@
     background: var(--paper); border: 1px solid var(--border); border-radius: var(--r-md);
     padding: 16px 12px; text-align: center; opacity: 0; transform: translateY(8px);
     transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+    width: 100%; -webkit-appearance: none; appearance: none; font-family: inherit; cursor: default;
+    position: relative; overflow: hidden;
   }
   .day-card.show { opacity: 1; transform: translateY(0); }
   .day-label { font-family: var(--en); font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--seed); text-transform: uppercase; }
@@ -468,6 +504,39 @@
   .day-emoji img { width: 46px; height: 46px; object-fit: cover; border-radius: var(--r-sm); margin: 0 auto; }
   .day-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.45; min-height: 52px; word-break: keep-all; }
   .day-stat { font-size: 10.5px; color: var(--slate); margin-top: 6px; }
+
+  /* 캡슐 뽑기(갓챠) 연출 */
+  .day-card.capsule { cursor: pointer; }
+  .day-card.capsule:hover .capsule-ball { transform: translateY(-3px) rotate(4deg); }
+  .capsule-ball {
+    font-size: 32px; line-height: 1; margin: 12px 0 6px; display: inline-block;
+    animation: capsule-bob 1.6s ease-in-out infinite;
+  }
+  @keyframes capsule-bob {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-5px) rotate(4deg); }
+  }
+  .capsule-hint { font-size: 10.5px; color: var(--slate); font-weight: 600; margin-top: 2px; }
+  .day-card.cracking .capsule-ball { animation: capsule-shake .42s ease-in-out; }
+  @keyframes capsule-shake {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    20% { transform: translateX(-4px) rotate(-8deg); }
+    40% { transform: translateX(4px) rotate(8deg); }
+    60% { transform: translateX(-4px) rotate(-6deg); }
+    80% { transform: translateX(4px) rotate(6deg); }
+  }
+  .day-card.pop { animation: capsule-pop .5s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes capsule-pop {
+    0% { transform: scale(.4) rotate(-6deg); opacity: 0; }
+    60% { transform: scale(1.12) rotate(2deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .day-card.opened::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(255,255,255,0) 70%);
+    animation: capsule-flash .5s ease-out forwards;
+  }
+  @keyframes capsule-flash { 0% { opacity: 1; } 100% { opacity: 0; } }
 
   .game-summary {
     display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 28px;
@@ -673,6 +742,57 @@
   .wl-pop-hide input { accent-color: var(--g); width: 14px; height: 14px; cursor: pointer; }
   .wl-pop-hide label { cursor: pointer; }
 
+  /* ---------- Arrival popups: coupon · promo (재사용: wl-pop-overlay / wl-pop) ---------- */
+  .cp-char {
+    position: absolute; right: 8px; bottom: -14px; height: 128px; width: auto; z-index: 2;
+    filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
+  }
+  .cp-visual { padding-right: 100px; text-align: left; }
+  .cp-badge {
+    display: inline-flex; align-items: center; gap: 6px; font-family: var(--en); font-size: 11px;
+    font-weight: 800; letter-spacing: .1em; background: rgba(255,255,255,.18); color: var(--sw);
+    padding: 6px 14px; border-radius: var(--r-pill); margin-bottom: 14px;
+  }
+  .cp-coupon {
+    display: flex; align-items: center; gap: 12px; text-align: left;
+    border: 1.5px dashed rgba(0,97,78,.35); border-radius: var(--r-lg);
+    background: rgba(0,97,78,.05); padding: 14px 16px; margin-bottom: 18px;
+  }
+  .cp-coupon-icon { font-size: 26px; flex-shrink: 0; }
+  .cp-coupon-title { font-size: 14px; font-weight: 800; color: var(--ink); word-break: keep-all; }
+  .cp-coupon-desc { font-size: 12px; color: var(--slate); margin-top: 3px; word-break: keep-all; }
+  .cp-coupon-tag {
+    margin-left: auto; flex-shrink: 0; background: var(--g); color: var(--sw); font-size: 10.5px;
+    font-weight: 800; padding: 5px 10px; border-radius: var(--r-pill); white-space: nowrap;
+  }
+
+  .pp-visual {
+    position: relative; height: 200px; padding: 0; overflow: hidden;
+    background-size: cover; background-position: center;
+  }
+  .pp-visual::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(15,23,20,.15) 0%, rgba(15,23,20,.72) 100%);
+  }
+  .pp-visual > * { position: relative; z-index: 1; }
+  .pp-visual .cp-badge { background: rgba(255,255,255,.22); }
+  .pp-visual .wl-pop-title { position: absolute; left: 28px; right: 28px; bottom: 30px; }
+  .pp-visual .cp-badge { position: absolute; left: 28px; top: 26px; }
+
+  /* ---------- Cookie consent bar ---------- */
+  .cookie-bar {
+    position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 250; margin: 0 auto;
+    max-width: 620px; background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--sh-lg); padding: 16px 18px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+    opacity: 0; visibility: hidden; transform: translateY(16px);
+    transition: opacity var(--dur-slow) var(--ease-out), visibility var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+  }
+  .cookie-bar.open { opacity: 1; visibility: visible; transform: translateY(0); }
+  .cookie-bar-text { flex: 1; min-width: 220px; font-size: 12.5px; color: var(--char); line-height: 1.65; word-break: keep-all; }
+  .cookie-bar-text b { color: var(--ink); }
+  .cookie-bar-ctas { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+  @media (max-width: 480px) { .cookie-bar { left: 10px; right: 10px; bottom: 10px; padding: 14px; } }
+
   /* ---------- Wellness Challenge: modal ---------- */
   .wl-modal {
     position: fixed; inset: 0; background: rgba(15,23,20,.55); z-index: 402;
@@ -719,6 +839,53 @@
     font-family: var(--kr); text-decoration: underline; padding: 4px 0;
   }
   .wl-demo-link:hover { color: var(--g); }
+
+  /* ---------- Product quick view ---------- */
+  .pv-modal {
+    position: fixed; inset: 0; background: rgba(15,23,20,.55); z-index: 402;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; visibility: hidden; transition: opacity var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .pv-modal.open { opacity: 1; visibility: visible; }
+  .pv-card {
+    width: min(480px, 100%); max-height: min(90vh, 720px); background: #fff;
+    border-radius: var(--r-2xl); box-shadow: var(--sh-lg); display: flex; flex-direction: column;
+    overflow: hidden; position: relative;
+    transform: translateY(16px) scale(.985); transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .pv-modal.open .pv-card { transform: translateY(0) scale(1); }
+  .pv-close {
+    position: absolute; top: 14px; right: 14px; z-index: 2; width: 34px; height: 34px; border-radius: 999px;
+    background: rgba(15,23,20,.4); color: #fff; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pv-close:hover { background: rgba(15,23,20,.6); }
+  .pv-gallery { position: relative; flex-shrink: 0; }
+  .pv-visual {
+    height: min(46vh, 360px); display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .pv-visual img { width: 100%; height: 100%; object-fit: cover; }
+  .pv-emoji { font-size: 96px; line-height: 1; }
+  .pv-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: 34px; height: 34px; border-radius: 999px; border: none; cursor: pointer;
+    background: rgba(255,255,255,.85); color: var(--ink);
+    display: flex; align-items: center; justify-content: center; transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pv-nav:hover { background: #fff; }
+  .pv-prev { left: 12px; }
+  .pv-next { right: 12px; }
+  .pv-dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; gap: 6px; justify-content: center; }
+  .pv-dot { width: 6px; height: 6px; border-radius: 999px; background: rgba(255,255,255,.55); }
+  .pv-dot.on { background: #fff; }
+  .pv-body { flex: 1; overflow-y: auto; padding: 22px 24px 24px; }
+  .pv-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .pv-badges:empty { display: none; }
+  .pv-name { font-family: var(--kr); font-weight: 800; font-size: 19px; color: var(--ink); line-height: 1.4; word-break: keep-all; }
+  .pv-desc { font-size: 13.5px; color: var(--slate); line-height: 1.7; margin-top: 8px; word-break: keep-all; }
+  .pv-foot { margin-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .pv-actions { display: flex; align-items: center; gap: 8px; }
+  .pv-actions .wish-btn { position: static; width: 38px; height: 38px; background: var(--paper); color: var(--slate); }
 
   .wl-block { margin-bottom: 22px; }
   .wl-block-title {
@@ -1372,9 +1539,9 @@
   <!-- ===== Star feature: Week Meal Game ===== -->
   <section id="week-game" class="section">
     <div class="wrap">
-      <div class="section-eyebrow">Play · 7-Day Meal Game</div>
+      <div class="section-eyebrow">Play · 7-Day Meal Gacha</div>
       <h2 class="section-title">이번 주, 나만의 균형을 뽑아보세요</h2>
-      <p class="section-sub word-keep">3가지 질문에 답하면 7일치 식단을 바로 짜드려요. 자취생의 냉장고 고민, 오늘로 끝.</p>
+      <p class="section-sub word-keep">3가지 질문에 답하면 7일치 메뉴 캡슐이 준비돼요. 캡슐을 하나씩 뽑아 이번 주 균형을 확인해보세요.</p>
 
       <div class="game-card">
         <div class="game-progress" id="gameProgress">
@@ -1386,10 +1553,10 @@
         <!-- Intro -->
         <div class="game-screen visible" data-screen="intro">
           <div class="game-intro">
-            <div class="game-icon">🗓️</div>
-            <h3>7일 균형 식단, 30초면 뽑혀요</h3>
-            <p class="word-keep">오늘 컨디션, 좋아하는 맛, 이번 주 목표만 알려주시면<br>스윗밸런스 메뉴로 월~일 식단을 짜드릴게요.</p>
-            <button class="btn btn-primary" type="button" onclick="SB.startGame()">식단 뽑으러 가기</button>
+            <div class="game-icon">🎁</div>
+            <h3>7일 균형 식단, 캡슐 뽑기로 만나요</h3>
+            <p class="word-keep">오늘 컨디션, 좋아하는 맛, 이번 주 목표만 알려주시면<br>스윗밸런스 메뉴로 월~일 캡슐 7개를 채워드릴게요.</p>
+            <button class="btn btn-primary" type="button" onclick="SB.startGame()">캡슐 뽑으러 가기</button>
           </div>
         </div>
 
@@ -1443,11 +1610,12 @@
         <!-- Result -->
         <div class="game-screen" data-screen="result">
           <div class="game-result">
-            <h3>당신의 7일 균형 식단이에요</h3>
-            <div class="result-sub">월요일부터 일요일까지, 매일 다른 균형으로 준비했어요.</div>
+            <h3>당신의 7일 균형 캡슐이 도착했어요</h3>
+            <div class="result-sub">캡슐을 하나씩 탭해서 뽑아보세요. 월요일부터 일요일까지 서로 다른 균형이 들어있어요.</div>
             <div class="week-grid" id="weekGrid"></div>
             <div class="game-summary" id="gameSummary"></div>
             <div class="game-result-ctas">
+              <button class="btn btn-secondary" type="button" id="gachaAllBtn" onclick="SB.gachaOpenAll()">캡슐 한번에 열기</button>
               <button class="btn btn-ghost" type="button" onclick="SB.resetGame()">다시 뽑기</button>
               <a class="btn btn-secondary" href="#shop">전체 메뉴 보러가기</a>
             </div>
@@ -1722,6 +1890,28 @@
   <!-- ===== Overlay ===== -->
   <div class="overlay" id="overlay" onclick="SB.closeAll()"></div>
 
+  <!-- ===== Product quick view ===== -->
+  <div class="pv-modal" id="pvModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pvName">
+    <div class="pv-card">
+      <button class="pv-close" type="button" aria-label="닫기" onclick="SB.closeQuickView()">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="pv-gallery" id="pvGallery"></div>
+      <div class="pv-body">
+        <div class="pv-badges" id="pvBadges"></div>
+        <div class="pv-name" id="pvName"></div>
+        <p class="pv-desc" id="pvDesc"></p>
+        <div class="pv-foot">
+          <div id="pvPrice"></div>
+          <div class="pv-actions">
+            <button class="wish-btn" id="pvWish" type="button" aria-label="찜하기">♡</button>
+            <button class="btn btn-primary" id="pvAdd" type="button">+ 담기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== Cart drawer ===== -->
   <div class="drawer" id="cartDrawer" aria-hidden="true">
     <div class="drawer-head">
@@ -1770,6 +1960,57 @@
         <div class="wl-pop-hide">
           <input type="checkbox" id="wlPopHide">
           <label for="wlPopHide">오늘 하루 이 창을 열지 않기</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Arrival popup: 웰컴 쿠폰 자동 발급 ===== -->
+  <div class="wl-pop-overlay" id="couponPopup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cpTitle">
+    <div class="wl-pop">
+      <button class="wl-pop-close" type="button" aria-label="닫기" onclick="SB.closeCouponPopup()">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="wl-pop-visual cp-visual">
+        <span class="cp-badge">🎉 WELCOME</span>
+        <div class="wl-pop-title" id="cpTitle">첫 방문을 환영해요!<br><em>웰컴 쿠폰</em>을 바로 담아드렸어요</div>
+        <img class="cp-char" src="assets/sweeny.png" alt="스윗밸런스 캐릭터 스위니">
+      </div>
+      <div class="wl-pop-body">
+        <div class="cp-coupon">
+          <span class="cp-coupon-icon">🎟️</span>
+          <span>
+            <span class="cp-coupon-title" id="cpCouponTitle">신규 회원 10% 할인</span>
+            <span class="cp-coupon-desc" id="cpCouponDesc">전 상품 10% 할인 (최대 5,000원 할인)</span>
+          </span>
+          <span class="cp-coupon-tag">발급 완료</span>
+        </div>
+        <div class="wl-pop-ctas">
+          <button class="btn btn-primary btn-block" type="button" onclick="SB.closeCouponPopup(); SB.openCoupons();">쿠폰함에서 확인하기</button>
+          <button class="wl-pop-later" type="button" onclick="SB.closeCouponPopup()">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Arrival popup: 신제품 타코랩 출시 ===== -->
+  <div class="wl-pop-overlay" id="promoPopup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="ppTitle">
+    <div class="wl-pop">
+      <button class="wl-pop-close" type="button" aria-label="닫기" onclick="SB.closePromoPopup()">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="wl-pop-visual pp-visual" style="background-image:url('assets/banner-01.jpg')">
+        <span class="cp-badge">NEW · 타코랩</span>
+        <div class="wl-pop-title" id="ppTitle">신제품 <em>타코랩</em> 출시!</div>
+      </div>
+      <div class="wl-pop-body">
+        <div class="wl-pop-bullets">
+          <div class="wl-pop-bullet"><span>🌯</span><span>한 손에 감아 먹는 멕시칸 한 끼, 타코랩 8종</span></div>
+          <div class="wl-pop-bullet"><span>🥗</span><span>생 토마토와 아삭한 채소를 듬뿍 채웠어요</span></div>
+        </div>
+        <div class="wl-pop-ctas">
+          <button class="btn btn-primary btn-block" type="button" onclick="SB.goToPromo()">보러가기</button>
+          <button class="wl-pop-later" type="button" onclick="SB.closePromoPopup()">다음에 볼게요</button>
         </div>
       </div>
     </div>
@@ -1985,6 +2226,17 @@
   <!-- ===== Toast ===== -->
   <div class="toast" id="toast"></div>
 
+  <!-- ===== Cookie consent ===== -->
+  <div class="cookie-bar" id="cookieBar" role="dialog" aria-label="쿠키 사용 동의">
+    <div class="cookie-bar-text">
+      🍪 <b>스윗밸런스</b>는 더 나은 서비스 제공을 위해 쿠키를 사용해요. 계속 이용하시면 쿠키 사용에 동의하는 것으로 볼게요.
+    </div>
+    <div class="cookie-bar-ctas">
+      <button class="btn btn-secondary btn-sm" type="button" onclick="SB.setCookieConsent('essential')">필수만 허용</button>
+      <button class="btn btn-primary btn-sm" type="button" onclick="SB.setCookieConsent('all')">모두 동의</button>
+    </div>
+  </div>
+
   <script>
   (function () {
     /* ===================== Shop catalog ===================== */
@@ -2000,89 +2252,89 @@
 
     /* sweetbalance.kr 제품 목록 · 가격은 미등록 (price 필드 추가 시 자동으로 판매 UI 활성화) */
     var CATALOG = [
-      { id: 'sal-01', cat: 'salad', img: '🥗', badges: ['best'], name: "허니 리코타치즈 샐러드", desc: "꿀이 더해진 리코타 치즈와 복숭아의 달콤함으로 꽉 채운 샐러드" },
-      { id: 'sal-02', cat: 'salad', img: '🥗', badges: [], name: "스파이시 에그마요 샐러드", desc: "부드러운 에그마요에 스파이시 랜치 드레싱이 조합된 고소한 샐러드" },
-      { id: 'sal-03', cat: 'salad', img: '🍜', badges: [], name: "달걀지단과 메밀면 샐러드", desc: "와사비 메밀면에 달걀지단이 올라가 깔끔한 면 요리를 먹는 듯한 샐러드" },
-      { id: 'sal-04', cat: 'salad', img: '🍝', badges: [], name: "푸실리 파스타 샐러드", desc: "새콤달콤 토마토소스와 고소한 매쉬포테이토가 어우러진 파스타 샐러드" },
-      { id: 'sal-05', cat: 'salad', img: '🥗', badges: [], name: "쉬림프 에그 샐러드", desc: "통통한 새우와 고소한 에그마요가 조화로운 샐러드" },
-      { id: 'sal-06', cat: 'salad', img: '🥗', badges: [], name: "케이준 치킨 샐러드", desc: "부드러운 치킨 너겟과 새콤한 사워크림, 토마토 맛 드레싱의 조화가 좋은 샐러드" },
-      { id: 'sal-07', cat: 'salad', img: '🥗', badges: [], name: "군고구마 단호박 샐러드", desc: "달달한 구황작물로 든든하게 속을 채울 수 있는 샐러드" },
-      { id: 'sal-08', cat: 'salad', img: '🥗', badges: [], name: "닭가슴살 고구마 샐러드", desc: "촉촉한 수비드 닭가슴살에 부드러운 고구마 메쉬로 담백한 샐러드" },
-      { id: 'sal-09', cat: 'salad', img: '🥗', badges: [], name: "구운 고구마와 촉촉한 그릴드 닭가슴살 샐러드", desc: "촉촉한 그릴드 닭가슴살과 고소한 시저 드레싱이 조화롭게 어울리는 샐러드" },
-      { id: 'wrap-01', cat: 'saladwrap', img: '🌯', badges: [], name: "비프 치폴레 샐러드 랩", desc: "한 손으로 간편하게 즐기는 비프 부리또 스타일의 샐러드 랩" },
-      { id: 'sal-10', cat: 'salad', img: '🥗', badges: [], name: "닭가슴살과 오징어 포케 샐러드", desc: "귀리보리에 쫄깃한 닭가슴살과 오징어가 더해져 포케가 떠오르는 샐러드" },
+      { id: 'sal-01', cat: 'salad', img: 'assets/products/sal-01.png', price: 5700, badges: ['best'], name: "허니 리코타치즈 샐러드", desc: "꿀이 더해진 리코타 치즈와 복숭아의 달콤함으로 꽉 채운 샐러드" },
+      { id: 'sal-02', cat: 'salad', img: 'assets/products/sal-02.png', price: 5200, badges: [], name: "스파이시 에그마요 샐러드", desc: "부드러운 에그마요에 스파이시 랜치 드레싱이 조합된 고소한 샐러드" },
+      { id: 'sal-03', cat: 'salad', img: 'assets/products/sal-03.png', price: 5400, badges: [], name: "달걀지단과 메밀면 샐러드", desc: "와사비 메밀면에 달걀지단이 올라가 깔끔한 면 요리를 먹는 듯한 샐러드" },
+      { id: 'sal-04', cat: 'salad', img: 'assets/products/sal-04.png', price: 5500, badges: [], name: "푸실리 파스타 샐러드", desc: "새콤달콤 토마토소스와 고소한 매쉬포테이토가 어우러진 파스타 샐러드" },
+      { id: 'sal-05', cat: 'salad', img: 'assets/products/sal-05.png', price: 5400, badges: [], name: "쉬림프 에그 샐러드", desc: "통통한 새우와 고소한 에그마요가 조화로운 샐러드" },
+      { id: 'sal-06', cat: 'salad', img: 'assets/products/sal-06.png', price: 5900, badges: [], name: "케이준 치킨 샐러드", desc: "부드러운 치킨 너겟과 새콤한 사워크림, 토마토 맛 드레싱의 조화가 좋은 샐러드" },
+      { id: 'sal-07', cat: 'salad', img: 'assets/products/sal-07.png', price: 5000, badges: [], name: "군고구마 단호박 샐러드", desc: "달달한 구황작물로 든든하게 속을 채울 수 있는 샐러드" },
+      { id: 'sal-08', cat: 'salad', img: 'assets/products/sal-08.png', price: 5700, badges: [], name: "닭가슴살 고구마 샐러드", desc: "촉촉한 수비드 닭가슴살에 부드러운 고구마 메쉬로 담백한 샐러드" },
+      { id: 'sal-09', cat: 'salad', img: 'assets/products/sal-09.png', price: 5700, badges: [], name: "구운 고구마와 촉촉한 그릴드 닭가슴살 샐러드", desc: "촉촉한 그릴드 닭가슴살과 고소한 시저 드레싱이 조화롭게 어울리는 샐러드" },
+      { id: 'wrap-01', cat: 'saladwrap', img: 'assets/products/wrap-01.png', badges: [], name: "비프 치폴레 샐러드 랩", desc: "한 손으로 간편하게 즐기는 비프 부리또 스타일의 샐러드 랩" },
+      { id: 'sal-10', cat: 'salad', img: 'assets/products/sal-10.png', price: 5700, badges: [], name: "닭가슴살과 오징어 포케 샐러드", desc: "귀리보리에 쫄깃한 닭가슴살과 오징어가 더해져 포케가 떠오르는 샐러드" },
       { id: 'wrap-02', cat: 'saladwrap', img: '🌯', badges: [], name: "매쉬포테이토 케이준 치킨 샐러드 랩", desc: "바삭한 치킨 너겟에 고소한 매쉬포테이토가 어우러진 샐러드 랩" },
-      { id: 'sal-11', cat: 'salad', img: '🥗', badges: [], name: "멕시칸 치킨 샐러드", desc: "코코넛커리 닭가슴살과 덴마크 사워크림으로 멕시칸 요리같은 샐러드" },
-      { id: 'sal-12', cat: 'salad', img: '🥗', badges: [], name: "훈제오리와 고구마메쉬 샐러드", desc: "담백한 훈제오리와 달콤한 고구마 메쉬 조합의 샐러드" },
-      { id: 'wrap-03', cat: 'saladwrap', img: '🌯', badges: [], name: "케이준 치킨 시저 샐러드 랩", desc: "한 손으로 간편하게 즐기는 미국식 치킨 샐러드 랩" },
-      { id: 'wrap-04', cat: 'saladwrap', img: '🌯', badges: [], name: "멕시칸 치킨 샐러드 랩", desc: "한 손으로 간편하게 즐기는 멕시칸 스타일 치킨 샐러드 랩" },
-      { id: 'wrap-05', cat: 'saladwrap', img: '🌯', badges: [], name: "랜치 소시지 샐러드 랩", desc: "한 손으로 간편하게 즐기는 매콤새콤한 소시지 샐러드 랩" },
-      { id: 'wrap-06', cat: 'saladwrap', img: '🌯', badges: [], name: "어니언 치킨 샐러드 랩", desc: "한 손으로 간편하게 즐기는 크리미한 치킨 샐러드 랩" },
-      { id: 'sal-13', cat: 'salad', img: '🍜', badges: [], name: "스모키 그릴드 닭가슴살 메밀면 샐러드", desc: "메밀소바처럼 깔끔한 감칠맛을 가진 누들 샐러드" },
-      { id: 'sal-14', cat: 'salad', img: '🥗', badges: [], name: "단호박 메쉬 스모키 그릴드 닭가슴살 샐러드", desc: "단호박 메쉬가 달콤한 맛을 더한 스모키 닭가슴살 토핑 샐러드" },
-      { id: 'sal-15', cat: 'salad', img: '🍜', badges: [], name: "분짜 쌀국수 샐러드", desc: "쌀국수 면으로 분짜의 식감까지 100% 살린 누들 샐러드" },
-      { id: 'sal-16', cat: 'salad', img: '🥗', badges: [], name: "명란마요 새우 샐러드", desc: "고소한 맛과 부드러운 식감의 조화가 좋은 든든한 곡물 샐러드" },
-      { id: 'sal-17', cat: 'salad', img: '🥗', badges: [], name: "구운버섯 단호박 샐러드", desc: "3가지 버섯의 향과 맛이 조화로운 샐러드" },
-      { id: 'meal-01', cat: 'meal', img: '🍱', badges: [], name: "모짜차돌김치볶음밥과 함박소스오믈렛", desc: "고소한 치즈 토핑을 얹은 차돌 김치볶음밥과 오믈렛 도시락" },
-      { id: 'sal-18', cat: 'salad', img: '🥗', badges: [], name: "참치&게맛살 샐러드", desc: "담백한 해산물 포케를 먹고 싶은 날 제격인 든든한 곡물 샐러드" },
-      { id: 'sal-19', cat: 'salad', img: '🥗', badges: [], name: "바질 리코타 샐러드", desc: "바질이 콕콕 박힌 허니 리코타 치즈에 과일이 믹스된 샐러드" },
-      { id: 'sal-20', cat: 'salad', img: '🥗', badges: [], name: "닭가슴살 리코타 샐러드", desc: "부드러운 맛을 살린 리코타 치즈와 수비드 닭가슴살 토핑 샐러드" },
-      { id: 'wrap-07', cat: 'saladwrap', img: '🌯', badges: [], name: "데리야끼 너비아니 샐러드 랩", desc: "한 손으로 간편하게 즐기는 짭조름한 간장 베이스의 너비아니 샐러드 랩" },
-      { id: 'sal-21', cat: 'salad', img: '🥗', badges: [], name: "고소한 리코타 치즈와 시금치 페스토 샐러드", desc: "꾸덕한 리코타 치즈에 시금치 페스토를 버무린 샐러드" },
-      { id: 'sal-22', cat: 'salad', img: '🥗', badges: [], name: "모짜렐라 카프레제 샐러드", desc: "고소한 모짜렐라 치즈와 방울 토마토로 가볍게 즐기는 카프레제 샐러드" },
-      { id: 'sal-23', cat: 'salad', img: '🥗', badges: [], name: "소불고기 샐러드", desc: "된장찌개에 밥 한 그릇 생각 나는 날 먹기 좋은 든든한 곡물 샐러드" },
-      { id: 'sal-24', cat: 'salad', img: '🥗', badges: [], name: "왕새우 치폴레 샐러드", desc: "다채로운 식감과 매콤한 감칠맛 가득한 왕새우 샐러드" },
+      { id: 'sal-11', cat: 'salad', img: 'assets/products/sal-11.png', price: 5600, badges: [], name: "멕시칸 치킨 샐러드", desc: "코코넛커리 닭가슴살과 덴마크 사워크림으로 멕시칸 요리같은 샐러드" },
+      { id: 'sal-12', cat: 'salad', img: 'assets/products/sal-12.png', price: 5900, badges: [], name: "훈제오리와 고구마메쉬 샐러드", desc: "담백한 훈제오리와 달콤한 고구마 메쉬 조합의 샐러드" },
+      { id: 'wrap-03', cat: 'saladwrap', img: 'assets/products/wrap-03.png', badges: [], name: "케이준 치킨 시저 샐러드 랩", desc: "한 손으로 간편하게 즐기는 미국식 치킨 샐러드 랩" },
+      { id: 'wrap-04', cat: 'saladwrap', img: 'assets/products/wrap-04.png', badges: [], name: "멕시칸 치킨 샐러드 랩", desc: "한 손으로 간편하게 즐기는 멕시칸 스타일 치킨 샐러드 랩" },
+      { id: 'wrap-05', cat: 'saladwrap', img: 'assets/products/wrap-05.png', badges: [], name: "랜치 소시지 샐러드 랩", desc: "한 손으로 간편하게 즐기는 매콤새콤한 소시지 샐러드 랩" },
+      { id: 'wrap-06', cat: 'saladwrap', img: 'assets/products/wrap-06.png', badges: [], name: "어니언 치킨 샐러드 랩", desc: "한 손으로 간편하게 즐기는 크리미한 치킨 샐러드 랩" },
+      { id: 'sal-13', cat: 'salad', img: 'assets/products/sal-13.png', price: 5900, badges: [], name: "스모키 그릴드 닭가슴살 메밀면 샐러드", desc: "메밀소바처럼 깔끔한 감칠맛을 가진 누들 샐러드" },
+      { id: 'sal-14', cat: 'salad', img: 'assets/products/sal-14.png', price: 5800, badges: [], name: "단호박 메쉬 스모키 그릴드 닭가슴살 샐러드", desc: "단호박 메쉬가 달콤한 맛을 더한 스모키 닭가슴살 토핑 샐러드" },
+      { id: 'sal-15', cat: 'salad', img: 'assets/products/sal-15.png', price: 5700, badges: [], name: "분짜 쌀국수 샐러드", desc: "쌀국수 면으로 분짜의 식감까지 100% 살린 누들 샐러드" },
+      { id: 'sal-16', cat: 'salad', img: 'assets/products/sal-16.png', price: 5900, badges: [], name: "명란마요 새우 샐러드", desc: "고소한 맛과 부드러운 식감의 조화가 좋은 든든한 곡물 샐러드" },
+      { id: 'sal-17', cat: 'salad', img: 'assets/products/sal-17.png', price: 5100, badges: [], name: "구운버섯 단호박 샐러드", desc: "3가지 버섯의 향과 맛이 조화로운 샐러드" },
+      { id: 'meal-01', cat: 'meal', img: 'assets/products/meal-01.png', badges: [], name: "모짜차돌김치볶음밥과 함박소스오믈렛", desc: "고소한 치즈 토핑을 얹은 차돌 김치볶음밥과 오믈렛 도시락" },
+      { id: 'sal-18', cat: 'salad', img: 'assets/products/sal-18.png', badges: [], name: "참치&게맛살 샐러드", desc: "담백한 해산물 포케를 먹고 싶은 날 제격인 든든한 곡물 샐러드" },
+      { id: 'sal-19', cat: 'salad', img: 'assets/products/sal-19.png', price: 5500, badges: [], name: "바질 리코타 샐러드", desc: "바질이 콕콕 박힌 허니 리코타 치즈에 과일이 믹스된 샐러드" },
+      { id: 'sal-20', cat: 'salad', img: 'assets/products/sal-20.png', price: 5800, badges: [], name: "닭가슴살 리코타 샐러드", desc: "부드러운 맛을 살린 리코타 치즈와 수비드 닭가슴살 토핑 샐러드" },
+      { id: 'wrap-07', cat: 'saladwrap', img: 'assets/products/wrap-07.png', badges: [], name: "데리야끼 너비아니 샐러드 랩", desc: "한 손으로 간편하게 즐기는 짭조름한 간장 베이스의 너비아니 샐러드 랩" },
+      { id: 'sal-21', cat: 'salad', img: 'assets/products/sal-21.png', price: 5600, badges: [], name: "고소한 리코타 치즈와 시금치 페스토 샐러드", desc: "꾸덕한 리코타 치즈에 시금치 페스토를 버무린 샐러드" },
+      { id: 'sal-22', cat: 'salad', img: 'assets/products/sal-22.png', price: 5600, badges: [], name: "모짜렐라 카프레제 샐러드", desc: "고소한 모짜렐라 치즈와 방울 토마토로 가볍게 즐기는 카프레제 샐러드" },
+      { id: 'sal-23', cat: 'salad', img: 'assets/products/sal-23.png', price: 5800, badges: [], name: "소불고기 샐러드", desc: "된장찌개에 밥 한 그릇 생각 나는 날 먹기 좋은 든든한 곡물 샐러드" },
+      { id: 'sal-24', cat: 'salad', img: 'assets/products/sal-24.png', price: 6000, badges: [], name: "왕새우 치폴레 샐러드", desc: "다채로운 식감과 매콤한 감칠맛 가득한 왕새우 샐러드" },
       { id: 'bs-01', cat: 'burgersandwich', img: '🥪', badges: [], name: "콘참치 모닝 샌드위치", desc: "고소하고 짭짤한 참치에 옥수수콘을 더한 단짠 샌드위치" },
-      { id: 'sal-25', cat: 'salad', img: '🥗', badges: [], name: "에그마요 심플 샐러드", desc: "에그마요의 고소함, 고구마의 달콤함, 드레싱의 매콤함이 어우러진 샐러드" },
-      { id: 'wrap-08', cat: 'saladwrap', img: '🌯', badges: [], name: "바질리코타치즈 요거트 샐러드 랩", desc: "한 손으로 간편하게 즐기는 상큼한 요거트 베이스 바질 리코타 치즈 샐러드 랩" },
+      { id: 'sal-25', cat: 'salad', img: 'assets/products/sal-25.png', price: 5100, badges: [], name: "에그마요 심플 샐러드", desc: "에그마요의 고소함, 고구마의 달콤함, 드레싱의 매콤함이 어우러진 샐러드" },
+      { id: 'wrap-08', cat: 'saladwrap', img: 'assets/product-basil-wrap-single.png', gallery: ['assets/product-basil-wrap-single.png', 'assets/product-basil-wrap-party.png'], badges: [], name: "바질리코타치즈 요거트 샐러드 랩", desc: "한 손으로 간편하게 즐기는 상큼한 요거트 베이스 바질 리코타 치즈 샐러드 랩" },
       { id: 'wrap-09', cat: 'saladwrap', img: '🌯', badges: [], name: "간장 불고기 샐러드 랩", desc: "한 손으로 간편하게 즐기는 짭조름한 불고기 샐러드 랩" },
-      { id: 'meal-02', cat: 'meal', img: '🍱', badges: [], name: "크림굴림만두와 곤약간장계란밥", desc: "육즙 가득 만두와 닭가슴살 곤약간장계란밥에 특제 크림소스를 버무린 도시락" },
-      { id: 'wrap-10', cat: 'saladwrap', img: '🌯', badges: [], name: "달걀지단 유자소이 샐러드 랩", desc: "한 손으로 간편하게 즐기는 포슬포슬 달걀지단 샐러드 랩" },
-      { id: 'wrap-11', cat: 'saladwrap', img: '🌯', badges: [], name: "허니머스타드 케이준 샐러드 랩", desc: "한 손으로 간편하게 즐기는 치킨 너겟 샐러드 랩" },
-      { id: 'sal-26', cat: 'salad', img: '🍝', badges: [], name: "머쉬룸 알리오 파스타", desc: "진한 버섯 풍미와 알리오 올리오 파스타가 어우러져 깔끔한 맛을 내는 파스타 샐러드" },
-      { id: 'sal-27', cat: 'salad', img: '🍝', badges: [], name: "명란 치즈 먹물 파스타", desc: "고소한 먹물 면과 짭조름한 명란 마요가 조화롭게 어우러진 파스타 샐러드" },
-      { id: 'sal-28', cat: 'salad', img: '🥬', badges: [], name: "프레시 채소 믹스", desc: "알록달록한 색감에 라디치오의 쌉싸름한 활력을 더한 다채로운 채소 믹스" },
-      { id: 'sal-29', cat: 'salad', img: '🥬', badges: [], name: "유러피안 루꼴라 가든 믹스", desc: "향긋한 루꼴라와 라디치오가 만나 고급스러운 브런치 느낌의 채소 믹스" },
-      { id: 'sal-30', cat: 'salad', img: '🥬', badges: [], name: "유러피안 데일리 채소 믹스", desc: "연하고 부드러운 멀티립 베이스로 부드러운 맛을 담은 채소 믹스" },
-      { id: 'sal-31', cat: 'salad', img: '🥬', badges: [], name: "데일리 채소 믹스", desc: "양상추와 양배추의 조화로 아삭함이 살아있는 채소믹스" },
-      { id: 'meal-03', cat: 'meal', img: '🥣', badges: [], name: "쉬림프&사워크림 멕시칸 브리또볼", desc: "구운 새우에 스파이시 토마토소스로 매콤하게 즐기는 멕시칸 브리또볼" },
-      { id: 'meal-04', cat: 'meal', img: '🥣', badges: [], name: "치킨&과카몰리 멕시칸 브리또볼", desc: "과카몰리와 닭가슴살로 더 건강한 멕시칸 브리또볼" },
-      { id: 'meal-05', cat: 'meal', img: '🥣', badges: [], name: "풀드포크&나쵸 멕시칸 브리또볼", desc: "풀드포크의 부드러움과 나쵸의 바삭함을 동시에 즐기는 멕시칸 브리또볼" },
-      { id: 'sal-32', cat: 'salad', img: '♨️', badges: [], name: "귀리보리 쉬림프 온샐러드", desc: "슈퍼곡물에 매콤한 랜치 드레싱으로 질릴 틈 없는 오븐 로스티드 온샐러드" },
-      { id: 'sal-33', cat: 'salad', img: '♨️', badges: [], name: "강낭콩 훈제오리 온샐러드", desc: "저당 참깨 드레싱으로 한 번 더 건강하게, 따뜻하고 촉촉한 오븐 로스티드 온샐러드" },
-      { id: 'sal-34', cat: 'salad', img: '♨️', badges: [], name: "병아리콩 훈제목살 온샐러드", desc: "동그란 토핑으로 건강함이 입 속으로 데굴데굴, 따뜻하고 촉촉한 오븐 로스티드 온샐러드" },
-      { id: 'sal-35', cat: 'salad', img: '♨️', badges: [], name: "렌틸콩 닭가슴살 온샐러드", desc: "렌틸콩 듬뿍 넣어 근손실 방어! 따뜻하고 촉촉한 오븐 로스티드 온샐러드" },
-      { id: 'sal-36', cat: 'salad', img: '🥗', badges: [], name: "스파이시랜치 포크밀", desc: "돈불고기와 치즈, 버섯이 매콤하게 조화를 이룬 샐러드" },
-      { id: 'sal-37', cat: 'salad', img: '🥗', badges: [], name: "훈제오리 믹스밀", desc: "훈제오리와 버섯이 담백하게 어우러진 고단백 샐러드" },
-      { id: 'sal-38', cat: 'salad', img: '🥗', badges: [], name: "소불고기 믹스밀", desc: "소불고기와 계란이 곡물과 어우러진 든든한 한 끼" },
-      { id: 'sal-39', cat: 'salad', img: '🥗', badges: [], name: "멕시칸 귀리밀", desc: "돈불고기와 치즈가 매콤하게 어울린 멕시칸 스타일" },
-      { id: 'sal-40', cat: 'salad', img: '🥗', badges: [], name: "크림오징어 샐러드", desc: "부드러운 오징어와 곡물 믹스의 고소한 만남" },
-      { id: 'sal-41', cat: 'salad', img: '🥗', badges: [], name: "새우듬뿍 샐러드", desc: "탱글한 새우와 곡물 베이스로 담백하게 즐기는 샐러드" },
-      { id: 'sal-42', cat: 'salad', img: '🥗', badges: [], name: "치폴레 핫 치킨 샐러드", desc: "매운맛 좋아하는 사람들에게 강력 추천하는 든든한 곡물 샐러드" },
+      { id: 'meal-02', cat: 'meal', img: 'assets/products/meal-02.png', badges: [], name: "크림굴림만두와 곤약간장계란밥", desc: "육즙 가득 만두와 닭가슴살 곤약간장계란밥에 특제 크림소스를 버무린 도시락" },
+      { id: 'wrap-10', cat: 'saladwrap', img: 'assets/products/wrap-10.png', badges: [], name: "달걀지단 유자소이 샐러드 랩", desc: "한 손으로 간편하게 즐기는 포슬포슬 달걀지단 샐러드 랩" },
+      { id: 'wrap-11', cat: 'saladwrap', img: 'assets/products/wrap-11.png', badges: [], name: "허니머스타드 케이준 샐러드 랩", desc: "한 손으로 간편하게 즐기는 치킨 너겟 샐러드 랩" },
+      { id: 'sal-26', cat: 'salad', img: 'assets/products/sal-26.png', price: 5300, badges: [], name: "머쉬룸 알리오 파스타", desc: "진한 버섯 풍미와 알리오 올리오 파스타가 어우러져 깔끔한 맛을 내는 파스타 샐러드" },
+      { id: 'sal-27', cat: 'salad', img: 'assets/products/sal-27.png', price: 5800, badges: [], name: "명란 치즈 먹물 파스타", desc: "고소한 먹물 면과 짭조름한 명란 마요가 조화롭게 어우러진 파스타 샐러드" },
+      { id: 'sal-28', cat: 'salad', img: 'assets/products/sal-28.png', price: 5000, badges: [], name: "프레시 채소 믹스", desc: "알록달록한 색감에 라디치오의 쌉싸름한 활력을 더한 다채로운 채소 믹스" },
+      { id: 'sal-29', cat: 'salad', img: 'assets/products/sal-29.png', badges: [], name: "유러피안 루꼴라 가든 믹스", desc: "향긋한 루꼴라와 라디치오가 만나 고급스러운 브런치 느낌의 채소 믹스" },
+      { id: 'sal-30', cat: 'salad', img: 'assets/products/sal-30.png', badges: [], name: "유러피안 데일리 채소 믹스", desc: "연하고 부드러운 멀티립 베이스로 부드러운 맛을 담은 채소 믹스" },
+      { id: 'sal-31', cat: 'salad', img: 'assets/products/sal-31.png', badges: [], name: "데일리 채소 믹스", desc: "양상추와 양배추의 조화로 아삭함이 살아있는 채소믹스" },
+      { id: 'meal-03', cat: 'meal', img: 'assets/products/meal-03.png', price: 6000, badges: [], name: "쉬림프&사워크림 멕시칸 브리또볼", desc: "구운 새우에 스파이시 토마토소스로 매콤하게 즐기는 멕시칸 브리또볼" },
+      { id: 'meal-04', cat: 'meal', img: 'assets/products/meal-04.png', price: 6000, badges: [], name: "치킨&과카몰리 멕시칸 브리또볼", desc: "과카몰리와 닭가슴살로 더 건강한 멕시칸 브리또볼" },
+      { id: 'meal-05', cat: 'meal', img: 'assets/products/meal-05.png', badges: [], name: "풀드포크&나쵸 멕시칸 브리또볼", desc: "풀드포크의 부드러움과 나쵸의 바삭함을 동시에 즐기는 멕시칸 브리또볼" },
+      { id: 'sal-32', cat: 'salad', img: 'assets/products/sal-32.png', price: 6000, badges: [], name: "귀리보리 쉬림프 온샐러드", desc: "슈퍼곡물에 매콤한 랜치 드레싱으로 질릴 틈 없는 오븐 로스티드 온샐러드" },
+      { id: 'sal-33', cat: 'salad', img: 'assets/products/sal-33.png', price: 6000, badges: [], name: "강낭콩 훈제오리 온샐러드", desc: "저당 참깨 드레싱으로 한 번 더 건강하게, 따뜻하고 촉촉한 오븐 로스티드 온샐러드" },
+      { id: 'sal-34', cat: 'salad', img: 'assets/products/sal-34.png', price: 5900, badges: [], name: "병아리콩 훈제목살 온샐러드", desc: "동그란 토핑으로 건강함이 입 속으로 데굴데굴, 따뜻하고 촉촉한 오븐 로스티드 온샐러드" },
+      { id: 'sal-35', cat: 'salad', img: 'assets/products/sal-35.png', price: 5600, badges: [], name: "렌틸콩 닭가슴살 온샐러드", desc: "렌틸콩 듬뿍 넣어 근손실 방어! 따뜻하고 촉촉한 오븐 로스티드 온샐러드" },
+      { id: 'sal-36', cat: 'salad', img: 'assets/products/sal-36.png', price: 5800, badges: [], name: "스파이시랜치 포크밀", desc: "돈불고기와 치즈, 버섯이 매콤하게 조화를 이룬 샐러드" },
+      { id: 'sal-37', cat: 'salad', img: 'assets/products/sal-37.png', badges: [], name: "훈제오리 믹스밀", desc: "훈제오리와 버섯이 담백하게 어우러진 고단백 샐러드" },
+      { id: 'sal-38', cat: 'salad', img: 'assets/products/sal-38.png', price: 5900, badges: [], name: "소불고기 믹스밀", desc: "소불고기와 계란이 곡물과 어우러진 든든한 한 끼" },
+      { id: 'sal-39', cat: 'salad', img: 'assets/products/sal-39.png', price: 5500, badges: [], name: "멕시칸 귀리밀", desc: "돈불고기와 치즈가 매콤하게 어울린 멕시칸 스타일" },
+      { id: 'sal-40', cat: 'salad', img: 'assets/products/sal-40.png', price: 5300, badges: [], name: "크림오징어 샐러드", desc: "부드러운 오징어와 곡물 믹스의 고소한 만남" },
+      { id: 'sal-41', cat: 'salad', img: 'assets/products/sal-41.png', price: 5800, badges: [], name: "새우듬뿍 샐러드", desc: "탱글한 새우와 곡물 베이스로 담백하게 즐기는 샐러드" },
+      { id: 'sal-42', cat: 'salad', img: 'assets/products/sal-42.png', price: 5900, badges: [], name: "치폴레 핫 치킨 샐러드", desc: "매운맛 좋아하는 사람들에게 강력 추천하는 든든한 곡물 샐러드" },
       { id: 'bs-02', cat: 'burgersandwich', img: '🍔', badges: [], name: "더블 미니버거", desc: "더블 너비아니로 맛도 양도 든든하게 즐기는 미니버거" },
-      { id: 'sal-43', cat: 'salad', img: '🥗', badges: [], name: "단호박 리코타 심플 샐러드", desc: "리코타치즈와 구운 단호박의 부드러운 식감이 좋은 샐러드" },
-      { id: 'sal-44', cat: 'salad', img: '🥗', badges: [], name: "요거트 구운 단호박 샐러드", desc: "새콤달콤 요거트 드레싱과 달콤한 구황작물의 만남, 가볍게 즐기는 샐러드" },
+      { id: 'sal-43', cat: 'salad', img: 'assets/products/sal-43.png', price: 5200, badges: [], name: "단호박 리코타 심플 샐러드", desc: "리코타치즈와 구운 단호박의 부드러운 식감이 좋은 샐러드" },
+      { id: 'sal-44', cat: 'salad', img: 'assets/products/sal-44.png', badges: [], name: "요거트 구운 단호박 샐러드", desc: "새콤달콤 요거트 드레싱과 달콤한 구황작물의 만남, 가볍게 즐기는 샐러드" },
       { id: 'bs-03', cat: 'burgersandwich', img: '🥪', badges: [], name: "에그포테이토 모닝 샌드위치", desc: "고소한 에그스프레드에 통감자의 식감까지 즐길 수 있는 샌드위치" },
-      { id: 'meal-06', cat: 'meal', img: '🍱', badges: [], name: "매콤동글닭가슴살전과 곤드레나물밥", desc: "쫄깃한 닭가슴살전과 향긋한 나물 3종이 들어간 나물밥 도시락" },
-      { id: 'sal-45', cat: 'salad', img: '🍜', badges: [], name: "라구 두부면 샐러드", desc: "담백한 두부면으로 토마토 라구 파스타의 맛과 식감을 살린 샐러드" },
+      { id: 'meal-06', cat: 'meal', img: 'assets/products/meal-06.png', badges: [], name: "매콤동글닭가슴살전과 곤드레나물밥", desc: "쫄깃한 닭가슴살전과 향긋한 나물 3종이 들어간 나물밥 도시락" },
+      { id: 'sal-45', cat: 'salad', img: 'assets/products/sal-45.png', price: 5400, badges: [], name: "라구 두부면 샐러드", desc: "담백한 두부면으로 토마토 라구 파스타의 맛과 식감을 살린 샐러드" },
       { id: 'bs-04', cat: 'burgersandwich', img: '🍔', badges: [], name: "햄치즈 미니버거", desc: "짭짤한 프레스햄에 고소한 치즈를 곁들인 미니버거" },
-      { id: 'sal-46', cat: 'salad', img: '🥗', badges: [], name: "당근라페 리코타 샐러드", desc: "아삭한 당근라페와 달달한 허니 리코타 치즈가 조화로운 샐러드" },
-      { id: 'meal-07', cat: 'meal', img: '🍱', badges: [], name: "블랙 페퍼 닭가슴살과 카레현미밥", desc: "촉촉한 닭가슴살과 카레 현미 볶음밥이 잘 어우러진 도시락" },
-      { id: 'wrap-12', cat: 'saladwrap', img: '🌯', badges: [], name: "허니리코타치즈 샐러드 랩", desc: "한 손으로 간편하게 즐기는 달달한 허니 리코타 치즈 샐러드 랩" },
-      { id: 'meal-08', cat: 'meal', img: '🍱', badges: [], name: "서울식 불고기스크램블과 퀴노아영양밥", desc: "퀴노아 영양밥에 달큰한 소불고기를 얹어 집밥을 떠올리게 하는 도시락" },
+      { id: 'sal-46', cat: 'salad', img: 'assets/products/sal-46.png', price: 5500, badges: [], name: "당근라페 리코타 샐러드", desc: "아삭한 당근라페와 달달한 허니 리코타 치즈가 조화로운 샐러드" },
+      { id: 'meal-07', cat: 'meal', img: 'assets/products/meal-07.png', badges: [], name: "블랙 페퍼 닭가슴살과 카레현미밥", desc: "촉촉한 닭가슴살과 카레 현미 볶음밥이 잘 어우러진 도시락" },
+      { id: 'wrap-12', cat: 'saladwrap', img: 'assets/products/wrap-12.png', badges: [], name: "허니리코타치즈 샐러드 랩", desc: "한 손으로 간편하게 즐기는 달달한 허니 리코타 치즈 샐러드 랩" },
+      { id: 'meal-08', cat: 'meal', img: 'assets/products/meal-08.png', badges: [], name: "서울식 불고기스크램블과 퀴노아영양밥", desc: "퀴노아 영양밥에 달큰한 소불고기를 얹어 집밥을 떠올리게 하는 도시락" },
       { id: 'bs-05', cat: 'burgersandwich', img: '🥪', badges: [], name: "햄치즈 샌드위치", desc: "햄과 치즈, 채소까지! 기본에 충실한 곡물빵 샌드위치" },
       { id: 'bs-06', cat: 'burgersandwich', img: '🥪', badges: [], name: "쿡살라미 샌드위치", desc: "짭조름한 살라미를 쉽게 즐길 수 있는 곡물빵 샌드위치" },
-      { id: 'meal-09', cat: 'meal', img: '🍱', badges: [], name: "로제비엔나와 단호박야채볶음밥", desc: "훈제 비엔나 소시지를 올린 야채볶음밥에 로제소스를 곁들인 단짠 도시락" },
+      { id: 'meal-09', cat: 'meal', img: 'assets/products/meal-09.png', badges: [], name: "로제비엔나와 단호박야채볶음밥", desc: "훈제 비엔나 소시지를 올린 야채볶음밥에 로제소스를 곁들인 단짠 도시락" },
       { id: 'bs-07', cat: 'burgersandwich', img: '🥪', badges: [], name: "콘에그 샌드위치", desc: "부드러운 에그 스프레드에 옥수수 콘이 팡팡 터지는 곡물빵 샌드위치" },
       { id: 'drs-01', cat: 'dressing', img: '🫙', badges: [], name: "시저 드레싱", desc: "치즈의 풍미와 우유의 고소함이 더해진 드레싱" },
       { id: 'drs-02', cat: 'dressing', img: '🫙', badges: [], name: "치폴레 마요 드레싱", desc: "이국적인 매콤함과 마요네즈의 조화가 좋은 드레싱" },
       { id: 'drs-03', cat: 'dressing', img: '🫙', badges: [], name: "허니 레몬 요거트 드레싱", desc: "꿀과 요거트의 상큼 달달한 맛과 향을 가진 드레싱" },
-      { id: 'wrap-13', cat: 'saladwrap', img: '🍕', badges: [], name: "화이트 케이준 포테이토 피자랩", desc: "감자 덕후들을 위한 리얼 포테이토 피자" },
-      { id: 'wrap-14', cat: 'saladwrap', img: '🍕', badges: [], name: "파인 팡팡 하와이안 피자랩", desc: "파인애플과 소세지 조합의 단짠쿵짝 피자" },
-      { id: 'wrap-15', cat: 'saladwrap', img: '🍕', badges: [], name: "핫 페퍼로니 피자랩", desc: "매콤한 페퍼로니와 아삭한 양파가 조화로운 피자" },
-      { id: 'wrap-16', cat: 'saladwrap', img: '🍕', badges: [], name: "더블 스윗 고구마 피자랩", desc: "아이부터 어른까지 모두 좋아하는 달달한 피자" },
-      { id: 'wrap-17', cat: 'saladwrap', img: '🍕', badges: [], name: "호호 불닭 피자랩", desc: "매운 맛에 푹 빠진 불닭 러버들을 위한 피자" },
-      { id: 'wrap-18', cat: 'saladwrap', img: '🍕', badges: [], name: "콘 톡톡 콤비네이션 피자랩", desc: "피자소스에 소시지, 올리브까지 더한 정석 피자" },
+      { id: 'wrap-13', cat: 'saladwrap', img: 'assets/products/wrap-13.png', badges: [], name: "화이트 케이준 포테이토 피자랩", desc: "감자 덕후들을 위한 리얼 포테이토 피자" },
+      { id: 'wrap-14', cat: 'saladwrap', img: 'assets/products/wrap-14.png', badges: [], name: "파인 팡팡 하와이안 피자랩", desc: "파인애플과 소세지 조합의 단짠쿵짝 피자" },
+      { id: 'wrap-15', cat: 'saladwrap', img: 'assets/products/wrap-15.png', badges: [], name: "핫 페퍼로니 피자랩", desc: "매콤한 페퍼로니와 아삭한 양파가 조화로운 피자" },
+      { id: 'wrap-16', cat: 'saladwrap', img: 'assets/products/wrap-16.png', badges: [], name: "더블 스윗 고구마 피자랩", desc: "아이부터 어른까지 모두 좋아하는 달달한 피자" },
+      { id: 'wrap-17', cat: 'saladwrap', img: 'assets/products/wrap-17.png', badges: [], name: "호호 불닭 피자랩", desc: "매운 맛에 푹 빠진 불닭 러버들을 위한 피자" },
+      { id: 'wrap-18', cat: 'saladwrap', img: 'assets/products/wrap-18.png', badges: [], name: "콘 톡톡 콤비네이션 피자랩", desc: "피자소스에 소시지, 올리브까지 더한 정석 피자" },
       { id: 'drs-04', cat: 'dressing', img: '🫙', badges: [], name: "허니 머스터드 드레싱", desc: "꿀의 달콤함에 기분 좋아지는 드레싱" },
       { id: 'drs-05', cat: 'dressing', img: '🫙', badges: [], name: "스파이시 트러플 마요 드레싱", desc: "스리라차 소스와 트러플이 만난 이색적인 드레싱" },
       { id: 'drs-06', cat: 'dressing', img: '🫙', badges: [], name: "크림 어니언 드레싱", desc: "양파의 감칠맛에 크림의 고소함이 더해진 드레싱" },
@@ -2100,6 +2352,40 @@
 
     var BADGE_LABEL = { new: 'NEW', best: 'BEST', diet: '저당', sale: 'SALE' };
     var BADGE_CLASS = { new: 'badge-new', best: 'badge-best', diet: 'badge-soft', sale: 'badge-sale' };
+
+    /* ===================== 프로모션: 요일별 식단 구성 세트 =====================
+       제품 6개씩 묶어 월~일 7가지 세트로 구성, 세트 가격은 CATALOG의 실제 price
+       합계에서 정확히 30% 할인된 값으로 런타임에 계산한다 (하드코딩 금지). */
+    var PROMO_CAT = 'promo';   /* 카테고리가 아닌 프로모션 전용 탭 키 */
+    var PROMO_SETS_RAW = [
+      { id: 'promo-mon', day: '월요일', dayEn: 'MON', title: '든든하게 여는 월요일 세트', ids: ['sal-06', 'sal-08', 'meal-04', 'sal-23', 'sal-38', 'sal-35'] },
+      { id: 'promo-tue', day: '화요일', dayEn: 'TUE', title: '산뜻하게 채우는 화요일 세트', ids: ['sal-28', 'sal-46', 'sal-43', 'sal-25', 'sal-22', 'sal-01'] },
+      { id: 'promo-wed', day: '수요일', dayEn: 'WED', title: '가볍게 즐기는 수요일 파스타 세트', ids: ['sal-03', 'sal-04', 'sal-13', 'sal-15', 'sal-26', 'sal-27'] },
+      { id: 'promo-thu', day: '목요일', dayEn: 'THU', title: '칼칼하게 힘내는 목요일 세트', ids: ['sal-11', 'sal-24', 'sal-42', 'sal-36', 'sal-39', 'meal-03'] },
+      { id: 'promo-fri', day: '금요일', dayEn: 'FRI', title: '든든하게 마무리하는 금요일 세트', ids: ['sal-05', 'sal-10', 'sal-16', 'sal-40', 'sal-41', 'sal-32'] },
+      { id: 'promo-sat', day: '토요일', dayEn: 'SAT', title: '여유롭게 즐기는 토요일 브런치 세트', ids: ['sal-02', 'sal-19', 'sal-20', 'sal-21', 'sal-17', 'sal-45'] },
+      { id: 'promo-sun', day: '일요일', dayEn: 'SUN', title: '균형 있게 채우는 일요일 세트', ids: ['sal-07', 'sal-09', 'sal-12', 'sal-14', 'sal-33', 'sal-34'] }
+    ];
+
+    var PROMO_SETS = PROMO_SETS_RAW.map(function (s) {
+      var items = s.ids.map(function (id) {
+        return CATALOG.filter(function (p) { return p.id === id; })[0];
+      }).filter(Boolean);
+      var original = items.reduce(function (sum, p) { return sum + (p.price || 0); }, 0);
+      var price = Math.round(original * 0.7); /* 6개 합계 대비 정확히 30% 할인 */
+      return {
+        id: s.id, cat: PROMO_CAT, badges: ['sale'],
+        day: s.day, dayEn: s.dayEn,
+        name: s.title,
+        desc: items.map(function (p) { return p.name; }).join(' · '),
+        img: items.length ? items[0].img : '🍽️',
+        items: items,
+        originalPrice: original,
+        price: price
+      };
+    });
+
+    function findPromoSet(id) { return PROMO_SETS.filter(function (s) { return s.id === id; })[0]; }
 
     /* ===================== Coupons ===================== */
     var COUPONS = [
@@ -2160,7 +2446,10 @@
     }
 
     function formatWon(n) { return '₩' + Math.round(n).toLocaleString('ko-KR'); }
-    function findProduct(id) { return CATALOG.filter(function (p) { return p.id === id; })[0]; }
+    function findProduct(id) {
+      var p = CATALOG.filter(function (p) { return p.id === id; })[0];
+      return p || findPromoSet(id);
+    }
     function findCoupon(id) { return COUPONS.filter(function (c) { return c.id === id; })[0]; }
     function cartCount() {
       var n = 0;
@@ -2183,6 +2472,15 @@
       });
 
       /* 카테고리와 성격이 달라 CATEGORIES에 넣지 않고 맨 끝에 따로 붙인다 */
+      var promoBtn = document.createElement('button');
+      promoBtn.type = 'button';
+      promoBtn.id = 'promoTab';
+      promoBtn.className = 'tab-btn' + (activeCat === PROMO_CAT ? ' active' : '');
+      promoBtn.setAttribute('data-cat', PROMO_CAT);
+      promoBtn.textContent = '🔥 프로모션';
+      promoBtn.onclick = function () { setCategory(PROMO_CAT); };
+      bar.appendChild(promoBtn);
+
       var wishBtn = document.createElement('button');
       wishBtn.type = 'button';
       wishBtn.id = 'wishTab';
@@ -2213,11 +2511,23 @@
       renderGrid();
     }
 
-    function visualMarkup(p) {
-      if (/\.(png|jpg|jpeg|webp)$/i.test(p.img)) {
-        return '<img src="' + p.img + '" alt="' + p.name + '">';
-      }
-      return p.img;
+    function isImgSrc(src) { return /\.(png|jpg|jpeg|webp)$/i.test(src); }
+
+    function srcVisualMarkup(src, alt) {
+      return isImgSrc(src) ? '<img src="' + src + '" alt="' + alt + '">' : src;
+    }
+
+    function visualMarkup(p) { return srcVisualMarkup(p.img, p.name); }
+
+    function badgesMarkup(p) {
+      return (p.badges || []).map(function (b) {
+        return '<span class="badge ' + BADGE_CLASS[b] + '">' + BADGE_LABEL[b] + '</span>';
+      }).join('');
+    }
+
+    /* 제품이 가진 사진(들) - 없으면 카드와 같은 이모지 한 장으로 폴백 */
+    function productGallery(p) {
+      return (Array.isArray(p.gallery) && p.gallery.length) ? p.gallery : [p.img];
     }
 
     function priceMarkup(p) {
@@ -2234,9 +2544,55 @@
       return '<div class="shop-card-price"><span class="price-now"><span class="price-value">' + formatWon(p.price) + '</span></span></div>';
     }
 
+    function renderPromoGrid(grid, empty) {
+      grid.classList.add('shop-grid-promo');
+      empty.classList.remove('visible');
+      var moreBox = document.getElementById('shopMore');
+      if (moreBox) moreBox.innerHTML = '';
+
+      grid.innerHTML = '';
+      PROMO_SETS.forEach(function (s) {
+        var card = document.createElement('div');
+        card.className = 'promo-card';
+        card.setAttribute('data-id', s.id);
+
+        var thumbs = s.items.map(function (p) {
+          return '<div class="promo-thumb">' + srcVisualMarkup(p.img, p.name) + '</div>';
+        }).join('');
+
+        card.innerHTML =
+          '<div class="promo-card-head">' +
+            '<span class="promo-day">' + s.dayEn + ' · ' + s.day + '</span>' +
+            '<span class="promo-badge">6종 30% OFF</span>' +
+          '</div>' +
+          '<div class="promo-thumbs">' + thumbs + '</div>' +
+          '<div class="promo-card-body">' +
+            '<div class="promo-card-name">' + s.name + '</div>' +
+            '<div class="promo-card-desc">' + s.desc + '</div>' +
+            '<div class="shop-card-foot">' +
+              priceMarkup(s) +
+              '<button class="add-btn" type="button" data-add="' + s.id + '">+ 담기</button>' +
+            '</div>' +
+          '</div>';
+
+        grid.appendChild(card);
+      });
+
+      grid.querySelectorAll('[data-add]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); addToCart(btn.getAttribute('data-add')); });
+      });
+    }
+
     function renderGrid() {
       var grid = document.getElementById('shopGrid');
       var empty = document.getElementById('shopEmpty');
+
+      if (activeCat === PROMO_CAT) {
+        renderPromoGrid(grid, empty);
+        return;
+      }
+      grid.classList.remove('shop-grid-promo');
+
       var list = activeCat === WISH_CAT
         ? wishedProducts()
         : (activeCat === 'all' ? CATALOG : CATALOG.filter(function (p) { return p.cat === activeCat; }));
@@ -2251,10 +2607,12 @@
       page.forEach(function (p) {
         var card = document.createElement('div');
         card.className = 'shop-card';
-        var badgesHtml = (p.badges || []).map(function (b) {
-          return '<span class="badge ' + BADGE_CLASS[b] + '">' + BADGE_LABEL[b] + '</span>';
-        }).join('');
-        var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
+        card.setAttribute('data-id', p.id);
+        card.setAttribute('role', 'button');
+        card.tabIndex = 0;
+        card.setAttribute('aria-label', p.name + ' 상세 이미지 보기');
+        var badgesHtml = badgesMarkup(p);
+        var isImg = isImgSrc(p.img);
 
         card.innerHTML =
           '<div class="shop-card-visual"' + (isImg ? '' : ' style="background:linear-gradient(135deg,#EEF6DE,#CFE3B0);"') + '>' +
@@ -2275,13 +2633,32 @@
       });
 
       grid.querySelectorAll('[data-add]').forEach(function (btn) {
-        btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-add')); });
+        btn.addEventListener('click', function (e) { e.stopPropagation(); addToCart(btn.getAttribute('data-add')); });
       });
       grid.querySelectorAll('[data-wish]').forEach(function (btn) {
-        btn.addEventListener('click', function () { toggleWish(btn.getAttribute('data-wish'), btn); });
+        btn.addEventListener('click', function (e) { e.stopPropagation(); toggleWish(btn.getAttribute('data-wish')); });
       });
 
       renderMore(list.length);
+    }
+
+    /* 카드 자체는 매 렌더마다 새로 만들어지지만 #shopGrid 엘리먼트는 그대로라
+       위임 리스너를 한 번만 걸어두면 렌더 때마다 다시 바인딩할 필요가 없다. */
+    function initShopGridInteractions() {
+      var grid = document.getElementById('shopGrid');
+      grid.addEventListener('click', function (e) {
+        if (e.target.closest('[data-wish],[data-add]')) return;
+        var card = e.target.closest('.shop-card');
+        if (card) openQuickView(card.getAttribute('data-id'));
+      });
+      grid.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        if (e.target.closest('[data-wish],[data-add]')) return;
+        var card = e.target.closest('.shop-card');
+        if (!card) return;
+        e.preventDefault();
+        openQuickView(card.getAttribute('data-id'));
+      });
     }
 
     function renderMore(total) {
@@ -2297,14 +2674,23 @@
       });
     }
 
-    function toggleWish(id, btn) {
+    /* id가 같은 하트 버튼은 화면에 동시에 여러 개 있을 수 있다
+       (상품 카드 + 상세보기 모달) - 전부 같은 상태로 맞춘다 */
+    function syncWishButtons(id) {
+      var on = !!wished[id];
+      document.querySelectorAll('[data-wish="' + id + '"]').forEach(function (b) {
+        b.classList.toggle('active', on);
+        b.textContent = on ? '♥' : '♡';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.setAttribute('aria-label', on ? '찜 해제' : '찜하기');
+      });
+    }
+
+    function toggleWish(id) {
       wished[id] = !wished[id];
       if (!wished[id]) delete wished[id];
-      btn.classList.toggle('active', !!wished[id]);
-      btn.textContent = wished[id] ? '♥' : '♡';
-      btn.setAttribute('aria-pressed', wished[id] ? 'true' : 'false');
-      btn.setAttribute('aria-label', wished[id] ? '찜 해제' : '찜하기');
       saveState();
+      syncWishButtons(id);
       renderWishTab();
       updateBadges();
       /* 위시리스트 탭에서 해제하면 목록에서도 바로 빠져야 한다 */
@@ -2489,15 +2875,88 @@
       });
     }
 
-    function claimCoupon(id) {
+    function claimCoupon(id, silent) {
       if (claimed.indexOf(id) !== -1) return;
       claimed.push(id);
       saveState();
       updateBadges();
       renderCoupons();
       renderCart();
-      var c = findCoupon(id);
-      showToast((c ? c.title : '쿠폰') + '을(를) 받았어요.');
+      if (!silent) {
+        var c = findCoupon(id);
+        showToast((c ? c.title : '쿠폰') + '을(를) 받았어요.');
+      }
+    }
+
+    /* ===================== Product quick view ===================== */
+    var pv = { id: null, gallery: [], idx: 0 };
+
+    function pvRenderGallery() {
+      var box = document.getElementById('pvGallery');
+      var imgs = pv.gallery;
+      var src = imgs[pv.idx];
+      box.innerHTML =
+        '<div class="pv-visual"' + (isImgSrc(src) ? '' : ' style="background:linear-gradient(135deg,#EEF6DE,#CFE3B0);"') + '>' +
+          (isImgSrc(src) ? srcVisualMarkup(src, '') : '<span class="pv-emoji">' + src + '</span>') +
+        '</div>' +
+        (imgs.length > 1 ?
+          '<button class="pv-nav pv-prev" type="button" aria-label="이전 사진">' +
+            '<svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>' +
+          '</button>' +
+          '<button class="pv-nav pv-next" type="button" aria-label="다음 사진">' +
+            '<svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>' +
+          '</button>' +
+          '<div class="pv-dots">' + imgs.map(function (_, i) { return '<span class="pv-dot' + (i === pv.idx ? ' on' : '') + '"></span>'; }).join('') + '</div>'
+          : '');
+
+      if (imgs.length > 1) {
+        box.querySelector('.pv-prev').addEventListener('click', function () { pvGoTo(pv.idx - 1); });
+        box.querySelector('.pv-next').addEventListener('click', function () { pvGoTo(pv.idx + 1); });
+      }
+    }
+
+    function pvGoTo(i) {
+      var n = pv.gallery.length;
+      pv.idx = ((i % n) + n) % n;
+      pvRenderGallery();
+    }
+
+    function openQuickView(id) {
+      var p = findProduct(id);
+      if (!p) return;
+      pv = { id: id, gallery: productGallery(p), idx: 0 };
+      pvRenderGallery();
+
+      document.getElementById('pvBadges').innerHTML = badgesMarkup(p);
+      document.getElementById('pvName').textContent = p.name;
+      document.getElementById('pvDesc').textContent = p.desc;
+      document.getElementById('pvPrice').innerHTML = priceMarkup(p);
+
+      var wishBtn = document.getElementById('pvWish');
+      wishBtn.setAttribute('data-wish', id);
+      syncWishButtons(id);
+
+      var addBtn = document.getElementById('pvAdd');
+      addBtn.style.display = p.price ? '' : 'none';
+      addBtn.onclick = function () { addToCart(id); };
+
+      document.getElementById('pvModal').classList.add('open');
+      document.getElementById('pvModal').setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeQuickView() {
+      document.getElementById('pvModal').classList.remove('open');
+      document.getElementById('pvModal').setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+
+    function initQuickView() {
+      document.getElementById('pvWish').addEventListener('click', function () {
+        toggleWish(this.getAttribute('data-wish'));
+      });
+      var modal = document.getElementById('pvModal');
+      modal.addEventListener('click', function (e) { if (e.target === modal) closeQuickView(); });
     }
 
     /* ===================== Drawers / overlay ===================== */
@@ -2746,39 +3205,93 @@
       return c ? c.label : '';
     }
 
+    /* 7일 식단 뽑기 = 갓챠 캡슐 연출. 결과 자체는 pickWeek()가 그대로 정하고,
+       화면에는 처음에 닫힌 캡슐 7개만 보여준 뒤 탭할 때마다 하나씩 열어 보여준다. */
+    var gachaWeek = [];   // [{ product, day }] 이번 판에 뽑힌 7일치 결과
+    var gachaOpened = {}; // { dayIndex: true } 이미 연 캡슐
+
     function renderResult() {
       var week = pickWeek();
       var grid = document.getElementById('weekGrid');
       grid.innerHTML = '';
-
-      var byCat = {};
+      gachaWeek = [];
+      gachaOpened = {};
 
       week.forEach(function (id, i) {
         var p = findProduct(id);
         if (!p) return;
-        byCat[p.cat] = (byCat[p.cat] || 0) + 1;
+        gachaWeek[i] = p;
 
+        var card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'day-card capsule';
+        card.setAttribute('data-day', i);
+        card.setAttribute('aria-label', DAY_LABELS[i] + ' 캡슐 뽑기');
+        card.innerHTML =
+          '<div class="day-label">' + DAY_LABELS[i] + '</div>' +
+          '<div class="capsule-ball">🎁</div>' +
+          '<div class="capsule-hint">탭해서 뽑기</div>';
+        card.addEventListener('click', function () { openCapsule(i); });
+        grid.appendChild(card);
+
+        setTimeout(function () { card.classList.add('show'); }, i * 60);
+      });
+
+      document.getElementById('gameSummary').innerHTML = '';
+      var allBtn = document.getElementById('gachaAllBtn');
+      if (allBtn) allBtn.style.display = '';
+    }
+
+    function openCapsule(i) {
+      if (gachaOpened[i] || !gachaWeek[i]) return;
+      var card = document.querySelector('.day-card[data-day="' + i + '"]');
+      if (!card) return;
+      var p = gachaWeek[i];
+      gachaOpened[i] = true;
+      card.classList.add('cracking');
+
+      setTimeout(function () {
         var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
-        var card = document.createElement('div');
-        card.className = 'day-card';
+        card.classList.remove('capsule', 'cracking');
+        card.classList.add('opened', 'pop');
         card.innerHTML =
           '<div class="day-label">' + DAY_LABELS[i] + '</div>' +
           '<div class="day-emoji">' + (isImg ? '<img src="' + p.img + '" alt="' + p.name + '">' : p.img) + '</div>' +
           '<div class="day-name">' + p.name + '</div>' +
           '<div class="day-stat">' + catLabel(p.cat) + '</div>';
-        grid.appendChild(card);
+        updateGachaSummary();
+      }, 420);
+    }
 
-        setTimeout(function () { card.classList.add('show'); }, i * 60);
+    function gachaOpenAll() {
+      gachaWeek.forEach(function (p, i) {
+        if (gachaOpened[i]) return;
+        setTimeout(function () { openCapsule(i); }, i * 260);
+      });
+    }
+
+    function updateGachaSummary() {
+      var byCat = {};
+      var openedCount = 0;
+      gachaWeek.forEach(function (p, i) {
+        if (!gachaOpened[i]) return;
+        openedCount++;
+        byCat[p.cat] = (byCat[p.cat] || 0) + 1;
       });
 
       document.getElementById('gameSummary').innerHTML =
         CATEGORIES.filter(function (c) { return c.key !== 'all' && byCat[c.key]; })
           .map(function (c) { return '<span class="summary-pill">' + c.label + ' ' + byCat[c.key] + '일</span>'; })
           .join('');
+
+      var allBtn = document.getElementById('gachaAllBtn');
+      if (allBtn) allBtn.style.display = openedCount >= gachaWeek.length ? 'none' : '';
     }
 
     function resetGame() {
       answers = [];
+      gachaWeek = [];
+      gachaOpened = {};
       setDots(-1);
       document.querySelectorAll('.option-btn').forEach(function (b) { b.classList.remove('selected'); });
       showScreen('intro');
@@ -3081,13 +3594,110 @@
     }
 
     /* ---------- popup & modal ---------- */
-    function popupHiddenToday() {
-      try { return localStorage.getItem('sb_wl_popup_hide') === todayStamp(); }
+    function popupHiddenToday(key) {
+      try { return localStorage.getItem(key || 'sb_wl_popup_hide') === todayStamp(); }
       catch (e) { return false; }
     }
     function todayStamp() {
       var d = new Date();
       return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    }
+
+    /* ===================== 접속 시 안내 팝업 =====================
+       접속하면 순서대로 하나씩 보여준다: 웰컴 쿠폰(최초 1회) → 신제품 안내(최초 1회)
+       → 30일 챌린지(오늘 하루 보지 않기를 안 눌렀다면 매일). 한 번에 하나만 뜨도록
+       앞 팝업을 닫을 때 다음 팝업을 이어서 연다. */
+    function popupSeenEver(key) {
+      try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
+    }
+    function markPopupSeenEver(key) {
+      try { localStorage.setItem(key, '1'); } catch (e) { /* noop */ }
+    }
+
+    var COUPON_POPUP_SEEN_KEY = 'sb_coupon_popup_seen';
+    var PROMO_POPUP_SEEN_KEY = 'sb_promo_popup_seen';
+    var WELCOME_COUPON_ID = 'welcome10';
+
+    function runArrivalQueue() {
+      if (!popupSeenEver(COUPON_POPUP_SEEN_KEY)) { openCouponPopup(); return; }
+      if (!popupSeenEver(PROMO_POPUP_SEEN_KEY)) { openPromoPopup(); return; }
+      if (!popupHiddenToday('sb_wl_popup_hide')) { openWellnessPopup(); return; }
+    }
+
+    function openCouponPopup() {
+      markPopupSeenEver(COUPON_POPUP_SEEN_KEY);
+      var c = findCoupon(WELCOME_COUPON_ID);
+      if (c) {
+        document.getElementById('cpCouponTitle').textContent = c.title;
+        document.getElementById('cpCouponDesc').textContent = c.desc;
+      }
+      claimCoupon(WELCOME_COUPON_ID, true); /* 팝업 문구가 이미 '발급 완료'라 토스트는 생략 */
+      var el = document.getElementById('couponPopup');
+      if (!el) return;
+      el.classList.add('open');
+      el.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCouponPopup() {
+      var el = document.getElementById('couponPopup');
+      if (el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); }
+      setTimeout(runArrivalQueue, 450);
+    }
+
+    function openPromoPopup() {
+      markPopupSeenEver(PROMO_POPUP_SEEN_KEY);
+      var el = document.getElementById('promoPopup');
+      if (!el) return;
+      el.classList.add('open');
+      el.setAttribute('aria-hidden', 'false');
+    }
+
+    function closePromoPopup() {
+      var el = document.getElementById('promoPopup');
+      if (el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); }
+      setTimeout(runArrivalQueue, 450);
+    }
+
+    /* '보러가기' - 배너의 타코랩 신제품 슬라이드로 이동해 보여준다 */
+    function goToPromo() {
+      closePromoPopup();
+      var banner = document.getElementById('topBanner');
+      if (banner) {
+        rbGo(0);
+        banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    /* ===================== 쿠키 동의 배너 =====================
+       페이지가 서버 없는 정적 데모라 실제 트래킹 쿠키는 없지만,
+       동의 UX 자체는 실제 사이트처럼 동작하도록 구현한다. */
+    var COOKIE_CONSENT_KEY = 'sb_cookie_consent';
+
+    function initCookieConsent() {
+      var bar = document.getElementById('cookieBar');
+      if (!bar) return;
+      var chosen;
+      try { chosen = localStorage.getItem(COOKIE_CONSENT_KEY); } catch (e) { chosen = null; }
+      if (chosen) return;
+      setTimeout(function () { bar.classList.add('open'); }, 400);
+    }
+
+    function setCookieConsent(mode) {
+      try { localStorage.setItem(COOKIE_CONSENT_KEY, mode); } catch (e) { /* noop */ }
+      var bar = document.getElementById('cookieBar');
+      if (bar) bar.classList.remove('open');
+    }
+
+    function initArrivalPopups() {
+      ['couponPopup', 'promoPopup'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('click', function (e) {
+          if (e.target !== el) return;
+          if (id === 'couponPopup') closeCouponPopup(); else closePromoPopup();
+        });
+      });
+      setTimeout(runArrivalQueue, 700);
     }
 
     function openWellnessPopup() {
@@ -3924,9 +4534,7 @@
         pop.addEventListener('click', function (e) { if (e.target === pop) closeWellnessPopup(); });
       }
       grantRewards();
-      if (!popupHiddenToday()) {
-        setTimeout(openWellnessPopup, 1000);
-      }
+      /* 자동 오픈은 접속 안내 팝업 큐(runArrivalQueue)가 순서대로 담당한다 */
     }
 
     function initChat() {
@@ -3951,10 +4559,14 @@
       initVisits();
       renderTabs();
       renderGrid();
+      initShopGridInteractions();
+      initQuickView();
       updateBadges();
       initWellness();
       initTable();
       initChat();
+      initCookieConsent();
+      initArrivalPopups();
     });
 
     document.addEventListener('keydown', function (e) {
@@ -3962,9 +4574,15 @@
       var pop = document.getElementById('wlPopup');
       var wl = document.getElementById('wlModal');
       var cgo = document.getElementById('catchGame');
+      var pvm = document.getElementById('pvModal');
+      var cpp = document.getElementById('couponPopup');
+      var ppp = document.getElementById('promoPopup');
       if (cgo && cgo.classList.contains('open')) { closeCatch(); return; }
+      if (cpp && cpp.classList.contains('open')) { closeCouponPopup(); return; }
+      if (ppp && ppp.classList.contains('open')) { closePromoPopup(); return; }
       if (pop && pop.classList.contains('open')) { closeWellnessPopup(); return; }
       if (wl && wl.classList.contains('open')) { closeChallenge(); return; }
+      if (pvm && pvm.classList.contains('open')) { closeQuickView(); return; }
       if (chatOpen) { closeChat(); return; }
       closeAll();
     });
@@ -3973,15 +4591,21 @@
       startGame: startGame,
       answer: answerGame,
       resetGame: resetGame,
+      gachaOpenAll: gachaOpenAll,
       addToCart: addToCart,
       openCart: openCart,
       openCoupons: openCoupons,
       openWishlist: openWishlist,
+      closeQuickView: closeQuickView,
       closeAll: closeAll,
       openChallenge: openChallenge,
       closeChallenge: closeChallenge,
       startChallenge: startChallenge,
       closeWellnessPopup: closeWellnessPopup,
+      closeCouponPopup: closeCouponPopup,
+      closePromoPopup: closePromoPopup,
+      goToPromo: goToPromo,
+      setCookieConsent: setCookieConsent,
       finishDay: finishDay,
       nextDay: nextDay,
       toggleChat: toggleChat,
