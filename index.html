@@ -675,6 +675,57 @@
   .wl-pop-hide input { accent-color: var(--g); width: 14px; height: 14px; cursor: pointer; }
   .wl-pop-hide label { cursor: pointer; }
 
+  /* ---------- Arrival popups: coupon · promo (재사용: wl-pop-overlay / wl-pop) ---------- */
+  .cp-char {
+    position: absolute; right: 8px; bottom: -14px; height: 128px; width: auto; z-index: 2;
+    filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
+  }
+  .cp-visual { padding-right: 100px; text-align: left; }
+  .cp-badge {
+    display: inline-flex; align-items: center; gap: 6px; font-family: var(--en); font-size: 11px;
+    font-weight: 800; letter-spacing: .1em; background: rgba(255,255,255,.18); color: var(--sw);
+    padding: 6px 14px; border-radius: var(--r-pill); margin-bottom: 14px;
+  }
+  .cp-coupon {
+    display: flex; align-items: center; gap: 12px; text-align: left;
+    border: 1.5px dashed rgba(0,97,78,.35); border-radius: var(--r-lg);
+    background: rgba(0,97,78,.05); padding: 14px 16px; margin-bottom: 18px;
+  }
+  .cp-coupon-icon { font-size: 26px; flex-shrink: 0; }
+  .cp-coupon-title { font-size: 14px; font-weight: 800; color: var(--ink); word-break: keep-all; }
+  .cp-coupon-desc { font-size: 12px; color: var(--slate); margin-top: 3px; word-break: keep-all; }
+  .cp-coupon-tag {
+    margin-left: auto; flex-shrink: 0; background: var(--g); color: var(--sw); font-size: 10.5px;
+    font-weight: 800; padding: 5px 10px; border-radius: var(--r-pill); white-space: nowrap;
+  }
+
+  .pp-visual {
+    position: relative; height: 200px; padding: 0; overflow: hidden;
+    background-size: cover; background-position: center;
+  }
+  .pp-visual::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(15,23,20,.15) 0%, rgba(15,23,20,.72) 100%);
+  }
+  .pp-visual > * { position: relative; z-index: 1; }
+  .pp-visual .cp-badge { background: rgba(255,255,255,.22); }
+  .pp-visual .wl-pop-title { position: absolute; left: 28px; right: 28px; bottom: 30px; }
+  .pp-visual .cp-badge { position: absolute; left: 28px; top: 26px; }
+
+  /* ---------- Cookie consent bar ---------- */
+  .cookie-bar {
+    position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 250; margin: 0 auto;
+    max-width: 620px; background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--sh-lg); padding: 16px 18px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+    opacity: 0; visibility: hidden; transform: translateY(16px);
+    transition: opacity var(--dur-slow) var(--ease-out), visibility var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+  }
+  .cookie-bar.open { opacity: 1; visibility: visible; transform: translateY(0); }
+  .cookie-bar-text { flex: 1; min-width: 220px; font-size: 12.5px; color: var(--char); line-height: 1.65; word-break: keep-all; }
+  .cookie-bar-text b { color: var(--ink); }
+  .cookie-bar-ctas { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+  @media (max-width: 480px) { .cookie-bar { left: 10px; right: 10px; bottom: 10px; padding: 14px; } }
+
   /* ---------- Wellness Challenge: modal ---------- */
   .wl-modal {
     position: fixed; inset: 0; background: rgba(15,23,20,.55); z-index: 402;
@@ -1846,6 +1897,57 @@
     </div>
   </div>
 
+  <!-- ===== Arrival popup: 웰컴 쿠폰 자동 발급 ===== -->
+  <div class="wl-pop-overlay" id="couponPopup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cpTitle">
+    <div class="wl-pop">
+      <button class="wl-pop-close" type="button" aria-label="닫기" onclick="SB.closeCouponPopup()">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="wl-pop-visual cp-visual">
+        <span class="cp-badge">🎉 WELCOME</span>
+        <div class="wl-pop-title" id="cpTitle">첫 방문을 환영해요!<br><em>웰컴 쿠폰</em>을 바로 담아드렸어요</div>
+        <img class="cp-char" src="assets/sweeny.png" alt="스윗밸런스 캐릭터 스위니">
+      </div>
+      <div class="wl-pop-body">
+        <div class="cp-coupon">
+          <span class="cp-coupon-icon">🎟️</span>
+          <span>
+            <span class="cp-coupon-title" id="cpCouponTitle">신규 회원 10% 할인</span>
+            <span class="cp-coupon-desc" id="cpCouponDesc">전 상품 10% 할인 (최대 5,000원 할인)</span>
+          </span>
+          <span class="cp-coupon-tag">발급 완료</span>
+        </div>
+        <div class="wl-pop-ctas">
+          <button class="btn btn-primary btn-block" type="button" onclick="SB.closeCouponPopup(); SB.openCoupons();">쿠폰함에서 확인하기</button>
+          <button class="wl-pop-later" type="button" onclick="SB.closeCouponPopup()">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Arrival popup: 신제품 타코랩 출시 ===== -->
+  <div class="wl-pop-overlay" id="promoPopup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="ppTitle">
+    <div class="wl-pop">
+      <button class="wl-pop-close" type="button" aria-label="닫기" onclick="SB.closePromoPopup()">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="wl-pop-visual pp-visual" style="background-image:url('assets/banner-01.jpg')">
+        <span class="cp-badge">NEW · 타코랩</span>
+        <div class="wl-pop-title" id="ppTitle">신제품 <em>타코랩</em> 출시!</div>
+      </div>
+      <div class="wl-pop-body">
+        <div class="wl-pop-bullets">
+          <div class="wl-pop-bullet"><span>🌯</span><span>한 손에 감아 먹는 멕시칸 한 끼, 타코랩 8종</span></div>
+          <div class="wl-pop-bullet"><span>🥗</span><span>생 토마토와 아삭한 채소를 듬뿍 채웠어요</span></div>
+        </div>
+        <div class="wl-pop-ctas">
+          <button class="btn btn-primary btn-block" type="button" onclick="SB.goToPromo()">보러가기</button>
+          <button class="wl-pop-later" type="button" onclick="SB.closePromoPopup()">다음에 볼게요</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== Wellness Challenge: mission modal ===== -->
   <div class="wl-modal" id="wlModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wlModalTitle">
     <div class="wl-modal-card">
@@ -2055,6 +2157,17 @@
 
   <!-- ===== Toast ===== -->
   <div class="toast" id="toast"></div>
+
+  <!-- ===== Cookie consent ===== -->
+  <div class="cookie-bar" id="cookieBar" role="dialog" aria-label="쿠키 사용 동의">
+    <div class="cookie-bar-text">
+      🍪 <b>스윗밸런스</b>는 더 나은 서비스 제공을 위해 쿠키를 사용해요. 계속 이용하시면 쿠키 사용에 동의하는 것으로 볼게요.
+    </div>
+    <div class="cookie-bar-ctas">
+      <button class="btn btn-secondary btn-sm" type="button" onclick="SB.setCookieConsent('essential')">필수만 허용</button>
+      <button class="btn btn-primary btn-sm" type="button" onclick="SB.setCookieConsent('all')">모두 동의</button>
+    </div>
+  </div>
 
   <script>
   (function () {
@@ -2602,15 +2715,17 @@
       });
     }
 
-    function claimCoupon(id) {
+    function claimCoupon(id, silent) {
       if (claimed.indexOf(id) !== -1) return;
       claimed.push(id);
       saveState();
       updateBadges();
       renderCoupons();
       renderCart();
-      var c = findCoupon(id);
-      showToast((c ? c.title : '쿠폰') + '을(를) 받았어요.');
+      if (!silent) {
+        var c = findCoupon(id);
+        showToast((c ? c.title : '쿠폰') + '을(를) 받았어요.');
+      }
     }
 
     /* ===================== Product quick view ===================== */
@@ -3265,13 +3380,110 @@
     }
 
     /* ---------- popup & modal ---------- */
-    function popupHiddenToday() {
-      try { return localStorage.getItem('sb_wl_popup_hide') === todayStamp(); }
+    function popupHiddenToday(key) {
+      try { return localStorage.getItem(key || 'sb_wl_popup_hide') === todayStamp(); }
       catch (e) { return false; }
     }
     function todayStamp() {
       var d = new Date();
       return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    }
+
+    /* ===================== 접속 시 안내 팝업 =====================
+       접속하면 순서대로 하나씩 보여준다: 웰컴 쿠폰(최초 1회) → 신제품 안내(최초 1회)
+       → 30일 챌린지(오늘 하루 보지 않기를 안 눌렀다면 매일). 한 번에 하나만 뜨도록
+       앞 팝업을 닫을 때 다음 팝업을 이어서 연다. */
+    function popupSeenEver(key) {
+      try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
+    }
+    function markPopupSeenEver(key) {
+      try { localStorage.setItem(key, '1'); } catch (e) { /* noop */ }
+    }
+
+    var COUPON_POPUP_SEEN_KEY = 'sb_coupon_popup_seen';
+    var PROMO_POPUP_SEEN_KEY = 'sb_promo_popup_seen';
+    var WELCOME_COUPON_ID = 'welcome10';
+
+    function runArrivalQueue() {
+      if (!popupSeenEver(COUPON_POPUP_SEEN_KEY)) { openCouponPopup(); return; }
+      if (!popupSeenEver(PROMO_POPUP_SEEN_KEY)) { openPromoPopup(); return; }
+      if (!popupHiddenToday('sb_wl_popup_hide')) { openWellnessPopup(); return; }
+    }
+
+    function openCouponPopup() {
+      markPopupSeenEver(COUPON_POPUP_SEEN_KEY);
+      var c = findCoupon(WELCOME_COUPON_ID);
+      if (c) {
+        document.getElementById('cpCouponTitle').textContent = c.title;
+        document.getElementById('cpCouponDesc').textContent = c.desc;
+      }
+      claimCoupon(WELCOME_COUPON_ID, true); /* 팝업 문구가 이미 '발급 완료'라 토스트는 생략 */
+      var el = document.getElementById('couponPopup');
+      if (!el) return;
+      el.classList.add('open');
+      el.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCouponPopup() {
+      var el = document.getElementById('couponPopup');
+      if (el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); }
+      setTimeout(runArrivalQueue, 450);
+    }
+
+    function openPromoPopup() {
+      markPopupSeenEver(PROMO_POPUP_SEEN_KEY);
+      var el = document.getElementById('promoPopup');
+      if (!el) return;
+      el.classList.add('open');
+      el.setAttribute('aria-hidden', 'false');
+    }
+
+    function closePromoPopup() {
+      var el = document.getElementById('promoPopup');
+      if (el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); }
+      setTimeout(runArrivalQueue, 450);
+    }
+
+    /* '보러가기' - 배너의 타코랩 신제품 슬라이드로 이동해 보여준다 */
+    function goToPromo() {
+      closePromoPopup();
+      var banner = document.getElementById('topBanner');
+      if (banner) {
+        rbGo(0);
+        banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    /* ===================== 쿠키 동의 배너 =====================
+       페이지가 서버 없는 정적 데모라 실제 트래킹 쿠키는 없지만,
+       동의 UX 자체는 실제 사이트처럼 동작하도록 구현한다. */
+    var COOKIE_CONSENT_KEY = 'sb_cookie_consent';
+
+    function initCookieConsent() {
+      var bar = document.getElementById('cookieBar');
+      if (!bar) return;
+      var chosen;
+      try { chosen = localStorage.getItem(COOKIE_CONSENT_KEY); } catch (e) { chosen = null; }
+      if (chosen) return;
+      setTimeout(function () { bar.classList.add('open'); }, 400);
+    }
+
+    function setCookieConsent(mode) {
+      try { localStorage.setItem(COOKIE_CONSENT_KEY, mode); } catch (e) { /* noop */ }
+      var bar = document.getElementById('cookieBar');
+      if (bar) bar.classList.remove('open');
+    }
+
+    function initArrivalPopups() {
+      ['couponPopup', 'promoPopup'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('click', function (e) {
+          if (e.target !== el) return;
+          if (id === 'couponPopup') closeCouponPopup(); else closePromoPopup();
+        });
+      });
+      setTimeout(runArrivalQueue, 700);
     }
 
     function openWellnessPopup() {
@@ -4108,9 +4320,7 @@
         pop.addEventListener('click', function (e) { if (e.target === pop) closeWellnessPopup(); });
       }
       grantRewards();
-      if (!popupHiddenToday()) {
-        setTimeout(openWellnessPopup, 1000);
-      }
+      /* 자동 오픈은 접속 안내 팝업 큐(runArrivalQueue)가 순서대로 담당한다 */
     }
 
     function initChat() {
@@ -4141,6 +4351,8 @@
       initWellness();
       initTable();
       initChat();
+      initCookieConsent();
+      initArrivalPopups();
     });
 
     document.addEventListener('keydown', function (e) {
@@ -4149,7 +4361,11 @@
       var wl = document.getElementById('wlModal');
       var cgo = document.getElementById('catchGame');
       var pvm = document.getElementById('pvModal');
+      var cpp = document.getElementById('couponPopup');
+      var ppp = document.getElementById('promoPopup');
       if (cgo && cgo.classList.contains('open')) { closeCatch(); return; }
+      if (cpp && cpp.classList.contains('open')) { closeCouponPopup(); return; }
+      if (ppp && ppp.classList.contains('open')) { closePromoPopup(); return; }
       if (pop && pop.classList.contains('open')) { closeWellnessPopup(); return; }
       if (wl && wl.classList.contains('open')) { closeChallenge(); return; }
       if (pvm && pvm.classList.contains('open')) { closeQuickView(); return; }
@@ -4171,6 +4387,10 @@
       closeChallenge: closeChallenge,
       startChallenge: startChallenge,
       closeWellnessPopup: closeWellnessPopup,
+      closeCouponPopup: closeCouponPopup,
+      closePromoPopup: closePromoPopup,
+      goToPromo: goToPromo,
+      setCookieConsent: setCookieConsent,
       finishDay: finishDay,
       nextDay: nextDay,
       toggleChat: toggleChat,
