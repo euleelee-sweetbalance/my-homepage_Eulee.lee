@@ -1244,7 +1244,7 @@
       <div class="tbl-scene">
         <div class="tbl-scene-head">
           <div class="tbl-scene-title">나의 식탁</div>
-          <div class="tbl-scene-sub word-keep">모은 재료 <b data-tbl-total>0</b>개 · 재료 종류 <b data-tbl-kinds>0</b>/13</div>
+          <div class="tbl-scene-sub word-keep">모은 재료 <b data-tbl-total>0</b>개 · 재료 종류 <b data-tbl-kinds>0</b>/<b data-tbl-kindtotal>14</b></div>
         </div>
 
         <div class="tbl-cloth">
@@ -1262,7 +1262,7 @@
 
       <div class="rcp-head-row">
         <h3>완성할 수 있는 스윗밸런스 메뉴</h3>
-        <span class="rcp-progress"><b data-tbl-cooked>0</b> / 6 완성</span>
+        <span class="rcp-progress"><b data-tbl-cooked>0</b> / <b data-tbl-cookedtotal>7</b> 완성</span>
       </div>
       <div class="rcp-grid" data-tbl-recipes></div>
     </div>
@@ -1649,7 +1649,7 @@
       { id: 'wellness7', title: '7일 연속 달성 쿠폰', desc: '웰니스 챌린지 7일 연속 달성 리워드 · 전 상품 15% 할인 (최대 6,000원)', minOrder: 15000, type: 'percent', value: 15, cap: 6000, lock: true, lockText: '챌린지 7일 연속 달성 시 오픈' },
       { id: 'wellness15', title: '신제품 체험권', desc: '웰니스 챌린지 15일 달성 리워드 · 6,900원 즉시할인', minOrder: 20000, type: 'amount', value: 6900, lock: true, lockText: '챌린지 15일 달성 시 오픈' },
       { id: 'wellness30', title: '웰니스 마스터 리워드', desc: '30일 완주 인증 · 새로운 샐러드 증정 (9,900원 즉시할인)', minOrder: 0, type: 'amount', value: 9900, lock: true, lockText: '챌린지 30일 달성 시 오픈' },
-      { id: 'tablemaster', title: '건강 식탁 마스터', desc: '6개 메뉴 재료를 모두 모은 리워드 · 5,000원 즉시할인', minOrder: 20000, type: 'amount', value: 5000, lock: true, lockText: '건강 식탁 6개 메뉴 완성 시 오픈' }
+      { id: 'tablemaster', title: '건강 식탁 마스터', desc: '7개 메뉴 재료를 모두 모은 리워드 · 5,000원 즉시할인', minOrder: 20000, type: 'amount', value: 5000, lock: true, lockText: '건강 식탁 7개 메뉴 완성 시 오픈' }
     ];
 
     var SHIP_FEE = 3000;
@@ -1678,6 +1678,11 @@
             pantry: (w.pantry && typeof w.pantry === 'object') ? w.pantry : {},
             spent: w.spent || 0
           };
+          /* ricotta was split into honey / basil - keep what was already collected */
+          if (wellness.pantry.ricotta) {
+            wellness.pantry.basilric = (wellness.pantry.basilric || 0) + wellness.pantry.ricotta;
+            delete wellness.pantry.ricotta;
+          }
         }
       } catch (e) { cart = {}; claimed = []; appliedCoupon = null; wished = {}; }
     }
@@ -2498,7 +2503,8 @@
       { id: 'chicken',  name: '닭가슴살',     emoji: '🍗', short: '닭가슴' },
       { id: 'pork',     name: '돼지불고기',   emoji: '🥩', short: '불고기' },
       { id: 'angel',    name: '엔젤헤어치즈', emoji: '🧀', short: '엔젤헤어' },
-      { id: 'ricotta',  name: '허리리코타치즈', emoji: '🥛', short: '리코타' },
+      { id: 'honeyric', name: '허니리코타치즈', emoji: '🍯', short: '허니리코타' },
+      { id: 'basilric', name: '바질리코타치즈', emoji: '🍃', short: '바질리코타' },
       { id: 'lentil',   name: '렌틸콩',       emoji: '🫘', short: '렌틸콩' },
       { id: 'quinoa',   name: '퀴노아',       emoji: '🌾', short: '퀴노아' }
     ];
@@ -2512,7 +2518,8 @@
       { id: 'quinoa-bowl',      ings: ['quinoa', 'carrot', 'corn'] },
       { id: 'mushroom-risotto', ings: ['mushroom', 'angel', 'potato'] },
       { id: 'hummus-bowl',      ings: ['lentil', 'tomato', 'sweetpo'] },
-      { id: 'basil-wrap-single',ings: ['frillice', 'ricotta', 'pork'] }
+      { id: 'basil-wrap-single',ings: ['frillice', 'basilric', 'pork'] },
+      { id: 'yogurt-bowl',      ings: ['honeyric', 'sweetpo', 'quinoa'] }
     ];
 
     function findIngredient(id) { return INGREDIENTS.filter(function (i) { return i.id === id; })[0]; }
@@ -2545,6 +2552,8 @@
       document.querySelectorAll('[data-tbl-total]').forEach(function (el) { el.textContent = totals.total; });
       document.querySelectorAll('[data-tbl-kinds]').forEach(function (el) { el.textContent = totals.kinds; });
       document.querySelectorAll('[data-tbl-cooked]').forEach(function (el) { el.textContent = cookedCount(); });
+      document.querySelectorAll('[data-tbl-kindtotal]').forEach(function (el) { el.textContent = INGREDIENTS.length; });
+      document.querySelectorAll('[data-tbl-cookedtotal]').forEach(function (el) { el.textContent = RECIPES.length; });
 
       document.querySelectorAll('[data-tbl-items]').forEach(function (box) {
         var owned = INGREDIENTS.filter(function (i) { return pantryCount(i.id) > 0; });
