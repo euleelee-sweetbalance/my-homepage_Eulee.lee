@@ -547,22 +547,9 @@
     box-shadow: var(--sh-md);
   }
   @media (max-width: 640px) { .br-sheet { padding: 24px 20px; } }
-  .br-sheet-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
-  .br-sheet-avatar {
-    width: 62px; height: 62px; border-radius: 999px; background: var(--paper); flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 31px;
-  }
   .br-sheet-title { font-size: 20px; font-weight: 800; color: var(--ink); word-break: keep-all; }
   .br-sheet-en { font-family: var(--en); font-size: 12.5px; font-weight: 700; color: var(--seed); letter-spacing: .04em; margin-top: 3px; }
   .br-sheet-body { font-size: 13.5px; line-height: 1.9; color: var(--char); word-break: keep-all; }
-
-  .br-attrs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 22px; }
-  @media (max-width: 640px) { .br-attrs { grid-template-columns: 1fr; } }
-  .br-attr { background: var(--paper); border-radius: var(--r-md); padding: 14px 16px; }
-  .br-attr.wide { grid-column: 1 / -1; }
-  .br-attr-k { font-size: 11px; font-weight: 800; color: var(--g); letter-spacing: .04em; }
-  .br-attr-v { font-size: 13px; color: var(--char); margin-top: 5px; line-height: 1.7; word-break: keep-all; }
-  .br-attr.accent { background: rgba(0,97,78,.07); border: 1.5px solid rgba(0,97,78,.18); }
 
   .br-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
   .br-chip {
@@ -570,23 +557,6 @@
     font-size: 11.5px; font-weight: 600; padding: 6px 12px; border-radius: var(--r-pill);
   }
   .br-chips-label { font-size: 11px; font-weight: 800; color: var(--slate); letter-spacing: .1em; margin-top: 22px; }
-
-  /* colour system */
-  .br-color-note { font-size: 13.5px; line-height: 1.9; color: var(--char); word-break: keep-all; margin-bottom: 24px; }
-  .br-color-group { font-size: 12.5px; font-weight: 800; color: var(--ink); margin: 0 0 12px; }
-  .br-color-group span { font-family: var(--en); font-weight: 700; color: var(--slate); margin-left: 6px; }
-  .br-swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
-  @media (max-width: 760px) { .br-swatches { grid-template-columns: 1fr; } }
-  .br-swatch { border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
-  .br-swatch-chip { height: 76px; }
-  .br-swatch-body { padding: 13px 14px 14px; }
-  .br-swatch-kr { font-size: 13px; font-weight: 700; color: var(--ink); }
-  .br-swatch-en { font-family: var(--en); font-size: 11px; font-weight: 700; color: var(--seed); margin-top: 2px; }
-  .br-swatch-desc { font-size: 11.5px; color: var(--slate); margin-top: 7px; line-height: 1.6; word-break: keep-all; }
-  .br-swatch-spec {
-    font-family: var(--en); font-size: 10.5px; color: var(--char); margin-top: 9px; line-height: 1.7;
-    padding-top: 9px; border-top: 1px solid var(--div);
-  }
 
   /* character */
   .br-char-intro { display: flex; gap: 26px; align-items: flex-start; }
@@ -1627,131 +1597,6 @@
         </div>
       </div>
 
-      <!-- Target persona -->
-      <div class="br-block">
-        <div class="br-label">Target persona</div>
-        <div class="br-sheet">
-          <div class="br-sheet-head">
-            <span class="br-sheet-avatar">🙌</span>
-            <div>
-              <div class="br-sheet-title">유쾌한 열정가들</div>
-              <div class="br-sheet-en">Joyful Enthusiasts</div>
-            </div>
-          </div>
-          <p class="br-sheet-body">‘유쾌한 열정가들’은 조화로운 삶과 자기 만족을 위한 성취를 동시에 추구하는 다채로운 인물입니다. 이들은 일과 개인적 삶의 균형을 맞추려 하며, 목표를 향해 주도적으로 나아가는 추진력을 지니고 있습니다. 건강한 삶과 지속가능성에 대해 깊이 공감하고 실천하면서도 유머와 여유를 잃지 않고 성취를 향한 과정 속의 삶 자체를 즐기려 합니다. 뛰어난 감성 지능과 자기 확신을 바탕으로 협력과 도전을 결합하며, 긍정적인 에너지를 주변에 전파하는 것을 중요하게 생각합니다. 이성과 감성, 도전과 조화 사이에서 균형을 이루며, 무엇보다 풍요롭고 즐거운 삶을 지향합니다.</p>
-
-          <div class="br-attrs">
-            <div class="br-attr">
-              <div class="br-attr-k">연령</div>
-              <div class="br-attr-v">20대 후반 ~ 50대</div>
-            </div>
-            <div class="br-attr">
-              <div class="br-attr-k">직업</div>
-              <div class="br-attr-v">사무직, 전문가, 프리랜서</div>
-            </div>
-            <div class="br-attr accent wide">
-              <div class="br-attr-k">욕망</div>
-              <div class="br-attr-v">어떤 상황에서든 건강한 식사를 놓치고 싶지 않다.</div>
-            </div>
-            <div class="br-attr">
-              <div class="br-attr-k">라이프 스타일</div>
-              <div class="br-attr-v">건강함의 기준이 있고 그것을 영위하는 사람들. 풍요롭고 즐거운 삶을 지향함.</div>
-            </div>
-            <div class="br-attr">
-              <div class="br-attr-k">행동</div>
-              <div class="br-attr-v">맛있고 균형있는 음식을 선호하며, 미식 경험을 좋아함.</div>
-            </div>
-            <div class="br-attr wide">
-              <div class="br-attr-k">평가</div>
-              <div class="br-attr-v">건강한 식습관의 중요성을 충분히 이해하고 있는 사람들로, 바쁜 일상 중 언제 어디서든 건강식을 쉽게 섭취하고자 하는 니즈가 있다. 구매력이 있어 가격에 크게 구애 받지 않는다.</div>
-            </div>
-          </div>
-
-          <div class="br-chips-label">KEYWORDS</div>
-          <div class="br-chips">
-            <span class="br-chip">유쾌한</span><span class="br-chip">정열적인</span><span class="br-chip">열정적인</span>
-            <span class="br-chip">성취</span><span class="br-chip">성공</span><span class="br-chip">목표</span>
-            <span class="br-chip">유머</span><span class="br-chip">즐거운</span><span class="br-chip">도파민</span>
-            <span class="br-chip">성실</span><span class="br-chip">꾸준함</span><span class="br-chip">영리한</span>
-            <span class="br-chip">효율적인</span><span class="br-chip">가치</span><span class="br-chip">도전정신</span>
-            <span class="br-chip">조화로운</span><span class="br-chip">균형</span><span class="br-chip">주도적</span>
-            <span class="br-chip">실천</span><span class="br-chip">여유</span><span class="br-chip">과정을 즐기는</span>
-            <span class="br-chip">협력</span><span class="br-chip">긍정적</span><span class="br-chip">추진력</span>
-            <span class="br-chip">몰입</span><span class="br-chip">집중</span><span class="br-chip">흥분</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Color system -->
-      <div class="br-block">
-        <div class="br-label">Color system</div>
-        <div class="br-sheet">
-          <p class="br-color-note">스윗밸런스의 컬러는 자연의 색채에서 출발합니다. 신선한 푸른 채소, 따스하게 내리쬐는 햇살, 촉촉하고 비옥한 토양에서 피어오르는 생명력, 청명한 하늘의 투명함. 이 컬러 조합을 통해 건강한 삶과 자연의 균형을 표현합니다.</p>
-
-          <h3 class="br-color-group">메인 컬러 <span>Primary Colors</span></h3>
-          <div class="br-swatches">
-            <div class="br-swatch">
-              <div class="br-swatch-chip" style="background:#00614E;"></div>
-              <div class="br-swatch-body">
-                <div class="br-swatch-kr">바이탈 그린</div>
-                <div class="br-swatch-en">Vital Green</div>
-                <div class="br-swatch-desc">신선하고 건강한 삶의 본질을 상징하는 스윗밸런스의 코어 컬러입니다.</div>
-                <div class="br-swatch-spec">PANTONE 336C<br>HEX #00614E<br>RGB 0 / 97 / 78<br>CMYK 100 / 50 / 80 / 2</div>
-              </div>
-            </div>
-            <div class="br-swatch">
-              <div class="br-swatch-chip" style="background:#007C5E;"></div>
-              <div class="br-swatch-body">
-                <div class="br-swatch-kr">하모니 그린</div>
-                <div class="br-swatch-en">Harmony Green</div>
-                <div class="br-swatch-desc">보다 밝고 경쾌한 뉘앙스로 건강한 에너지를 확장하는 보조 그린입니다.</div>
-                <div class="br-swatch-spec">PANTONE 341C<br>HEX #007C5E<br>RGB 0 / 124 / 94<br>CMYK 92 / 32 / 76 / 0</div>
-              </div>
-            </div>
-            <div class="br-swatch">
-              <div class="br-swatch-chip" style="background:#FDFFE6;border-bottom:1px solid var(--border);"></div>
-              <div class="br-swatch-body">
-                <div class="br-swatch-kr">선샤인 화이트</div>
-                <div class="br-swatch-en">Sunshine White</div>
-                <div class="br-swatch-desc">햇살처럼 부드럽고 따스한 안정감을 전해주는 베이스 컬러입니다.</div>
-                <div class="br-swatch-spec">PANTONE 9064C<br>HEX #FDFFE6<br>RGB 253 / 255 / 230<br>CMYK 3 / 0 / 14 / 0</div>
-              </div>
-            </div>
-          </div>
-
-          <h3 class="br-color-group">서브 컬러 <span>Secondary Colors</span></h3>
-          <div class="br-swatches" style="margin-bottom:0;">
-            <div class="br-swatch">
-              <div class="br-swatch-chip" style="background:#84BA45;"></div>
-              <div class="br-swatch-body">
-                <div class="br-swatch-kr">씨드 그린</div>
-                <div class="br-swatch-en">Seed Green</div>
-                <div class="br-swatch-desc">새싹이 움트는 생명력을 담은 연두빛 컬러로 시작과 성장을 암시합니다.</div>
-                <div class="br-swatch-spec">PANTONE 2299C<br>HEX #84BA45<br>RGB 132 / 186 / 69<br>CMYK 53 / 2 / 90 / 0</div>
-              </div>
-            </div>
-            <div class="br-swatch">
-              <div class="br-swatch-chip" style="background:#896431;"></div>
-              <div class="br-swatch-body">
-                <div class="br-swatch-kr">소일 브라운</div>
-                <div class="br-swatch-en">Soil Brown</div>
-                <div class="br-swatch-desc">촉촉한 흙의 온기와 안정감을 담아 자연의 순환을 표현합니다.</div>
-                <div class="br-swatch-spec">PANTONE 4027C<br>HEX #896431<br>RGB 137 / 100 / 49<br>CMYK 42 / 55 / 85 / 20</div>
-              </div>
-            </div>
-            <div class="br-swatch">
-              <div class="br-swatch-chip" style="background:#50AADC;"></div>
-              <div class="br-swatch-body">
-                <div class="br-swatch-kr">스카이 블루</div>
-                <div class="br-swatch-en">Sky Blue</div>
-                <div class="br-swatch-desc">청량한 하늘의 투명함을 담아 브랜드에 시원하고 깨끗한 인상을 더합니다.</div>
-                <div class="br-swatch-spec">PANTONE 298C<br>HEX #50AADC<br>RGB 80 / 170 / 220<br>CMYK 68 / 7 / 4 / 0</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Character -->
       <div class="br-block">
         <div class="br-label">Character</div>
@@ -1799,7 +1644,7 @@
         </div>
       </div>
 
-      <p class="br-source">출처: 스윗밸런스 브랜드 가이드 [2025 Ver.] — Brand core · Brand benefits · Target persona · Color system · Character</p>
+      <p class="br-source">출처: 스윗밸런스 브랜드 가이드 [2025 Ver.] — Brand core · Brand benefits · Character</p>
     </div>
   </section>
 
