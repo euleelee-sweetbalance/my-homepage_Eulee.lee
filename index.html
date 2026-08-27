@@ -810,6 +810,216 @@
   .cs-done-title { font-size: 14px; font-weight: 800; color: var(--g); }
   .cs-done-desc { font-size: 12px; color: var(--char); margin-top: 7px; line-height: 1.6; word-break: keep-all; }
   .cs-ticket { font-family: var(--en); font-weight: 800; font-size: 13px; color: var(--ink); background: #fff; border-radius: var(--r-sm); padding: 8px 12px; display: inline-block; margin-top: 10px; letter-spacing: .04em; }
+
+  /* ---------- My Healthy Table: section & scene ---------- */
+  #table { background: var(--sw); }
+  .tbl-layout { max-width: 980px; margin: 0 auto; }
+
+  .tbl-scene {
+    position: relative; background: linear-gradient(180deg, #EFF6E4 0%, #E3EFD3 100%);
+    border-radius: var(--r-2xl); padding: 34px 26px 30px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  @media (max-width: 560px) { .tbl-scene { padding: 24px 16px 22px; } }
+  .tbl-scene::before {
+    content: ''; position: absolute; left: 50%; top: 22px; transform: translateX(-50%);
+    width: 220px; height: 220px; border-radius: 50%; background: rgba(132,186,69,.10);
+  }
+  .tbl-scene-head { position: relative; text-align: center; margin-bottom: 20px; }
+  .tbl-scene-title { font-size: 14px; font-weight: 800; color: var(--g); }
+  .tbl-scene-sub { font-size: 12.5px; color: var(--char); margin-top: 5px; word-break: keep-all; }
+
+  .tbl-cloth {
+    position: relative; background: linear-gradient(180deg, #A9713C 0%, #8B5A2E 100%);
+    border-radius: var(--r-lg) var(--r-lg) 10px 10px; padding: 18px 16px 22px;
+    box-shadow: 0 14px 30px rgba(88,55,22,.26);
+  }
+  .tbl-cloth::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -9px; height: 9px;
+    background: #6F4622; border-radius: 0 0 8px 8px;
+  }
+  .tbl-plate {
+    background: radial-gradient(ellipse at 50% 40%, #FFFFFF 0%, #F4F6F1 72%, #E6EBE3 100%);
+    border-radius: 50% / 22%; min-height: 190px; padding: 26px 22px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 0 6px rgba(0,97,78,.06), 0 6px 16px rgba(0,0,0,.16);
+  }
+  @media (max-width: 560px) { .tbl-plate { min-height: 160px; padding: 20px 14px; } }
+
+  .tbl-empty { text-align: center; color: var(--slate); font-size: 13px; line-height: 1.75; word-break: keep-all; }
+  .tbl-empty b { display: block; font-size: 15px; color: var(--char); margin-bottom: 6px; }
+
+  .tbl-items { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: flex-start; }
+  .tbl-chip {
+    position: relative; width: 62px; text-align: center;
+    animation: tbl-pop var(--dur-slow) var(--ease-out) both;
+  }
+  @keyframes tbl-pop { from { opacity: 0; transform: scale(.6) translateY(6px); } to { opacity: 1; transform: none; } }
+  .tbl-chip-emoji { font-size: 27px; line-height: 1; filter: drop-shadow(0 2px 3px rgba(0,0,0,.14)); }
+  .tbl-chip-name { font-size: 9.5px; font-weight: 700; color: var(--char); margin-top: 4px; word-break: keep-all; line-height: 1.3; }
+  .tbl-chip-count {
+    position: absolute; top: -5px; right: 4px; min-width: 17px; height: 17px; padding: 0 4px;
+    border-radius: 999px; background: var(--g); color: var(--sw); font-family: var(--en);
+    font-weight: 800; font-size: 10px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 2px #fff;
+  }
+
+  .tbl-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 22px; position: relative; }
+  .tbl-ticket {
+    display: inline-flex; align-items: center; gap: 7px; background: rgba(0,97,78,.09); color: var(--g);
+    font-size: 12.5px; font-weight: 700; padding: 9px 16px; border-radius: var(--r-pill);
+  }
+  .tbl-ticket.zero { background: rgba(107,117,113,.12); color: var(--slate); }
+  .tbl-hint { text-align: center; font-size: 11.5px; color: var(--slate); margin-top: 12px; word-break: keep-all; }
+
+  /* ---------- Recipes ---------- */
+  .rcp-head-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    margin: 44px 0 16px; flex-wrap: wrap;
+  }
+  .rcp-head-row h3 { font-size: 17px; font-weight: 800; color: var(--ink); }
+  .rcp-head-row .rcp-progress { font-family: var(--en); font-size: 12.5px; font-weight: 700; color: var(--g); }
+
+  .rcp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .rcp {
+    background: #fff; border: 1.5px solid var(--border); border-radius: var(--r-lg);
+    padding: 18px 18px 16px; display: flex; flex-direction: column;
+    transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .rcp.done { border-color: var(--g); box-shadow: var(--sh-sm); background: rgba(0,97,78,.03); }
+  .rcp-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .rcp-visual {
+    display: flex; width: 46px; height: 46px; border-radius: var(--r-md); background: var(--paper); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 23px; overflow: hidden;
+  }
+  .rcp-visual img { width: 100%; height: 100%; object-fit: cover; }
+  .rcp-main { flex: 1; min-width: 0; display: block; }
+  .rcp-name { display: block; font-size: 14px; font-weight: 700; color: var(--ink); word-break: keep-all; }
+  .rcp-price { display: block; font-family: var(--en); font-size: 12.5px; font-weight: 700; color: var(--g); margin-top: 3px; }
+  .rcp-state {
+    flex-shrink: 0; align-self: center; white-space: nowrap; font-family: var(--en); font-size: 10.5px; font-weight: 800; letter-spacing: .05em;
+    padding: 5px 10px; border-radius: var(--r-pill); background: var(--paper); color: var(--slate);
+  }
+  .rcp.done .rcp-state { background: var(--g); color: var(--sw); }
+
+  .rcp-ings { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+  .rcp-ing { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .rcp-ing-emoji { font-size: 16px; flex-shrink: 0; width: 20px; text-align: center; }
+  .rcp-ing-name { flex: 1; min-width: 0; color: var(--char); font-weight: 600; }
+  .rcp-ing-bar { width: 62px; height: 5px; border-radius: 999px; background: var(--paper); overflow: hidden; flex-shrink: 0; }
+  .rcp-ing-bar i { display: block; height: 100%; border-radius: 999px; background: var(--seed); width: 0; transition: width var(--dur-slow) var(--ease-out); }
+  .rcp-ing-num { font-family: var(--en); font-size: 10.5px; font-weight: 700; color: var(--slate); width: 26px; text-align: right; flex-shrink: 0; }
+  .rcp-ing.full .rcp-ing-name { color: var(--g); }
+  .rcp-ing.full .rcp-ing-bar i { background: var(--g); }
+  .rcp-ing.full .rcp-ing-num { color: var(--g); }
+  .rcp-foot { margin-top: auto; }
+  .rcp-locked { font-size: 11.5px; color: var(--slate); text-align: center; padding: 9px 0; word-break: keep-all; }
+
+  /* ---------- Catch game ---------- */
+  .cg-overlay {
+    position: fixed; inset: 0; background: rgba(10,20,16,.78); z-index: 420;
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    opacity: 0; visibility: hidden; transition: opacity var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .cg-overlay.open { opacity: 1; visibility: visible; }
+  .cg-frame {
+    width: min(440px, 100%); height: min(700px, calc(100vh - 32px));
+    background: linear-gradient(180deg, #C3E7F7 0%, #DCF0E4 46%, #EDF3DF 78%, #E3EFD3 100%);
+    border-radius: var(--r-2xl); box-shadow: var(--sh-lg);
+    display: flex; flex-direction: column; overflow: hidden; position: relative;
+    transform: translateY(14px) scale(.985); transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .cg-overlay.open .cg-frame { transform: none; }
+  @media (max-width: 520px) { .cg-overlay { padding: 10px; } .cg-frame { height: calc(100vh - 20px); } }
+
+  .cg-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 14px 16px 12px; flex-shrink: 0; position: relative; z-index: 3;
+  }
+  .cg-badge {
+    display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.72);
+    color: var(--g); font-size: 12px; font-weight: 800; padding: 7px 13px; border-radius: var(--r-pill);
+    font-family: var(--en); backdrop-filter: blur(4px);
+  }
+  .cg-badge b { font-family: var(--en); }
+  .cg-close {
+    width: 32px; height: 32px; border-radius: 999px; border: none; background: rgba(255,255,255,.72);
+    color: var(--char); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .cg-close:hover { background: #fff; }
+
+  .cg-timebar { height: 5px; margin: 0 16px; border-radius: 999px; background: rgba(255,255,255,.6); overflow: hidden; flex-shrink: 0; position: relative; z-index: 3; }
+  .cg-timebar i { display: block; height: 100%; width: 100%; border-radius: 999px; background: var(--g); }
+
+  .cg-arena {
+    position: relative; flex: 1; min-height: 0; overflow: hidden;
+    touch-action: none; -webkit-user-select: none; user-select: none;
+  }
+  .cg-ground {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 54px;
+    background: linear-gradient(180deg, rgba(132,186,69,.22), rgba(132,186,69,.38));
+    border-top: 2px dashed rgba(0,97,78,.22);
+  }
+
+  .cg-item {
+    position: absolute; top: 0; left: 0; width: 52px; display: flex; flex-direction: column;
+    align-items: center; pointer-events: none; will-change: transform;
+  }
+  .cg-item-emoji { font-size: 30px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(0,0,0,.2)); }
+  .cg-item-label {
+    font-size: 9px; font-weight: 800; color: var(--g); background: rgba(255,255,255,.88);
+    padding: 1px 6px; border-radius: 999px; margin-top: 3px; white-space: nowrap; letter-spacing: -.02em;
+  }
+  .cg-item.caught { animation: cg-caught 260ms var(--ease-out) forwards; }
+  @keyframes cg-caught { to { opacity: 0; transform: translate(var(--cx), var(--cy)) scale(.4); } }
+
+  .cg-plate { position: absolute; left: 0; bottom: 16px; width: 100px; pointer-events: none; will-change: transform; }
+  .cg-plate-bowl {
+    height: 30px; background: linear-gradient(180deg, #FFFFFF 0%, #E9F0EA 100%);
+    border: 2.5px solid var(--g); border-radius: 8px 8px 48% 48% / 8px 8px 100% 100%;
+    box-shadow: 0 6px 14px rgba(27,42,36,.24);
+  }
+  .cg-plate-face { text-align: center; font-size: 14px; margin-top: -25px; position: relative; }
+
+  .cg-center {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; z-index: 4; pointer-events: none;
+  }
+  .cg-count-num { font-family: var(--en); font-weight: 800; font-size: 76px; color: var(--g); line-height: 1; text-shadow: 0 4px 14px rgba(255,255,255,.8); }
+  .cg-count-label { font-size: 14px; font-weight: 700; color: var(--char); margin-top: 10px; background: rgba(255,255,255,.8); padding: 7px 16px; border-radius: var(--r-pill); }
+
+  .cg-bottom {
+    flex-shrink: 0; padding: 12px 16px 16px; background: rgba(255,255,255,.72);
+    backdrop-filter: blur(4px); text-align: center; position: relative; z-index: 3;
+  }
+  .cg-score { font-size: 13.5px; font-weight: 800; color: var(--ink); }
+  .cg-score b { font-family: var(--en); color: var(--g); }
+  .cg-hint { font-size: 11px; color: var(--slate); margin-top: 4px; word-break: keep-all; }
+
+  /* result sheet */
+  .cg-result {
+    position: absolute; inset: 0; z-index: 6; background: #fff;
+    display: none; flex-direction: column; padding: 26px 22px 20px; overflow-y: auto;
+  }
+  .cg-result.show { display: flex; }
+  .cg-result-emoji { font-size: 44px; text-align: center; }
+  .cg-result-title { font-size: 19px; font-weight: 800; color: var(--ink); text-align: center; margin-top: 10px; word-break: keep-all; }
+  .cg-result-sub { font-size: 12.5px; color: var(--slate); text-align: center; margin-top: 6px; word-break: keep-all; line-height: 1.6; }
+  .cg-result-items {
+    display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin: 22px 0;
+  }
+  .cg-got {
+    display: inline-flex; align-items: center; gap: 5px; background: var(--paper); border: 1px solid var(--border);
+    border-radius: var(--r-pill); padding: 7px 13px; font-size: 12px; font-weight: 700; color: var(--char);
+  }
+  .cg-got b { font-family: var(--en); color: var(--g); }
+  .cg-cooked {
+    background: linear-gradient(160deg, #0B6E58, var(--g)); color: var(--sw); border-radius: var(--r-lg);
+    padding: 16px 18px; margin-bottom: 14px; text-align: center;
+  }
+  .cg-cooked-title { font-size: 14px; font-weight: 800; }
+  .cg-cooked-desc { font-size: 12px; opacity: .88; margin-top: 5px; word-break: keep-all; line-height: 1.55; }
+  .cg-result-foot { margin-top: auto; display: flex; flex-direction: column; gap: 9px; }
 </style>
 </head>
 <body>
@@ -821,6 +1031,7 @@
         <a href="#shop">전체 상품</a>
         <a href="#week-game">7일 식단 게임</a>
         <a href="#wellness">30일 챌린지</a>
+        <a href="#table">건강 식탁</a>
         <a href="#brand">브랜드</a>
       </nav>
       <div class="nav-actions">
@@ -848,6 +1059,7 @@
         <a class="btn btn-primary" href="#shop">전체 상품 보러가기</a>
         <a class="btn btn-secondary" href="#week-game">7일 식단 뽑기</a>
         <button class="btn btn-secondary" type="button" onclick="SB.openChallenge()">🌱 30일 챌린지 참여</button>
+        <a class="btn btn-secondary" href="#table">🍽️ 나의 건강 식탁</a>
       </div>
       <div class="hero-badges">
         <span class="badge badge-soft">저당</span>
@@ -1022,6 +1234,40 @@
     </div>
   </section>
 
+  <!-- ===== My Healthy Table ===== -->
+  <section id="table" class="section">
+    <div class="wrap tbl-layout">
+      <div class="section-eyebrow">Play · My Healthy Table</div>
+      <h2 class="section-title">나의 건강 식탁 만들기</h2>
+      <p class="section-sub word-keep">습관을 하나 달성할 때마다 재료가 하늘에서 쏟아져요. 손가락을 움직여 받아내고, 텅 빈 식탁을 나만의 한 끼로 채워보세요.</p>
+
+      <div class="tbl-scene">
+        <div class="tbl-scene-head">
+          <div class="tbl-scene-title">나의 식탁</div>
+          <div class="tbl-scene-sub word-keep">모은 재료 <b data-tbl-total>0</b>개 · 재료 종류 <b data-tbl-kinds>0</b>/13</div>
+        </div>
+
+        <div class="tbl-cloth">
+          <div class="tbl-plate">
+            <div class="tbl-items" data-tbl-items></div>
+          </div>
+        </div>
+
+        <div class="tbl-actions">
+          <span class="tbl-ticket" data-tbl-ticket>🌾 재료 받기 0회</span>
+          <button class="btn btn-primary" type="button" data-tbl-play onclick="SB.openCatch()">재료 받으러 가기</button>
+        </div>
+        <p class="tbl-hint" data-tbl-hint></p>
+      </div>
+
+      <div class="rcp-head-row">
+        <h3>완성할 수 있는 스윗밸런스 메뉴</h3>
+        <span class="rcp-progress"><b data-tbl-cooked>0</b> / 6 완성</span>
+      </div>
+      <div class="rcp-grid" data-tbl-recipes></div>
+    </div>
+  </section>
+
   <!-- ===== Brand ===== -->
   <section id="brand" class="section">
     <div class="wrap">
@@ -1072,6 +1318,7 @@
       <a href="#" onclick="SB.openCoupons(); return false;">쿠폰함</a>
       <a href="#" onclick="SB.openCart(); return false;">장바구니</a>
       <a href="#wellness">30일 챌린지</a>
+      <a href="#table">나의 건강 식탁</a>
       <a href="#brand">브랜드 소개</a>
       <a href="#" onclick="SB.openCustomerCenter(); return false;">고객센터 · 1:1 문의</a>
     </div>
@@ -1177,6 +1424,14 @@
         </div>
 
         <div class="wl-block">
+          <div class="wl-block-title">
+            <span>나의 건강 식탁</span>
+            <span class="wl-count" data-tbl-ticket>🌾 재료 받기 0회</span>
+          </div>
+          <button class="btn btn-secondary btn-block" type="button" data-tbl-play onclick="SB.openCatch()">재료 받으러 가기</button>
+        </div>
+
+        <div class="wl-block">
           <div class="wl-block-title"><span>리워드 로드맵</span></div>
           <div class="wl-rewards" data-wl-rewards></div>
         </div>
@@ -1188,6 +1443,38 @@
         <button class="wl-demo-link" type="button" onclick="SB.nextDay()">데모: 다음 날로 넘어가기 →</button>
         <button class="btn btn-primary" type="button" id="wlFinishBtn" onclick="SB.finishDay()">오늘 마무리하기</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== Ingredient catch game ===== -->
+  <div class="cg-overlay" id="catchGame" aria-hidden="true" role="dialog" aria-modal="true" aria-label="재료 받기 게임">
+    <div class="cg-frame">
+      <div class="cg-top">
+        <span class="cg-badge">⏱ <b id="cgTime">15</b>s</span>
+        <span class="cg-badge">🌾 재료 받기</span>
+        <button class="cg-close" type="button" aria-label="닫기" onclick="SB.closeCatch()">
+          <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="cg-timebar"><i id="cgTimeBar"></i></div>
+
+      <div class="cg-arena" id="cgArena" tabindex="0" aria-label="접시를 좌우로 움직여 재료를 받으세요">
+        <div class="cg-ground"></div>
+        <div class="cg-plate" id="cgPlate">
+          <div class="cg-plate-bowl"></div>
+        </div>
+        <div class="cg-center" id="cgCenter">
+          <div class="cg-count-num" id="cgCountNum">3</div>
+          <div class="cg-count-label">준비하세요!</div>
+        </div>
+      </div>
+
+      <div class="cg-bottom">
+        <div class="cg-score">받은 재료 <b id="cgScore">0</b>개</div>
+        <div class="cg-hint">손가락을 좌우로 움직여 접시로 받아요 (← → 키도 가능)</div>
+      </div>
+
+      <div class="cg-result" id="cgResult"></div>
     </div>
   </div>
 
@@ -1361,7 +1648,8 @@
       { id: 'sub5000', title: '정기구독 5,000원 할인', desc: '정기구독 상품 구매 시 5,000원 할인', minOrder: 50000, type: 'amount', value: 5000 },
       { id: 'wellness7', title: '7일 연속 달성 쿠폰', desc: '웰니스 챌린지 7일 연속 달성 리워드 · 전 상품 15% 할인 (최대 6,000원)', minOrder: 15000, type: 'percent', value: 15, cap: 6000, lock: true, lockText: '챌린지 7일 연속 달성 시 오픈' },
       { id: 'wellness15', title: '신제품 체험권', desc: '웰니스 챌린지 15일 달성 리워드 · 6,900원 즉시할인', minOrder: 20000, type: 'amount', value: 6900, lock: true, lockText: '챌린지 15일 달성 시 오픈' },
-      { id: 'wellness30', title: '웰니스 마스터 리워드', desc: '30일 완주 인증 · 새로운 샐러드 증정 (9,900원 즉시할인)', minOrder: 0, type: 'amount', value: 9900, lock: true, lockText: '챌린지 30일 달성 시 오픈' }
+      { id: 'wellness30', title: '웰니스 마스터 리워드', desc: '30일 완주 인증 · 새로운 샐러드 증정 (9,900원 즉시할인)', minOrder: 0, type: 'amount', value: 9900, lock: true, lockText: '챌린지 30일 달성 시 오픈' },
+      { id: 'tablemaster', title: '건강 식탁 마스터', desc: '6개 메뉴 재료를 모두 모은 리워드 · 5,000원 즉시할인', minOrder: 20000, type: 'amount', value: 5000, lock: true, lockText: '건강 식탁 6개 메뉴 완성 시 오픈' }
     ];
 
     var SHIP_FEE = 3000;
@@ -1386,7 +1674,9 @@
             start: w.start || 0,
             offset: w.offset || 0,
             log: (w.log && typeof w.log === 'object') ? w.log : {},
-            rewards: Array.isArray(w.rewards) ? w.rewards : []
+            rewards: Array.isArray(w.rewards) ? w.rewards : [],
+            pantry: (w.pantry && typeof w.pantry === 'object') ? w.pantry : {},
+            spent: w.spent || 0
           };
         }
       } catch (e) { cart = {}; claimed = []; appliedCoupon = null; wished = {}; }
@@ -1872,7 +2162,7 @@
       { id: 'wellness30', goal: 30, metric: 'cleared', medal: '🏆', day: 'DAY 30', title: '30일 달성',     desc: '웰니스 마스터 인증 + 새로운 샐러드 증정' }
     ];
 
-    var wellness = { start: 0, offset: 0, log: {}, rewards: [] };
+    var wellness = { start: 0, offset: 0, log: {}, rewards: [], pantry: {}, spent: 0 };
 
     function midnightNow() {
       var d = new Date();
@@ -1938,6 +2228,7 @@
     }
 
     function isRewardUnlocked(id) {
+      if (id === 'tablemaster') return cookedCount() >= RECIPES.length;
       var reward = REWARDS.filter(function (r) { return r.id === id; })[0];
       if (!reward) return true;
       return rewardProgress(reward, tally()) >= reward.goal;
@@ -2057,6 +2348,7 @@
       renderDayGrid();
       renderRewards();
       renderStats();
+      renderTickets();
     }
 
     function toggleMission(id) {
@@ -2071,11 +2363,13 @@
       renderWellness();
       grantRewards();
 
+      renderTickets();
+
       if (justCompleted && done.length >= MISSIONS_PER_DAY) {
         showDaySummary();
       } else if (justCompleted) {
         var cat = id.split(':')[0];
-        showToast(MISSIONS[cat].emoji + ' ' + MISSIONS[cat].label + ' 밸런스가 한 칸 채워졌어요.');
+        showToast(MISSIONS[cat].emoji + ' ' + MISSIONS[cat].label + ' 밸런스 +1 · 재료가 쏟아져요!', '받으러 가기', openCatch);
       } else {
         hideDaySummary();
       }
@@ -2112,8 +2406,12 @@
           '<div class="wl-summary-head">오늘의 밸런스 ' + pct + '% 완성!</div>' +
           '<div class="wl-summary-msg">' + head + '\n' + msg + '</div>' +
           '<div class="wl-summary-bar"><i></i></div>' +
-        '</div>';
+        '</div>' +
+        '<button class="btn btn-primary btn-block" type="button" id="wlToCatch" style="margin:-10px 0 22px;">🌾 받은 재료로 식탁 채우기 (' + ticketsLeft() + '회)</button>';
       box.classList.add('show');
+
+      var toCatch = document.getElementById('wlToCatch');
+      if (toCatch) toCatch.addEventListener('click', function () { closeChallenge(); openCatch(); });
 
       var bar = box.querySelector('.wl-summary-bar i');
       setTimeout(function () { if (bar) bar.style.width = pct + '%'; }, 60);
@@ -2186,6 +2484,471 @@
     function startChallenge() {
       closeWellnessPopup();
       openChallenge();
+    }
+
+    /* ===================== My Healthy Table: ingredients & recipes ===================== */
+    var INGREDIENTS = [
+      { id: 'carrot',   name: '당근',         emoji: '🥕', short: '당근' },
+      { id: 'sweetpo',  name: '고구마',       emoji: '🍠', short: '고구마' },
+      { id: 'potato',   name: '감자',         emoji: '🥔', short: '감자' },
+      { id: 'mushroom', name: '버섯',         emoji: '🍄', short: '버섯' },
+      { id: 'corn',     name: '옥수수',       emoji: '🌽', short: '옥수수' },
+      { id: 'tomato',   name: '토마토',       emoji: '🍅', short: '토마토' },
+      { id: 'frillice', name: '프릴아이스',   emoji: '🥬', short: '프릴' },
+      { id: 'chicken',  name: '닭가슴살',     emoji: '🍗', short: '닭가슴' },
+      { id: 'pork',     name: '돼지불고기',   emoji: '🥩', short: '불고기' },
+      { id: 'angel',    name: '엔젤헤어치즈', emoji: '🧀', short: '엔젤헤어' },
+      { id: 'ricotta',  name: '허리리코타치즈', emoji: '🥛', short: '리코타' },
+      { id: 'lentil',   name: '렌틸콩',       emoji: '🫘', short: '렌틸콩' },
+      { id: 'quinoa',   name: '퀴노아',       emoji: '🌾', short: '퀴노아' }
+    ];
+
+    var NEED_PER_ING = 3;
+
+    /* every recipe maps to a real product in the shop catalog */
+    var RECIPES = [
+      { id: 'cobb-salad',       ings: ['frillice', 'chicken', 'tomato'] },
+      { id: 'chicken-steak',    ings: ['chicken', 'potato', 'mushroom'] },
+      { id: 'quinoa-bowl',      ings: ['quinoa', 'carrot', 'corn'] },
+      { id: 'mushroom-risotto', ings: ['mushroom', 'angel', 'potato'] },
+      { id: 'hummus-bowl',      ings: ['lentil', 'tomato', 'sweetpo'] },
+      { id: 'basil-wrap-single',ings: ['frillice', 'ricotta', 'pork'] }
+    ];
+
+    function findIngredient(id) { return INGREDIENTS.filter(function (i) { return i.id === id; })[0]; }
+    function pantryCount(id) { return (wellness.pantry && wellness.pantry[id]) || 0; }
+
+    function pantryTotals() {
+      var total = 0, kinds = 0;
+      INGREDIENTS.forEach(function (i) {
+        var n = pantryCount(i.id);
+        total += n;
+        if (n > 0) kinds++;
+      });
+      return { total: total, kinds: kinds };
+    }
+
+    function recipeDone(r) {
+      return r.ings.every(function (id) { return pantryCount(id) >= NEED_PER_ING; });
+    }
+    function cookedCount() { return RECIPES.filter(recipeDone).length; }
+
+    /* one catch round is earned per completed mission (plus one welcome round) */
+    function ticketsLeft() {
+      return Math.max(0, 1 + tally().total - (wellness.spent || 0));
+    }
+
+    /* ---------- table rendering ---------- */
+    function renderTable() {
+      var totals = pantryTotals();
+
+      document.querySelectorAll('[data-tbl-total]').forEach(function (el) { el.textContent = totals.total; });
+      document.querySelectorAll('[data-tbl-kinds]').forEach(function (el) { el.textContent = totals.kinds; });
+      document.querySelectorAll('[data-tbl-cooked]').forEach(function (el) { el.textContent = cookedCount(); });
+
+      document.querySelectorAll('[data-tbl-items]').forEach(function (box) {
+        var owned = INGREDIENTS.filter(function (i) { return pantryCount(i.id) > 0; });
+        if (!owned.length) {
+          box.innerHTML =
+            '<div class="tbl-empty word-keep">' +
+              '<b>아직 식탁이 비어 있어요.</b>' +
+              '습관을 하나씩 달성하면 재료가 쏟아져요.<br>받아낸 재료가 이 위에 하나씩 올라갑니다.' +
+            '</div>';
+          return;
+        }
+        box.innerHTML = owned.map(function (i) {
+          return (
+            '<div class="tbl-chip">' +
+              '<div class="tbl-chip-emoji">' + i.emoji + '</div>' +
+              '<div class="tbl-chip-name">' + i.name + '</div>' +
+              '<span class="tbl-chip-count">' + pantryCount(i.id) + '</span>' +
+            '</div>'
+          );
+        }).join('');
+      });
+
+      renderTickets();
+      renderRecipes();
+    }
+
+    function renderTickets() {
+      var n = ticketsLeft();
+      document.querySelectorAll('[data-tbl-ticket]').forEach(function (el) {
+        el.textContent = '🌾 재료 받기 ' + n + '회';
+        el.classList.toggle('zero', n === 0);
+      });
+      document.querySelectorAll('[data-tbl-play]').forEach(function (btn) {
+        btn.disabled = n === 0;
+        btn.textContent = n === 0 ? '재료 받기 기회 소진' : '재료 받으러 가기';
+      });
+      document.querySelectorAll('[data-tbl-hint]').forEach(function (el) {
+        el.textContent = n === 0
+          ? '오늘의 습관 미션을 완료하면 재료 받기 기회가 다시 생겨요.'
+          : '미션을 하나 달성할 때마다 재료 받기 기회가 1회씩 쌓여요.';
+      });
+    }
+
+    function renderRecipes() {
+      document.querySelectorAll('[data-tbl-recipes]').forEach(function (box) {
+        box.innerHTML = RECIPES.map(function (r) {
+          var p = findProduct(r.id);
+          if (!p) return '';
+          var done = recipeDone(r);
+          var haveKinds = r.ings.filter(function (id) { return pantryCount(id) >= NEED_PER_ING; }).length;
+          var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
+
+          var ings = r.ings.map(function (id) {
+            var ing = findIngredient(id);
+            var have = Math.min(pantryCount(id), NEED_PER_ING);
+            var pct = Math.round(have / NEED_PER_ING * 100);
+            return (
+              '<div class="rcp-ing' + (have >= NEED_PER_ING ? ' full' : '') + '">' +
+                '<span class="rcp-ing-emoji">' + ing.emoji + '</span>' +
+                '<span class="rcp-ing-name">' + ing.name + '</span>' +
+                '<span class="rcp-ing-bar"><i style="width:' + pct + '%"></i></span>' +
+                '<span class="rcp-ing-num">' + have + '/' + NEED_PER_ING + '</span>' +
+              '</div>'
+            );
+          }).join('');
+
+          return (
+            '<div class="rcp' + (done ? ' done' : '') + '">' +
+              '<div class="rcp-top">' +
+                '<span class="rcp-visual">' + (isImg ? '<img src="' + p.img + '" alt="' + p.kr + '">' : p.img) + '</span>' +
+                '<span class="rcp-main">' +
+                  '<span class="rcp-name">' + p.kr + '</span>' +
+                  '<span class="rcp-price">' + formatWon(p.price) + '</span>' +
+                '</span>' +
+                '<span class="rcp-state">' + (done ? '완성' : haveKinds + '/3') + '</span>' +
+              '</div>' +
+              '<div class="rcp-ings">' + ings + '</div>' +
+              '<div class="rcp-foot">' +
+                (done
+                  ? '<button class="btn btn-primary btn-block btn-sm" type="button" data-rcp-add="' + p.id + '">이 메뉴 장바구니에 담기</button>'
+                  : '<div class="rcp-locked">재료를 모두 모으면 이 메뉴를 담을 수 있어요</div>') +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        box.querySelectorAll('[data-rcp-add]').forEach(function (btn) {
+          btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-rcp-add')); });
+        });
+      });
+    }
+
+    /* 6 recipes complete -> bonus coupon */
+    function grantTableReward() {
+      if (wellness.rewards.indexOf('tablemaster') !== -1) return;
+      if (cookedCount() < RECIPES.length) return;
+      wellness.rewards.push('tablemaster');
+      if (claimed.indexOf('tablemaster') === -1) claimed.push('tablemaster');
+      saveState();
+      updateBadges();
+      renderCoupons();
+      showToast('🍽️ 건강 식탁 완성! 5,000원 할인 쿠폰을 드렸어요.', '쿠폰함 보기', openCoupons);
+    }
+
+    /* ===================== Catch game ===================== */
+    var CG = {
+      ROUND_MS: 12000,
+      ITEM_W: 52,
+      ITEM_H: 52,
+      PLATE_W: 100,
+      PLATE_BOTTOM: 16,
+      PLATE_H: 30,
+      running: false,
+      items: [],
+      caught: null,
+      plateX: 0,
+      w: 0,
+      h: 0,
+      raf: 0,
+      last: 0,
+      elapsed: 0,
+      nextSpawn: 0,
+      seq: 0
+    };
+
+    function cgEls() {
+      return {
+        overlay: document.getElementById('catchGame'),
+        arena: document.getElementById('cgArena'),
+        plate: document.getElementById('cgPlate'),
+        center: document.getElementById('cgCenter'),
+        countNum: document.getElementById('cgCountNum'),
+        time: document.getElementById('cgTime'),
+        bar: document.getElementById('cgTimeBar'),
+        score: document.getElementById('cgScore'),
+        result: document.getElementById('cgResult')
+      };
+    }
+
+    function cgMeasure() {
+      var el = cgEls().arena;
+      var rect = el.getBoundingClientRect();
+      CG.w = rect.width;
+      CG.h = rect.height;
+      CG.plateW = Math.min(CG.PLATE_W, Math.max(72, CG.w * 0.26));
+      cgEls().plate.style.width = CG.plateW + 'px';
+      cgSetPlate(CG.plateX || CG.w / 2);
+    }
+
+    function cgSetPlate(centerX) {
+      var half = CG.plateW / 2;
+      CG.plateX = Math.max(half, Math.min(CG.w - half, centerX));
+      cgEls().plate.style.transform = 'translateX(' + (CG.plateX - half) + 'px)';
+    }
+
+    function cgPointer(e) {
+      if (!CG.running) return;
+      var rect = cgEls().arena.getBoundingClientRect();
+      cgSetPlate(e.clientX - rect.left);
+    }
+
+    function cgKey(e) {
+      if (!CG.running) return;
+      if (e.key === 'ArrowLeft') { cgSetPlate(CG.plateX - 28); e.preventDefault(); }
+      else if (e.key === 'ArrowRight') { cgSetPlate(CG.plateX + 28); e.preventDefault(); }
+    }
+
+    function cgSpawn() {
+      var ing = INGREDIENTS[Math.floor(Math.random() * INGREDIENTS.length)];
+      var el = document.createElement('div');
+      el.className = 'cg-item';
+      el.innerHTML =
+        '<span class="cg-item-emoji">' + ing.emoji + '</span>' +
+        '<span class="cg-item-label">' + ing.short + '</span>';
+      cgEls().arena.appendChild(el);
+
+      CG.items.push({
+        el: el,
+        ing: ing,
+        x: Math.random() * Math.max(1, CG.w - CG.ITEM_W),
+        y: -CG.ITEM_H,
+        vy: 240 + Math.random() * 120,
+        drift: (Math.random() - 0.5) * 26
+      });
+    }
+
+    function cgRemove(item, caught) {
+      var idx = CG.items.indexOf(item);
+      if (idx !== -1) CG.items.splice(idx, 1);
+      if (caught) {
+        item.el.classList.add('caught');
+        item.el.style.setProperty('--cx', (CG.plateX - CG.ITEM_W / 2) + 'px');
+        item.el.style.setProperty('--cy', (CG.h - CG.PLATE_BOTTOM - CG.PLATE_H) + 'px');
+        setTimeout(function () { if (item.el.parentNode) item.el.parentNode.removeChild(item.el); }, 280);
+      } else if (item.el.parentNode) {
+        item.el.parentNode.removeChild(item.el);
+      }
+    }
+
+    function cgTick(ts) {
+      if (!CG.running) return;
+      if (!CG.last) CG.last = ts;
+      var dt = Math.min(50, ts - CG.last) / 1000;
+      CG.last = ts;
+      CG.elapsed += dt * 1000;
+
+      var remain = Math.max(0, CG.ROUND_MS - CG.elapsed);
+      var els = cgEls();
+      els.time.textContent = Math.ceil(remain / 1000);
+      els.bar.style.width = (remain / CG.ROUND_MS * 100) + '%';
+
+      /* spawn faster as the round goes on */
+      if (CG.elapsed < CG.ROUND_MS - 400 && CG.elapsed >= CG.nextSpawn) {
+        cgSpawn();
+        var progress = CG.elapsed / CG.ROUND_MS;
+        CG.nextSpawn = CG.elapsed + (640 - progress * 180);
+      }
+
+      var catchTop = CG.h - CG.PLATE_BOTTOM - CG.PLATE_H;
+      var half = CG.plateW / 2;
+
+      CG.items.slice().forEach(function (it) {
+        it.y += it.vy * dt;
+        it.x += it.drift * dt;
+        if (it.x < 0) it.x = 0;
+        if (it.x > CG.w - CG.ITEM_W) it.x = CG.w - CG.ITEM_W;
+        it.el.style.transform = 'translate3d(' + it.x + 'px,' + it.y + 'px,0)';
+
+        var itemBottom = it.y + CG.ITEM_H * 0.62;
+        var itemCenter = it.x + CG.ITEM_W / 2;
+        if (itemBottom >= catchTop && it.y < catchTop + CG.PLATE_H &&
+            Math.abs(itemCenter - CG.plateX) <= half + 8) {
+          CG.caught[it.ing.id] = (CG.caught[it.ing.id] || 0) + 1;
+          CG.seq++;
+          els.score.textContent = CG.seq;
+          cgRemove(it, true);
+        } else if (it.y > CG.h) {
+          cgRemove(it, false);
+        }
+      });
+
+      if (remain <= 0) { cgFinish(); return; }
+      CG.raf = requestAnimationFrame(cgTick);
+    }
+
+    function cgClearItems() {
+      CG.items.forEach(function (it) { if (it.el.parentNode) it.el.parentNode.removeChild(it.el); });
+      CG.items = [];
+    }
+
+    function openCatch() {
+      if (ticketsLeft() <= 0) {
+        showToast('재료 받기 기회를 다 썼어요. 오늘의 미션을 완료하면 다시 생겨요.', '미션 열기', openChallenge);
+        return;
+      }
+
+      /* spend the round up front so a mid-game reload cannot farm it */
+      wellness.spent = (wellness.spent || 0) + 1;
+      saveState();
+      renderTickets();
+
+      var els = cgEls();
+      els.result.classList.remove('show');
+      els.result.innerHTML = '';
+      els.overlay.classList.add('open');
+      els.overlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+
+      CG.caught = {};
+      CG.seq = 0;
+      CG.items = [];
+      CG.elapsed = 0;
+      CG.nextSpawn = 0;
+      CG.last = 0;
+      els.score.textContent = '0';
+      els.time.textContent = Math.ceil(CG.ROUND_MS / 1000);
+      els.bar.style.width = '100%';
+
+      CG.plateX = 0;
+      cgMeasure();
+      cgSetPlate(CG.w / 2);
+
+      els.arena.addEventListener('pointermove', cgPointer);
+      els.arena.addEventListener('pointerdown', cgPointer);
+      window.addEventListener('resize', cgMeasure);
+      document.addEventListener('keydown', cgKey);
+
+      /* 3 - 2 - 1 countdown, then drop */
+      els.center.style.display = 'flex';
+      var n = 3;
+      els.countNum.textContent = n;
+      var timer = setInterval(function () {
+        n--;
+        if (n > 0) {
+          els.countNum.textContent = n;
+        } else {
+          clearInterval(timer);
+          els.center.style.display = 'none';
+          CG.running = true;
+          CG.last = 0;
+          try { els.arena.focus({ preventScroll: true }); } catch (e) { /* noop */ }
+          CG.raf = requestAnimationFrame(cgTick);
+        }
+      }, 700);
+      CG.countTimer = timer;
+    }
+
+    function cgStop() {
+      CG.running = false;
+      cancelAnimationFrame(CG.raf);
+      clearInterval(CG.countTimer);
+      var els = cgEls();
+      els.arena.removeEventListener('pointermove', cgPointer);
+      els.arena.removeEventListener('pointerdown', cgPointer);
+      window.removeEventListener('resize', cgMeasure);
+      document.removeEventListener('keydown', cgKey);
+      cgClearItems();
+    }
+
+    /* move everything caught this round onto the table */
+    function cgCommit() {
+      if (!wellness.pantry) wellness.pantry = {};
+      var before = RECIPES.filter(recipeDone).map(function (r) { return r.id; });
+      Object.keys(CG.caught || {}).forEach(function (id) {
+        wellness.pantry[id] = (wellness.pantry[id] || 0) + CG.caught[id];
+      });
+      saveState();
+      var after = RECIPES.filter(recipeDone).map(function (r) { return r.id; });
+      return after.filter(function (id) { return before.indexOf(id) === -1; });
+    }
+
+    function cgFinish() {
+      cgStop();
+      var newlyCooked = cgCommit();
+      var els = cgEls();
+      var got = Object.keys(CG.caught);
+
+      var chips = got.map(function (id) {
+        var ing = findIngredient(id);
+        return '<span class="cg-got">' + ing.emoji + ' ' + ing.name + ' <b>×' + CG.caught[id] + '</b></span>';
+      }).join('');
+
+      var cooked = newlyCooked.map(function (id) {
+        var p = findProduct(id);
+        return (
+          '<div class="cg-cooked">' +
+            '<div class="cg-cooked-title">🎉 ' + p.kr + ' 완성!</div>' +
+            '<div class="cg-cooked-desc">재료를 모두 모았어요. 식탁에서 바로 장바구니에 담을 수 있어요.</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      els.result.innerHTML =
+        (CG.seq > 0
+          ? '<div class="cg-result-emoji">🧺</div>' +
+            '<div class="cg-result-title">재료 ' + CG.seq + '개를 받았어요!</div>' +
+            '<div class="cg-result-sub word-keep">식탁이 조금 더 풍성해졌어요.</div>'
+          : '<div class="cg-result-emoji">🍃</div>' +
+            '<div class="cg-result-title">이번엔 하나도 못 받았네요</div>' +
+            '<div class="cg-result-sub word-keep">괜찮아요. 완벽하지 않아도 돼요.<br>내일 미션을 달성하면 또 기회가 생겨요.</div>') +
+        '<div class="cg-result-items">' + chips + '</div>' +
+        cooked +
+        '<div class="cg-result-foot">' +
+          '<button class="btn btn-primary btn-block" type="button" id="cgToTable">식탁에 올리기</button>' +
+          (ticketsLeft() > 0 ? '<button class="btn btn-secondary btn-block" type="button" id="cgAgain">한 번 더 받기 (' + ticketsLeft() + '회 남음)</button>' : '') +
+        '</div>';
+      els.result.classList.add('show');
+
+      document.getElementById('cgToTable').addEventListener('click', function () {
+        closeCatch();
+        var section = document.getElementById('table');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+      });
+      var again = document.getElementById('cgAgain');
+      if (again) again.addEventListener('click', function () { closeCatch(true); openCatch(); });
+
+      renderTable();
+      grantTableReward();
+    }
+
+    function closeCatch(silent) {
+      if (CG.running) {
+        /* keep whatever was caught before bailing out */
+        cgStop();
+        cgCommit();
+        renderTable();
+        grantTableReward();
+      } else {
+        cgStop();
+      }
+      var els = cgEls();
+      els.overlay.classList.remove('open');
+      els.overlay.setAttribute('aria-hidden', 'true');
+      els.result.classList.remove('show');
+      document.body.classList.remove('no-scroll');
+      if (!silent) renderTable();
+    }
+
+    function initTable() {
+      renderTable();
+      var overlay = document.getElementById('catchGame');
+      if (overlay) {
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) closeCatch(); });
+      }
     }
 
     /* ===================== Chatbot & customer support ===================== */
@@ -2507,6 +3270,7 @@
       renderGrid();
       updateBadges();
       initWellness();
+      initTable();
       initChat();
     });
 
@@ -2514,6 +3278,8 @@
       if (e.key !== 'Escape') return;
       var pop = document.getElementById('wlPopup');
       var wl = document.getElementById('wlModal');
+      var cgo = document.getElementById('catchGame');
+      if (cgo && cgo.classList.contains('open')) { closeCatch(); return; }
       if (pop && pop.classList.contains('open')) { closeWellnessPopup(); return; }
       if (wl && wl.classList.contains('open')) { closeChallenge(); return; }
       if (chatOpen) { closeChat(); return; }
@@ -2537,7 +3303,9 @@
       toggleChat: toggleChat,
       closeChat: closeChat,
       chatTab: chatTab,
-      openCustomerCenter: openCustomerCenter
+      openCustomerCenter: openCustomerCenter,
+      openCatch: openCatch,
+      closeCatch: closeCatch
     };
   })();
   </script>
