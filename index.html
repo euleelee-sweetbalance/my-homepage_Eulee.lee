@@ -433,6 +433,383 @@
   .foot-links a:hover { color: var(--sw); text-decoration: underline; }
   .foot-info { font-size: 11.5px; opacity: .7; margin-top: 10px; line-height: 1.8; }
   footer .foot-tagline { font-family: var(--en); font-style: italic; margin-top: 10px; opacity: .8; }
+
+  /* ---------- Wellness Challenge: intro popup ---------- */
+  .wl-pop-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,20,.55); z-index: 400;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; visibility: hidden; transition: opacity var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .wl-pop-overlay.open { opacity: 1; visibility: visible; }
+
+  .wl-pop {
+    position: relative; width: min(420px, 100%); background: #fff; border-radius: var(--r-2xl);
+    box-shadow: var(--sh-lg); overflow: hidden; text-align: center;
+    transform: translateY(14px) scale(.98); transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .wl-pop-overlay.open .wl-pop { transform: translateY(0) scale(1); }
+  .wl-pop-visual {
+    background: linear-gradient(160deg, var(--g) 0%, var(--g2) 60%, #0a8f6b 100%);
+    color: var(--sw); padding: 34px 28px 30px; position: relative; overflow: hidden;
+  }
+  .wl-pop-visual::after {
+    content: ''; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px;
+    border-radius: 50%; background: rgba(132,186,69,.16);
+  }
+  .wl-pop-visual > * { position: relative; z-index: 1; }
+  .wl-pop-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px; font-family: var(--en); font-size: 11px;
+    font-weight: 700; letter-spacing: .14em; background: rgba(255,255,255,.16);
+    padding: 6px 14px; border-radius: var(--r-pill); margin-bottom: 16px;
+  }
+  .wl-pop-emoji { font-size: 44px; line-height: 1; margin-bottom: 12px; }
+  .wl-pop-title { font-family: var(--kr); font-weight: 800; font-size: 25px; line-height: 1.35; word-break: keep-all; }
+  .wl-pop-title em { font-style: normal; color: #D9F27E; }
+  .wl-pop-desc { font-size: 13.5px; opacity: .9; margin-top: 12px; line-height: 1.7; word-break: keep-all; }
+  .wl-pop-body { padding: 24px 28px 22px; }
+  .wl-pop-bullets { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; text-align: left; }
+  .wl-pop-bullet { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; color: var(--char); word-break: keep-all; line-height: 1.6; }
+  .wl-pop-bullet span:first-child { flex-shrink: 0; }
+  .wl-pop-ctas { display: flex; flex-direction: column; gap: 9px; }
+  .wl-pop-later {
+    background: none; border: none; color: var(--slate); font-size: 12.5px; cursor: pointer;
+    font-family: var(--kr); text-decoration: underline; padding: 4px;
+  }
+  .wl-pop-later:hover { color: var(--char); }
+  .wl-pop-close {
+    position: absolute; top: 12px; right: 12px; z-index: 2; width: 32px; height: 32px; border-radius: 999px;
+    border: none; background: rgba(255,255,255,.18); color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wl-pop-close:hover { background: rgba(255,255,255,.3); }
+  .wl-pop-hide {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    font-size: 11.5px; color: var(--slate); padding: 12px 0 0; border-top: 1px solid var(--div); margin-top: 16px;
+  }
+  .wl-pop-hide input { accent-color: var(--g); width: 14px; height: 14px; cursor: pointer; }
+  .wl-pop-hide label { cursor: pointer; }
+
+  /* ---------- Wellness Challenge: modal ---------- */
+  .wl-modal {
+    position: fixed; inset: 0; background: rgba(15,23,20,.55); z-index: 402;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; visibility: hidden; transition: opacity var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .wl-modal.open { opacity: 1; visibility: visible; }
+  .wl-modal-card {
+    width: min(560px, 100%); max-height: min(88vh, 860px); background: var(--paper);
+    border-radius: var(--r-2xl); box-shadow: var(--sh-lg); display: flex; flex-direction: column;
+    overflow: hidden; position: relative;
+    transform: translateY(16px) scale(.985); transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .wl-modal.open .wl-modal-card { transform: translateY(0) scale(1); }
+  .wl-modal-head {
+    background: linear-gradient(160deg, var(--g) 0%, var(--g2) 100%); color: var(--sw);
+    padding: 26px 28px 22px; flex-shrink: 0;
+  }
+  .wl-daychip {
+    display: inline-flex; align-items: center; gap: 6px; font-family: var(--en); font-size: 11px;
+    font-weight: 700; letter-spacing: .1em; background: rgba(255,255,255,.18);
+    padding: 5px 13px; border-radius: var(--r-pill); margin-bottom: 12px;
+  }
+  .wl-modal-head h3 { font-family: var(--kr); font-weight: 800; font-size: 21px; line-height: 1.4; word-break: keep-all; }
+  .wl-quote { font-size: 14px; margin-top: 12px; line-height: 1.65; word-break: keep-all; opacity: .95; }
+  .wl-quote-sub { font-size: 12.5px; opacity: .72; margin-top: 4px; }
+  .wl-modal-close {
+    position: absolute; top: 14px; right: 14px; z-index: 3; width: 34px; height: 34px; border-radius: 999px;
+    border: none; background: rgba(255,255,255,.18); color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wl-modal-close:hover { background: rgba(255,255,255,.32); }
+  .wl-modal-body { flex: 1; overflow-y: auto; padding: 22px 26px 24px; }
+  @media (max-width: 520px) {
+    .wl-modal-head { padding: 22px 20px 20px; }
+    .wl-modal-body { padding: 18px 18px 20px; }
+  }
+  .wl-modal-foot {
+    flex-shrink: 0; padding: 14px 26px 18px; background: #fff; border-top: 1px solid var(--div);
+    display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  }
+  .wl-demo-link {
+    background: none; border: none; color: var(--slate); font-size: 11.5px; cursor: pointer;
+    font-family: var(--kr); text-decoration: underline; padding: 4px 0;
+  }
+  .wl-demo-link:hover { color: var(--g); }
+
+  .wl-block { margin-bottom: 22px; }
+  .wl-block-title {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    font-size: 13px; font-weight: 800; color: var(--ink); margin-bottom: 12px;
+  }
+  .wl-count { font-family: var(--en); font-size: 12px; font-weight: 700; color: var(--g); background: rgba(0,97,78,.09); padding: 3px 10px; border-radius: var(--r-pill); }
+
+  /* mission rows */
+  .wl-missions { display: flex; flex-direction: column; gap: 9px; }
+  .wl-mission {
+    display: flex; align-items: center; gap: 12px; background: #fff; border: 1.5px solid var(--border);
+    border-radius: var(--r-md); padding: 13px 15px; cursor: pointer; text-align: left; width: 100%;
+    font-family: var(--kr); transition: all var(--dur-fast) var(--ease-out);
+  }
+  .wl-mission:hover { border-color: var(--g); transform: translateY(-1px); box-shadow: var(--sh-sm); }
+  .wl-mission-check {
+    width: 24px; height: 24px; border-radius: 999px; border: 1.8px solid var(--mist); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; color: transparent; font-size: 13px; font-weight: 700;
+    transition: all var(--dur-base) var(--ease-out);
+  }
+  .wl-mission-main { flex: 1; min-width: 0; display: block; }
+  .wl-mission-cat {
+    display: block; font-family: var(--en); font-size: 10px; font-weight: 800; letter-spacing: .1em; color: var(--seed);
+  }
+  .wl-mission-label { display: block; font-size: 14.5px; font-weight: 600; color: var(--ink); margin-top: 2px; word-break: keep-all; }
+  .wl-mission-emoji { font-size: 20px; flex-shrink: 0; }
+  .wl-mission.done { background: rgba(0,97,78,.05); border-color: var(--g); }
+  .wl-mission.done .wl-mission-check { background: var(--g); border-color: var(--g); color: #fff; }
+  .wl-mission.done .wl-mission-label { color: var(--g); text-decoration: line-through; text-decoration-color: rgba(0,97,78,.35); }
+
+  /* balance gauge */
+  .wl-gauges { display: flex; flex-direction: column; gap: 10px; background: #fff; border-radius: var(--r-md); padding: 16px 18px; border: 1px solid var(--border); }
+  .wl-gauge { display: flex; align-items: center; gap: 10px; }
+  .wl-gauge-name { font-family: var(--en); font-size: 11.5px; font-weight: 800; letter-spacing: .08em; color: var(--char); width: 74px; flex-shrink: 0; }
+  .wl-gauge-dots { display: flex; gap: 5px; flex: 1; }
+  .wl-gauge-dot {
+    width: 13px; height: 13px; border-radius: 999px; background: var(--mist);
+    transition: background var(--dur-slow) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  .wl-gauge-dot.on { background: var(--g); }
+  .wl-gauge-dot.pop { transform: scale(1.35); }
+  .wl-gauge-val { font-family: var(--en); font-size: 11px; font-weight: 700; color: var(--slate); flex-shrink: 0; }
+
+  /* 30-day strip */
+  .wl-daygrid { display: grid; grid-template-columns: repeat(15, 1fr); gap: 4px; background: #fff; border-radius: var(--r-md); padding: 14px; border: 1px solid var(--border); }
+  .wl-daybox { aspect-ratio: 1; border-radius: 4px; background: var(--mist); opacity: .45; }
+  .wl-daybox.part { background: var(--seed); opacity: .55; }
+  .wl-daybox.full { background: var(--g); opacity: 1; }
+  .wl-daybox.today { outline: 2px solid var(--seed); outline-offset: 1px; opacity: 1; }
+
+  /* day summary card */
+  .wl-summary { display: none; }
+  .wl-summary.show { display: block; }
+  .wl-summary-card {
+    background: linear-gradient(160deg, #0B6E58 0%, var(--g) 100%); color: var(--sw);
+    border-radius: var(--r-lg); padding: 22px 24px; text-align: center; margin-bottom: 22px;
+  }
+  .wl-summary-pct { font-family: var(--en); font-weight: 800; font-size: 38px; line-height: 1.1; color: #D9F27E; }
+  .wl-summary-head { font-size: 14.5px; font-weight: 700; margin-top: 6px; }
+  .wl-summary-msg { font-size: 13px; opacity: .88; margin-top: 10px; line-height: 1.7; word-break: keep-all; white-space: pre-line; }
+  .wl-summary-bar { height: 7px; border-radius: 999px; background: rgba(255,255,255,.2); margin: 16px 0 0; overflow: hidden; }
+  .wl-summary-bar i { display: block; height: 100%; border-radius: 999px; background: #D9F27E; width: 0; transition: width 700ms var(--ease-out); }
+
+  /* reward roadmap */
+  .wl-rewards { display: flex; flex-direction: column; gap: 10px; }
+  .wl-reward {
+    display: flex; align-items: center; gap: 13px; background: #fff; border: 1.5px solid var(--border);
+    border-radius: var(--r-md); padding: 14px 16px;
+  }
+  .wl-reward-medal {
+    width: 40px; height: 40px; border-radius: 999px; background: var(--paper); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+  }
+  .wl-reward-main { flex: 1; min-width: 0; display: block; }
+  .wl-reward-day { display: block; font-family: var(--en); font-size: 10.5px; font-weight: 800; letter-spacing: .1em; color: var(--seed); }
+  .wl-reward-title { display: block; font-size: 13.5px; font-weight: 700; color: var(--ink); margin-top: 2px; word-break: keep-all; }
+  .wl-reward-desc { display: block; font-size: 11.5px; color: var(--slate); margin-top: 3px; word-break: keep-all; line-height: 1.5; }
+  .wl-reward-prog { display: block; height: 5px; border-radius: 999px; background: var(--paper); margin-top: 8px; overflow: hidden; }
+  .wl-reward-prog i { display: block; height: 100%; border-radius: 999px; background: var(--seed); width: 0; transition: width var(--dur-slow) var(--ease-out); }
+  .wl-reward-state {
+    flex-shrink: 0; align-self: center; white-space: nowrap; font-family: var(--en); font-size: 10.5px; font-weight: 800; letter-spacing: .06em;
+    padding: 6px 11px; border-radius: var(--r-pill); background: var(--paper); color: var(--slate);
+  }
+  .wl-reward.unlocked { border-color: var(--g); background: rgba(0,97,78,.04); }
+  .wl-reward.unlocked .wl-reward-medal { background: var(--g); }
+  .wl-reward.unlocked .wl-reward-state { background: var(--g); color: var(--sw); }
+
+  .wl-note {
+    text-align: center; font-size: 12.5px; color: var(--g); font-weight: 700; background: rgba(132,186,69,.14);
+    border-radius: var(--r-md); padding: 13px 16px; word-break: keep-all; line-height: 1.6;
+  }
+
+  /* ---------- Wellness section on page ---------- */
+  #wellness { background: var(--paper); }
+  .wl-hero-quote {
+    max-width: 620px; margin: 0 auto 36px; text-align: center; font-family: var(--kr);
+    font-weight: 700; font-size: clamp(19px, 2.6vw, 24px); color: var(--g); line-height: 1.55; word-break: keep-all;
+  }
+  .wl-hero-quote small { display: block; font-size: 14px; font-weight: 500; color: var(--char); margin-top: 10px; }
+  .wl-panel {
+    max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr .95fr; gap: 18px;
+  }
+  @media (max-width: 800px) { .wl-panel { grid-template-columns: 1fr; } }
+  .wl-panel-card { background: #fff; border-radius: var(--r-xl); padding: 26px 26px 24px; box-shadow: var(--sh-sm); border: 1px solid var(--border); }
+  .wl-panel-title { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+  .wl-panel-sub { font-size: 12.5px; color: var(--slate); margin-bottom: 18px; word-break: keep-all; line-height: 1.6; }
+  .wl-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+  .wl-stat { background: var(--paper); border-radius: var(--r-md); padding: 13px 10px; text-align: center; }
+  .wl-stat-val { font-family: var(--en); font-weight: 800; font-size: 21px; color: var(--g); line-height: 1.1; }
+  .wl-stat-label { font-size: 10.5px; color: var(--slate); margin-top: 4px; }
+  .wl-cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ---------- Chat / Customer support ---------- */
+  .chat-fab {
+    position: fixed; right: 22px; bottom: 22px; z-index: 340; width: 58px; height: 58px; border-radius: 999px;
+    border: none; background: var(--g); color: var(--sw); cursor: pointer; box-shadow: var(--sh-brand);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+  }
+  .chat-fab:hover { background: var(--g2); transform: translateY(-3px); }
+  .chat-fab .icon { width: 26px; height: 26px; }
+  .chat-fab-dot {
+    position: absolute; top: 4px; right: 4px; width: 12px; height: 12px; border-radius: 999px;
+    background: var(--seed); box-shadow: 0 0 0 2.5px var(--sw);
+  }
+  .chat-fab.open .chat-fab-dot { display: none; }
+  @media (max-width: 520px) { .chat-fab { right: 16px; bottom: 16px; } }
+
+  .chat-panel {
+    position: fixed; right: 22px; bottom: 92px; z-index: 341; width: min(376px, calc(100vw - 32px));
+    height: min(600px, calc(100vh - 130px)); background: #fff; border-radius: var(--r-xl);
+    box-shadow: var(--sh-lg); display: flex; flex-direction: column; overflow: hidden;
+    opacity: 0; visibility: hidden; transform: translateY(14px) scale(.98);
+    transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .chat-panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+  @media (max-width: 520px) { .chat-panel { right: 16px; left: 16px; width: auto; bottom: 86px; height: min(560px, calc(100vh - 120px)); } }
+
+  .chat-head {
+    background: linear-gradient(160deg, var(--g) 0%, var(--g2) 100%); color: var(--sw);
+    padding: 18px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  }
+  .chat-avatar {
+    width: 40px; height: 40px; border-radius: 999px; background: rgba(255,255,255,.18);
+    display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+  }
+  .chat-head-main { flex: 1; min-width: 0; }
+  .chat-head-title { font-size: 14.5px; font-weight: 800; }
+  .chat-head-sub { font-size: 11.5px; opacity: .8; margin-top: 2px; display: flex; align-items: center; gap: 5px; }
+  .chat-live-dot { width: 7px; height: 7px; border-radius: 999px; background: #9BE870; display: inline-block; }
+  .chat-close {
+    width: 30px; height: 30px; border-radius: 999px; border: none; background: rgba(255,255,255,.16);
+    color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .chat-close:hover { background: rgba(255,255,255,.3); }
+
+  .chat-tabs { display: flex; border-bottom: 1px solid var(--div); flex-shrink: 0; background: #fff; }
+  .chat-tab {
+    flex: 1; padding: 12px 8px; border: none; background: none; cursor: pointer; font-family: var(--kr);
+    font-size: 13px; font-weight: 700; color: var(--slate); border-bottom: 2px solid transparent;
+    transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .chat-tab:hover { color: var(--char); }
+  .chat-tab.active { color: var(--g); border-bottom-color: var(--g); }
+
+  .chat-pane { display: none; flex: 1; min-height: 0; flex-direction: column; }
+  .chat-pane.visible { display: flex; }
+
+  .chat-log { flex: 1; overflow-y: auto; padding: 18px 18px 8px; background: var(--paper); }
+  .chat-msg { display: flex; gap: 8px; margin-bottom: 12px; align-items: flex-end; }
+  .chat-msg.me { flex-direction: row-reverse; }
+  .chat-bubble-icon {
+    width: 26px; height: 26px; border-radius: 999px; background: var(--g); color: var(--sw); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+  }
+  .chat-bubble {
+    max-width: 78%; padding: 11px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.65;
+    background: #fff; color: var(--ink); border: 1px solid var(--border); border-bottom-left-radius: 5px;
+    word-break: keep-all; white-space: pre-line;
+  }
+  .chat-msg.me .chat-bubble {
+    background: var(--g); color: var(--sw); border-color: var(--g);
+    border-bottom-left-radius: 16px; border-bottom-right-radius: 5px;
+  }
+  .chat-bubble b { color: var(--g); font-weight: 800; }
+  .chat-msg.me .chat-bubble b { color: #D9F27E; }
+  .chat-bubble a { color: var(--g); font-weight: 700; }
+  .chat-time { font-size: 10px; color: var(--slate); align-self: flex-end; flex-shrink: 0; }
+
+  .chat-typing { display: flex; gap: 4px; padding: 13px 15px; }
+  .chat-typing span { width: 7px; height: 7px; border-radius: 999px; background: var(--mist); animation: pulse-dot 900ms var(--ease-out) infinite; }
+  .chat-typing span:nth-child(2) { animation-delay: 150ms; }
+  .chat-typing span:nth-child(3) { animation-delay: 300ms; }
+
+  .chat-actions { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 12px 34px; }
+  .chat-action {
+    border: 1.5px solid var(--g); background: #fff; color: var(--g); font-family: var(--kr); font-size: 12px;
+    font-weight: 700; padding: 7px 13px; border-radius: var(--r-pill); cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .chat-action:hover { background: rgba(0,97,78,.08); }
+
+  .chat-quick {
+    display: flex; gap: 6px; padding: 10px 14px; overflow-x: auto; flex-shrink: 0;
+    border-top: 1px solid var(--div); background: #fff; -webkit-overflow-scrolling: touch;
+  }
+  .chat-quick::-webkit-scrollbar { height: 0; }
+  .chat-chip {
+    flex-shrink: 0; border: 1px solid var(--border); background: var(--paper); color: var(--char);
+    font-family: var(--kr); font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: var(--r-pill);
+    cursor: pointer; white-space: nowrap; transition: all var(--dur-fast) var(--ease-out);
+  }
+  .chat-chip:hover { background: var(--g); color: var(--sw); border-color: var(--g); }
+
+  .chat-inputbar { display: flex; gap: 8px; padding: 12px 14px 14px; border-top: 1px solid var(--div); flex-shrink: 0; background: #fff; }
+  .chat-inputbar input {
+    flex: 1; min-width: 0; border: 1.5px solid var(--border); border-radius: var(--r-pill); padding: 11px 16px;
+    font-family: var(--kr); font-size: 13.5px; color: var(--ink); outline: none;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .chat-inputbar input:focus { border-color: var(--g); }
+  .chat-send {
+    width: 42px; height: 42px; border-radius: 999px; border: none; background: var(--g); color: var(--sw);
+    cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .chat-send:hover { background: var(--g2); }
+  .chat-send .icon { width: 19px; height: 19px; }
+
+  /* CS pane */
+  .cs-body { flex: 1; overflow-y: auto; padding: 18px; background: var(--paper); }
+  .cs-card {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); padding: 15px 16px;
+    display: flex; align-items: center; gap: 13px; margin-bottom: 10px; text-decoration: none; color: inherit;
+    transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .cs-card:hover { border-color: var(--g); transform: translateY(-1px); }
+  .cs-icon {
+    width: 38px; height: 38px; border-radius: var(--r-sm); background: rgba(0,97,78,.08); color: var(--g);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .cs-card-main { flex: 1; min-width: 0; }
+  .cs-card-title { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .cs-card-desc { font-size: 11.5px; color: var(--slate); margin-top: 3px; line-height: 1.5; word-break: keep-all; }
+  .cs-status {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700;
+    padding: 5px 11px; border-radius: var(--r-pill); margin-bottom: 14px;
+  }
+  .cs-status.on { background: rgba(132,186,69,.18); color: #4C7A18; }
+  .cs-status.off { background: rgba(107,117,113,.14); color: var(--slate); }
+  .cs-status.off .chat-live-dot { background: var(--mist); }
+
+  .cs-form-title { font-size: 13px; font-weight: 800; color: var(--ink); margin: 20px 0 4px; }
+  .cs-form-sub { font-size: 11.5px; color: var(--slate); margin-bottom: 14px; word-break: keep-all; line-height: 1.55; }
+  .cs-field { margin-bottom: 11px; }
+  .cs-field label { display: block; font-size: 11.5px; font-weight: 700; color: var(--char); margin-bottom: 5px; }
+  .cs-field input, .cs-field select, .cs-field textarea {
+    width: 100%; border: 1.5px solid var(--border); border-radius: var(--r-sm); padding: 10px 12px;
+    font-family: var(--kr); font-size: 13px; color: var(--ink); background: #fff; outline: none;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .cs-field textarea { min-height: 84px; resize: vertical; line-height: 1.6; }
+  .cs-field input:focus, .cs-field select:focus, .cs-field textarea:focus { border-color: var(--g); }
+  .cs-field .cs-err { display: none; font-size: 11px; color: var(--red); margin-top: 4px; }
+  .cs-field.invalid input, .cs-field.invalid select, .cs-field.invalid textarea { border-color: var(--red); }
+  .cs-field.invalid .cs-err { display: block; }
+  .cs-privacy { font-size: 10.5px; color: var(--slate); line-height: 1.6; margin: 10px 0 14px; word-break: keep-all; }
+  .cs-done {
+    background: rgba(0,97,78,.06); border: 1.5px dashed var(--g); border-radius: var(--r-md);
+    padding: 20px 18px; text-align: center; margin-bottom: 12px;
+  }
+  .cs-done-emoji { font-size: 32px; margin-bottom: 8px; }
+  .cs-done-title { font-size: 14px; font-weight: 800; color: var(--g); }
+  .cs-done-desc { font-size: 12px; color: var(--char); margin-top: 7px; line-height: 1.6; word-break: keep-all; }
+  .cs-ticket { font-family: var(--en); font-weight: 800; font-size: 13px; color: var(--ink); background: #fff; border-radius: var(--r-sm); padding: 8px 12px; display: inline-block; margin-top: 10px; letter-spacing: .04em; }
 </style>
 </head>
 <body>
@@ -443,6 +820,7 @@
       <nav class="nav-links">
         <a href="#shop">전체 상품</a>
         <a href="#week-game">7일 식단 게임</a>
+        <a href="#wellness">30일 챌린지</a>
         <a href="#brand">브랜드</a>
       </nav>
       <div class="nav-actions">
@@ -469,6 +847,7 @@
       <div class="hero-ctas">
         <a class="btn btn-primary" href="#shop">전체 상품 보러가기</a>
         <a class="btn btn-secondary" href="#week-game">7일 식단 뽑기</a>
+        <button class="btn btn-secondary" type="button" onclick="SB.openChallenge()">🌱 30일 챌린지 참여</button>
       </div>
       <div class="hero-badges">
         <span class="badge badge-soft">저당</span>
@@ -592,6 +971,57 @@
     </div>
   </section>
 
+  <!-- ===== 30-Day Wellness Life Challenge ===== -->
+  <section id="wellness" class="section">
+    <div class="wrap">
+      <div class="section-eyebrow">Challenge · 30 Days</div>
+      <h2 class="section-title">30일 웰니스 라이프 챌린지</h2>
+      <p class="wl-hero-quote word-keep">
+        내일의 나는 오늘의 작은 습관에서 시작되니까.
+        <small>30일 동안, 나를 위한 습관 하나씩.</small>
+      </p>
+
+      <div class="wl-panel">
+        <div class="wl-panel-card">
+          <div class="wl-panel-title">나의 밸런스 현황</div>
+          <div class="wl-panel-sub word-keep">매일 랜덤으로 등장하는 3개의 미션을 완료하면 밸런스 게이지가 차올라요.</div>
+
+          <div class="wl-stats">
+            <div class="wl-stat">
+              <div class="wl-stat-val" data-wl-stat="day">1</div>
+              <div class="wl-stat-label">진행 DAY</div>
+            </div>
+            <div class="wl-stat">
+              <div class="wl-stat-val" data-wl-stat="streak">0</div>
+              <div class="wl-stat-label">연속 달성</div>
+            </div>
+            <div class="wl-stat">
+              <div class="wl-stat-val" data-wl-stat="cleared">0</div>
+              <div class="wl-stat-label">누적 달성일</div>
+            </div>
+          </div>
+
+          <div class="wl-gauges" data-wl-gauges></div>
+
+          <div class="wl-panel-title" style="margin:20px 0 10px;">30일의 기록</div>
+          <div class="wl-daygrid" data-wl-daygrid></div>
+
+          <div class="wl-cta-row" style="margin-top:18px;">
+            <button class="btn btn-primary" type="button" onclick="SB.openChallenge()">오늘의 미션 열기</button>
+            <button class="btn btn-secondary" type="button" onclick="SB.openCoupons()">리워드 확인</button>
+          </div>
+        </div>
+
+        <div class="wl-panel-card">
+          <div class="wl-panel-title">30일 리워드 로드맵</div>
+          <div class="wl-panel-sub word-keep">습관이 쌓일수록 혜택도 함께 쌓여요. 달성하면 쿠폰함에 자동으로 들어갑니다.</div>
+          <div class="wl-rewards" data-wl-rewards></div>
+          <p class="wl-note" style="margin-top:16px;">🥗 30일의 습관을 완성하면 새로운 샐러드를 증정해드려요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== Brand ===== -->
   <section id="brand" class="section">
     <div class="wrap">
@@ -641,7 +1071,9 @@
       <a href="#shop">전체 상품</a>
       <a href="#" onclick="SB.openCoupons(); return false;">쿠폰함</a>
       <a href="#" onclick="SB.openCart(); return false;">장바구니</a>
+      <a href="#wellness">30일 챌린지</a>
       <a href="#brand">브랜드 소개</a>
+      <a href="#" onclick="SB.openCustomerCenter(); return false;">고객센터 · 1:1 문의</a>
     </div>
     <div>© 2026 SweetBalance. All rights reserved.</div>
     <div class="foot-info">고객센터 1522-0390 · 평일 09:00–17:00 (점심 12:00–13:00) · 이 페이지는 데모용 쇼핑몰 UI입니다.</div>
@@ -672,6 +1104,203 @@
       </button>
     </div>
     <div class="drawer-body" id="couponBody"></div>
+  </div>
+
+  <!-- ===== Wellness Challenge: intro popup ===== -->
+  <div class="wl-pop-overlay" id="wlPopup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wlPopTitle">
+    <div class="wl-pop">
+      <button class="wl-pop-close" type="button" aria-label="닫기" onclick="SB.closeWellnessPopup()">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="wl-pop-visual">
+        <span class="wl-pop-eyebrow">SWEET BALANCE · 30 DAYS</span>
+        <div class="wl-pop-emoji">🌱</div>
+        <div class="wl-pop-title" id="wlPopTitle">30일 <em>웰니스 라이프</em><br>챌린지</div>
+        <p class="wl-pop-desc word-keep">건강해야 한다가 아니라,<br>조금씩 더 균형 잡아간다는 것.</p>
+      </div>
+      <div class="wl-pop-body">
+        <div class="wl-pop-bullets">
+          <div class="wl-pop-bullet"><span>🎲</span><span>매일 랜덤으로 3개의 미션이 등장해요</span></div>
+          <div class="wl-pop-bullet"><span>📊</span><span>완료하면 EAT · MOVE · REST · MIND 밸런스 게이지가 차올라요</span></div>
+          <div class="wl-pop-bullet"><span>🎁</span><span>7일 · 15일 · 30일마다 스윗밸런스 리워드를 드려요</span></div>
+        </div>
+        <div class="wl-pop-ctas">
+          <button class="btn btn-primary btn-block" type="button" onclick="SB.startChallenge()">챌린지 시작하기</button>
+          <button class="wl-pop-later" type="button" onclick="SB.closeWellnessPopup()">다음에 할게요</button>
+        </div>
+        <div class="wl-pop-hide">
+          <input type="checkbox" id="wlPopHide">
+          <label for="wlPopHide">오늘 하루 이 창을 열지 않기</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Wellness Challenge: mission modal ===== -->
+  <div class="wl-modal" id="wlModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wlModalTitle">
+    <div class="wl-modal-card">
+      <button class="wl-modal-close" type="button" aria-label="닫기" onclick="SB.closeChallenge()">
+        <svg class="icon" style="width:17px;height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="wl-modal-head">
+        <span class="wl-daychip">DAY <b data-wl-stat="day">1</b> / 30</span>
+        <h3 id="wlModalTitle">30일 웰니스 라이프 챌린지</h3>
+        <p class="wl-quote word-keep">내일의 나는 오늘의 작은 습관에서 시작되니까.</p>
+        <p class="wl-quote-sub">30일 동안, 나를 위한 습관 하나씩.</p>
+      </div>
+
+      <div class="wl-modal-body">
+        <div class="wl-summary" id="wlSummary"></div>
+
+        <div class="wl-block">
+          <div class="wl-block-title">
+            <span>오늘의 미션</span>
+            <span class="wl-count" id="wlTodayCount">0 / 3</span>
+          </div>
+          <div class="wl-missions" id="wlMissions"></div>
+        </div>
+
+        <div class="wl-block">
+          <div class="wl-block-title">
+            <span>밸런스 게이지</span>
+            <span class="wl-count">카테고리별 15회 = ●●●●●</span>
+          </div>
+          <div class="wl-gauges" data-wl-gauges></div>
+        </div>
+
+        <div class="wl-block">
+          <div class="wl-block-title">
+            <span>30일의 기록</span>
+            <span class="wl-count"><b data-wl-stat="cleared">0</b> / 30일 달성</span>
+          </div>
+          <div class="wl-daygrid" data-wl-daygrid></div>
+        </div>
+
+        <div class="wl-block">
+          <div class="wl-block-title"><span>리워드 로드맵</span></div>
+          <div class="wl-rewards" data-wl-rewards></div>
+        </div>
+
+        <p class="wl-note">🥗 30일의 습관을 완성하면 새로운 샐러드를 증정해드려요.</p>
+      </div>
+
+      <div class="wl-modal-foot">
+        <button class="wl-demo-link" type="button" onclick="SB.nextDay()">데모: 다음 날로 넘어가기 →</button>
+        <button class="btn btn-primary" type="button" id="wlFinishBtn" onclick="SB.finishDay()">오늘 마무리하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Chatbot & Customer support ===== -->
+  <button class="chat-fab" id="chatFab" type="button" aria-label="문의하기" aria-expanded="false" onclick="SB.toggleChat()">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.3 9.3 0 0 1-2.8-.4L3 21l1.6-4.4A8.2 8.2 0 0 1 3 11.5 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg>
+    <span class="chat-fab-dot" id="chatFabDot"></span>
+  </button>
+
+  <div class="chat-panel" id="chatPanel" aria-hidden="true" role="dialog" aria-label="스윗밸런스 고객 상담">
+    <div class="chat-head">
+      <div class="chat-avatar">🥗</div>
+      <div class="chat-head-main">
+        <div class="chat-head-title">스윗밸런스 상담</div>
+        <div class="chat-head-sub"><span class="chat-live-dot"></span><span id="chatStatusText">챗봇 상담 24시간 운영중</span></div>
+      </div>
+      <button class="chat-close" type="button" aria-label="닫기" onclick="SB.closeChat()">
+        <svg class="icon" style="width:15px;height:15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="chat-tabs">
+      <button class="chat-tab active" type="button" data-chattab="bot" onclick="SB.chatTab('bot')">챗봇 상담</button>
+      <button class="chat-tab" type="button" data-chattab="cs" onclick="SB.chatTab('cs')">고객센터 연결</button>
+    </div>
+
+    <!-- Bot pane -->
+    <div class="chat-pane visible" data-pane="bot">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-quick" id="chatQuick"></div>
+      <form class="chat-inputbar" id="chatForm" autocomplete="off">
+        <input type="text" id="chatInput" placeholder="궁금한 점을 입력해 주세요" aria-label="문의 내용 입력">
+        <button class="chat-send" type="submit" aria-label="보내기">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Customer center pane -->
+    <div class="chat-pane" data-pane="cs">
+      <div class="cs-body">
+        <div class="cs-status" id="csStatus">
+          <span class="chat-live-dot"></span><span id="csStatusLabel">상담 가능 시간 확인중</span>
+        </div>
+
+        <a class="cs-card" href="tel:1522-0390">
+          <div class="cs-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.8.6 2.8.8a2 2 0 0 1 1.7 2Z"/></svg>
+          </div>
+          <div class="cs-card-main">
+            <div class="cs-card-title">전화 상담 1522-0390</div>
+            <div class="cs-card-desc">평일 09:00–17:00 (점심 12:00–13:00) · 주말·공휴일 휴무</div>
+          </div>
+        </a>
+
+        <button class="cs-card" type="button" style="width:100%;text-align:left;" onclick="SB.chatTab('bot')">
+          <div class="cs-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.3 9.3 0 0 1-2.8-.4L3 21l1.6-4.4A8.2 8.2 0 0 1 3 11.5 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+          </div>
+          <div class="cs-card-main">
+            <div class="cs-card-title">챗봇 상담 (24시간)</div>
+            <div class="cs-card-desc">배송·주문·쿠폰·챌린지 문의는 챗봇이 바로 답해드려요.</div>
+          </div>
+        </button>
+
+        <a class="cs-card" href="mailto:help@sweetbalance.kr">
+          <div class="cs-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          </div>
+          <div class="cs-card-main">
+            <div class="cs-card-title">이메일 문의 help@sweetbalance.kr</div>
+            <div class="cs-card-desc">영업일 기준 24시간 이내 답변드려요.</div>
+          </div>
+        </a>
+
+        <div class="cs-form-title">1:1 문의 남기기</div>
+        <div class="cs-form-sub word-keep">상담 시간이 아니어도 괜찮아요. 남겨주시면 영업일 기준 1일 이내에 답변드릴게요.</div>
+
+        <form id="csForm" autocomplete="off">
+          <div class="cs-field" id="csFieldName">
+            <label for="csName">이름</label>
+            <input type="text" id="csName" placeholder="홍길동">
+            <div class="cs-err">이름을 입력해 주세요.</div>
+          </div>
+          <div class="cs-field" id="csFieldEmail">
+            <label for="csEmail">답변받을 이메일</label>
+            <input type="email" id="csEmail" placeholder="name@example.com">
+            <div class="cs-err">이메일 형식을 확인해 주세요.</div>
+          </div>
+          <div class="cs-field" id="csFieldType">
+            <label for="csType">문의 유형</label>
+            <select id="csType">
+              <option value="">선택해 주세요</option>
+              <option>배송 문의</option>
+              <option>주문 · 결제</option>
+              <option>교환 · 환불</option>
+              <option>상품 · 영양성분</option>
+              <option>쿠폰 · 리워드</option>
+              <option>30일 웰니스 챌린지</option>
+              <option>기타 문의</option>
+            </select>
+            <div class="cs-err">문의 유형을 선택해 주세요.</div>
+          </div>
+          <div class="cs-field" id="csFieldMsg">
+            <label for="csMsg">문의 내용</label>
+            <textarea id="csMsg" placeholder="어떤 점이 궁금하신가요?"></textarea>
+            <div class="cs-err">문의 내용을 10자 이상 입력해 주세요.</div>
+          </div>
+          <p class="cs-privacy">문의 답변을 위해 이름과 이메일을 수집합니다. 이 페이지는 데모용이라 입력 내용은 서버로 전송되지 않고 브라우저에만 저장돼요.</p>
+          <button class="btn btn-primary btn-block" type="submit">문의 접수하기</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- ===== Toast ===== -->
@@ -729,7 +1358,10 @@
       { id: 'welcome10', title: '신규 회원 10% 할인', desc: '전 상품 10% 할인 (최대 5,000원 할인)', minOrder: 10000, type: 'percent', value: 10, cap: 5000 },
       { id: 'first3000', title: '첫 구매 3,000원 즉시할인', desc: '첫 구매 시 주문금액에서 바로 할인돼요', minOrder: 15000, type: 'amount', value: 3000 },
       { id: 'freeship', title: '무료배송 쿠폰', desc: '배송비 3,000원이 무료가 돼요', minOrder: 20000, type: 'freeship', value: 3000 },
-      { id: 'sub5000', title: '정기구독 5,000원 할인', desc: '정기구독 상품 구매 시 5,000원 할인', minOrder: 50000, type: 'amount', value: 5000 }
+      { id: 'sub5000', title: '정기구독 5,000원 할인', desc: '정기구독 상품 구매 시 5,000원 할인', minOrder: 50000, type: 'amount', value: 5000 },
+      { id: 'wellness7', title: '7일 연속 달성 쿠폰', desc: '웰니스 챌린지 7일 연속 달성 리워드 · 전 상품 15% 할인 (최대 6,000원)', minOrder: 15000, type: 'percent', value: 15, cap: 6000, lock: true, lockText: '챌린지 7일 연속 달성 시 오픈' },
+      { id: 'wellness15', title: '신제품 체험권', desc: '웰니스 챌린지 15일 달성 리워드 · 6,900원 즉시할인', minOrder: 20000, type: 'amount', value: 6900, lock: true, lockText: '챌린지 15일 달성 시 오픈' },
+      { id: 'wellness30', title: '웰니스 마스터 리워드', desc: '30일 완주 인증 · 새로운 샐러드 증정 (9,900원 즉시할인)', minOrder: 0, type: 'amount', value: 9900, lock: true, lockText: '챌린지 30일 달성 시 오픈' }
     ];
 
     var SHIP_FEE = 3000;
@@ -748,6 +1380,15 @@
         claimed = JSON.parse(localStorage.getItem('sb_coupons') || '[]');
         appliedCoupon = localStorage.getItem('sb_applied_coupon') || null;
         wished = JSON.parse(localStorage.getItem('sb_wished') || '{}');
+        var w = JSON.parse(localStorage.getItem('sb_wellness') || 'null');
+        if (w && typeof w === 'object') {
+          wellness = {
+            start: w.start || 0,
+            offset: w.offset || 0,
+            log: (w.log && typeof w.log === 'object') ? w.log : {},
+            rewards: Array.isArray(w.rewards) ? w.rewards : []
+          };
+        }
       } catch (e) { cart = {}; claimed = []; appliedCoupon = null; wished = {}; }
     }
     function saveState() {
@@ -756,6 +1397,7 @@
         localStorage.setItem('sb_coupons', JSON.stringify(claimed));
         localStorage.setItem('sb_applied_coupon', appliedCoupon || '');
         localStorage.setItem('sb_wished', JSON.stringify(wished));
+        localStorage.setItem('sb_wellness', JSON.stringify(wellness));
       } catch (e) { /* storage unavailable */ }
     }
 
@@ -1005,15 +1647,18 @@
       var body = document.getElementById('couponBody');
       body.innerHTML = COUPONS.map(function (c) {
         var isClaimed = claimed.indexOf(c.id) !== -1;
+        var locked = !!c.lock && !isRewardUnlocked(c.id);
         return (
           '<div class="coupon-card">' +
             '<div>' +
-              '<div class="coupon-card-title">' + c.title + '</div>' +
+              '<div class="coupon-card-title">' + (c.lock ? '🏅 ' : '') + c.title + '</div>' +
               '<div class="coupon-card-desc word-keep">' + c.desc + '</div>' +
-              '<div class="coupon-card-min">' + formatWon(c.minOrder) + ' 이상 구매 시</div>' +
+              (locked
+                ? '<div class="coupon-card-min" style="color:var(--slate);">🔒 ' + c.lockText + '</div>'
+                : '<div class="coupon-card-min">' + (c.minOrder > 0 ? formatWon(c.minOrder) + ' 이상 구매 시' : '최소 주문금액 없음') + '</div>') +
             '</div>' +
-            '<button class="claim-btn' + (isClaimed ? ' claimed' : '') + '" type="button" data-claim="' + c.id + '"' + (isClaimed ? ' disabled' : '') + '>' +
-              (isClaimed ? '받음' : '받기') +
+            '<button class="claim-btn' + ((isClaimed || locked) ? ' claimed' : '') + '" type="button" data-claim="' + c.id + '"' + ((isClaimed || locked) ? ' disabled' : '') + '>' +
+              (isClaimed ? '받음' : (locked ? '잠김' : '받기')) +
             '</button>' +
           '</div>'
         );
@@ -1208,16 +1853,671 @@
       showScreen('intro');
     }
 
+    /* ===================== 30-Day Wellness Life Challenge ===================== */
+    var MISSIONS = {
+      EAT:  { emoji: '🥦', label: 'EAT',  items: ['오늘 채소 먹기', '단백질 챙기기', '과일 먹기'] },
+      MOVE: { emoji: '🚶', label: 'MOVE', items: ['10분 걷기', '스트레칭하기', '계단 이용하기'] },
+      REST: { emoji: '💧', label: 'REST', items: ['물 한 잔 마시기', '7시간 자기', '자기 전 휴대폰 내려놓기'] },
+      MIND: { emoji: '🌿', label: 'MIND', items: ['5분 쉬기', '오늘 좋았던 일 하나 적기', '나에게 좋은 말 해주기'] }
+    };
+    var CAT_KEYS = ['EAT', 'MOVE', 'REST', 'MIND'];
+    var TOTAL_DAYS = 30;
+    var MISSIONS_PER_DAY = 3;
+    var DOTS_PER_GAUGE = 5;
+    var COMPLETIONS_PER_DOT = 3;
+
+    var REWARDS = [
+      { id: 'wellness7',  goal: 7,  metric: 'streak',  medal: '🥉', day: 'DAY 7',  title: '7일 연속 달성', desc: '스윗밸런스 15% 할인 쿠폰' },
+      { id: 'wellness15', goal: 15, metric: 'cleared', medal: '🥈', day: 'DAY 15', title: '15일 달성',     desc: '신제품 체험권 (6,900원 상당)' },
+      { id: 'wellness30', goal: 30, metric: 'cleared', medal: '🏆', day: 'DAY 30', title: '30일 달성',     desc: '웰니스 마스터 인증 + 새로운 샐러드 증정' }
+    ];
+
+    var wellness = { start: 0, offset: 0, log: {}, rewards: [] };
+
+    function midnightNow() {
+      var d = new Date();
+      d.setHours(0, 0, 0, 0);
+      return d.getTime();
+    }
+
+    function currentDay() {
+      if (!wellness.start) return 0;
+      var diff = Math.floor((midnightNow() - wellness.start) / 86400000);
+      return Math.max(0, Math.min(TOTAL_DAYS - 1, diff + (wellness.offset || 0)));
+    }
+
+    /* deterministic pseudo-random so the same day always shows the same missions */
+    function seeded(n) {
+      var x = Math.sin(n * 9301 + 49297) * 233280;
+      return x - Math.floor(x);
+    }
+
+    function missionsForDay(day) {
+      var cats = CAT_KEYS.slice();
+      for (var i = cats.length - 1; i > 0; i--) {
+        var j = Math.floor(seeded(day * 17 + i * 3 + 1) * (i + 1));
+        var tmp = cats[i]; cats[i] = cats[j]; cats[j] = tmp;
+      }
+      return cats.slice(0, MISSIONS_PER_DAY).map(function (cat, k) {
+        var items = MISSIONS[cat].items;
+        var idx = Math.floor(seeded(day * 31 + k * 7 + 5) * items.length) % items.length;
+        return { cat: cat, idx: idx, id: cat + ':' + idx, text: items[idx], emoji: MISSIONS[cat].emoji };
+      });
+    }
+
+    function doneList(day) { return wellness.log[day] || []; }
+
+    function tally() {
+      var counts = { EAT: 0, MOVE: 0, REST: 0, MIND: 0 };
+      var clearedSet = {}, cleared = 0, total = 0;
+      Object.keys(wellness.log).forEach(function (k) {
+        var arr = wellness.log[k] || [];
+        arr.forEach(function (id) {
+          var cat = id.split(':')[0];
+          if (counts[cat] !== undefined) counts[cat]++;
+          total++;
+        });
+        if (arr.length >= MISSIONS_PER_DAY) { clearedSet[parseInt(k, 10)] = true; cleared++; }
+      });
+
+      var today = currentDay();
+      var probe = clearedSet[today] ? today : today - 1;
+      var streak = 0;
+      while (probe >= 0 && clearedSet[probe]) { streak++; probe--; }
+
+      var best = 0, run = 0;
+      for (var d = 0; d < TOTAL_DAYS; d++) {
+        if (clearedSet[d]) { run++; if (run > best) best = run; } else { run = 0; }
+      }
+
+      return { counts: counts, cleared: cleared, clearedSet: clearedSet, total: total, streak: streak, best: best };
+    }
+
+    function rewardProgress(reward, t) {
+      return reward.metric === 'streak' ? t.best : t.cleared;
+    }
+
+    function isRewardUnlocked(id) {
+      var reward = REWARDS.filter(function (r) { return r.id === id; })[0];
+      if (!reward) return true;
+      return rewardProgress(reward, tally()) >= reward.goal;
+    }
+
+    function grantRewards() {
+      var t = tally();
+      REWARDS.forEach(function (r) {
+        if (wellness.rewards.indexOf(r.id) !== -1) return;
+        if (rewardProgress(r, t) < r.goal) return;
+        wellness.rewards.push(r.id);
+        if (claimed.indexOf(r.id) === -1) claimed.push(r.id);
+        saveState();
+        updateBadges();
+        renderCoupons();
+        showToast(r.medal + ' ' + r.title + '! ' + r.desc + '을(를) 드렸어요.', '쿠폰함 보기', openCoupons);
+      });
+    }
+
+    /* ---------- rendering ---------- */
+    function renderMissions() {
+      var box = document.getElementById('wlMissions');
+      if (!box) return;
+      var day = currentDay();
+      var list = missionsForDay(day);
+      var done = doneList(day);
+
+      box.innerHTML = list.map(function (m) {
+        var isDone = done.indexOf(m.id) !== -1;
+        return (
+          '<button class="wl-mission' + (isDone ? ' done' : '') + '" type="button" data-mission="' + m.id + '" aria-pressed="' + isDone + '">' +
+            '<span class="wl-mission-check">✓</span>' +
+            '<span class="wl-mission-main">' +
+              '<span class="wl-mission-cat">' + MISSIONS[m.cat].label + '</span>' +
+              '<span class="wl-mission-label">' + m.text + '</span>' +
+            '</span>' +
+            '<span class="wl-mission-emoji">' + m.emoji + '</span>' +
+          '</button>'
+        );
+      }).join('');
+
+      box.querySelectorAll('[data-mission]').forEach(function (btn) {
+        btn.addEventListener('click', function () { toggleMission(btn.getAttribute('data-mission')); });
+      });
+
+      var counter = document.getElementById('wlTodayCount');
+      if (counter) counter.textContent = done.length + ' / ' + MISSIONS_PER_DAY;
+    }
+
+    function renderGauges() {
+      var t = tally();
+      document.querySelectorAll('[data-wl-gauges]').forEach(function (box) {
+        box.innerHTML = CAT_KEYS.map(function (cat) {
+          var count = t.counts[cat];
+          var filled = Math.min(DOTS_PER_GAUGE, Math.ceil(count / COMPLETIONS_PER_DOT));
+          var dots = '';
+          for (var i = 0; i < DOTS_PER_GAUGE; i++) {
+            dots += '<span class="wl-gauge-dot' + (i < filled ? ' on' : '') + '"></span>';
+          }
+          return (
+            '<div class="wl-gauge">' +
+              '<span class="wl-gauge-name">' + MISSIONS[cat].emoji + ' ' + MISSIONS[cat].label + '</span>' +
+              '<span class="wl-gauge-dots">' + dots + '</span>' +
+              '<span class="wl-gauge-val">' + count + '회</span>' +
+            '</div>'
+          );
+        }).join('');
+      });
+    }
+
+    function renderDayGrid() {
+      var today = currentDay();
+      var html = '';
+      for (var d = 0; d < TOTAL_DAYS; d++) {
+        var n = doneList(d).length;
+        var cls = n >= MISSIONS_PER_DAY ? 'full' : (n > 0 ? 'part' : '');
+        html += '<span class="wl-daybox ' + cls + (d === today ? ' today' : '') + '" title="DAY ' + (d + 1) + ' · ' + n + '/' + MISSIONS_PER_DAY + '"></span>';
+      }
+      document.querySelectorAll('[data-wl-daygrid]').forEach(function (grid) { grid.innerHTML = html; });
+    }
+
+    function renderRewards() {
+      var t = tally();
+      document.querySelectorAll('[data-wl-rewards]').forEach(function (box) {
+        box.innerHTML = REWARDS.map(function (r) {
+          var prog = rewardProgress(r, t);
+          var unlocked = prog >= r.goal;
+          var pct = Math.min(100, Math.round(prog / r.goal * 100));
+          return (
+            '<div class="wl-reward' + (unlocked ? ' unlocked' : '') + '">' +
+              '<span class="wl-reward-medal">' + r.medal + '</span>' +
+              '<span class="wl-reward-main">' +
+                '<span class="wl-reward-day">' + r.day + '</span>' +
+                '<span class="wl-reward-title">' + r.title + '</span>' +
+                '<span class="wl-reward-desc">' + r.desc + '</span>' +
+                '<span class="wl-reward-prog"><i style="width:' + pct + '%"></i></span>' +
+              '</span>' +
+              '<span class="wl-reward-state">' + (unlocked ? 'OPEN' : prog + '/' + r.goal) + '</span>' +
+            '</div>'
+          );
+        }).join('');
+      });
+    }
+
+    function renderStats() {
+      var t = tally();
+      var vals = { day: currentDay() + 1, streak: t.streak, cleared: t.cleared };
+      document.querySelectorAll('[data-wl-stat]').forEach(function (el) {
+        var key = el.getAttribute('data-wl-stat');
+        if (vals[key] !== undefined) el.textContent = vals[key];
+      });
+    }
+
+    function renderWellness() {
+      renderMissions();
+      renderGauges();
+      renderDayGrid();
+      renderRewards();
+      renderStats();
+    }
+
+    function toggleMission(id) {
+      var day = currentDay();
+      var done = doneList(day).slice();
+      var at = done.indexOf(id);
+      var justCompleted = at === -1;
+
+      if (justCompleted) done.push(id); else done.splice(at, 1);
+      wellness.log[day] = done;
+      saveState();
+      renderWellness();
+      grantRewards();
+
+      if (justCompleted && done.length >= MISSIONS_PER_DAY) {
+        showDaySummary();
+      } else if (justCompleted) {
+        var cat = id.split(':')[0];
+        showToast(MISSIONS[cat].emoji + ' ' + MISSIONS[cat].label + ' 밸런스가 한 칸 채워졌어요.');
+      } else {
+        hideDaySummary();
+      }
+    }
+
+    function hideDaySummary() {
+      var box = document.getElementById('wlSummary');
+      if (box) box.classList.remove('show');
+    }
+
+    function showDaySummary() {
+      var box = document.getElementById('wlSummary');
+      if (!box) return;
+
+      var day = currentDay();
+      var done = doneList(day).length;
+      var pct = Math.round(done / MISSIONS_PER_DAY * 100);
+
+      var head, msg;
+      if (pct >= 100) {
+        head = '오늘의 세 칸, 모두 채웠어요.';
+        msg = '어제보다 조금 더 균형 잡힌 하루였어요.\n내일도 이 리듬 그대로 이어가요.';
+      } else if (pct > 0) {
+        head = '오늘도 한 칸 채웠어요.';
+        msg = '완벽하지 않아도 괜찮아요.\n내일 한 칸 더 채워봐요.';
+      } else {
+        head = '아직 오늘의 칸이 비어 있어요.';
+        msg = '괜찮아요. 물 한 잔 마시기부터 가볍게 시작해봐요.';
+      }
+
+      box.innerHTML =
+        '<div class="wl-summary-card">' +
+          '<div class="wl-summary-pct">' + pct + '%</div>' +
+          '<div class="wl-summary-head">오늘의 밸런스 ' + pct + '% 완성!</div>' +
+          '<div class="wl-summary-msg">' + head + '\n' + msg + '</div>' +
+          '<div class="wl-summary-bar"><i></i></div>' +
+        '</div>';
+      box.classList.add('show');
+
+      var bar = box.querySelector('.wl-summary-bar i');
+      setTimeout(function () { if (bar) bar.style.width = pct + '%'; }, 60);
+    }
+
+    function finishDay() {
+      showDaySummary();
+      grantRewards();
+      var body = document.querySelector('.wl-modal-body');
+      if (body) body.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextDay() {
+      if (currentDay() >= TOTAL_DAYS - 1) {
+        showToast('30일 챌린지의 마지막 날이에요. 끝까지 함께해줘서 고마워요 🌱');
+        return;
+      }
+      wellness.offset = (wellness.offset || 0) + 1;
+      saveState();
+      hideDaySummary();
+      renderWellness();
+      showToast('DAY ' + (currentDay() + 1) + '의 미션이 도착했어요.');
+    }
+
+    /* ---------- popup & modal ---------- */
+    function popupHiddenToday() {
+      try { return localStorage.getItem('sb_wl_popup_hide') === todayStamp(); }
+      catch (e) { return false; }
+    }
+    function todayStamp() {
+      var d = new Date();
+      return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    }
+
+    function openWellnessPopup() {
+      var el = document.getElementById('wlPopup');
+      if (!el) return;
+      el.classList.add('open');
+      el.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeWellnessPopup() {
+      var el = document.getElementById('wlPopup');
+      if (!el) return;
+      var hide = document.getElementById('wlPopHide');
+      if (hide && hide.checked) {
+        try { localStorage.setItem('sb_wl_popup_hide', todayStamp()); } catch (e) { /* noop */ }
+      }
+      el.classList.remove('open');
+      el.setAttribute('aria-hidden', 'true');
+    }
+
+    function openChallenge() {
+      if (!wellness.start) { wellness.start = midnightNow(); saveState(); }
+      hideDaySummary();
+      renderWellness();
+      var el = document.getElementById('wlModal');
+      el.classList.add('open');
+      el.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeChallenge() {
+      var el = document.getElementById('wlModal');
+      el.classList.remove('open');
+      el.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+
+    function startChallenge() {
+      closeWellnessPopup();
+      openChallenge();
+    }
+
+    /* ===================== Chatbot & customer support ===================== */
+    var CS_PHONE = '1522-0390';
+    var BOT_TOPICS = [
+      {
+        key: 'delivery', chip: '🚚 배송 문의',
+        kw: ['배송', '언제', '새벽', '도착', '택배', '발송', '출고', '배달', '주소'],
+        answer: '스윗밸런스는 <b>새벽배송</b>으로 찾아가요 🚚\n· 밤 11시 이전 주문 → 다음 날 아침 7시 이전 도착\n· 배송비 3,000원 / 40,000원 이상 주문 시 무료\n· 주말·공휴일은 지역에 따라 하루 늦어질 수 있어요.',
+        actions: [{ label: '무료배송 쿠폰 받기', fn: 'coupons' }]
+      },
+      {
+        key: 'order', chip: '💳 주문 · 결제',
+        kw: ['주문', '결제', '카드', '취소', '변경', '계좌', '간편결제', '영수증', '현금'],
+        answer: '주문은 장바구니에 담고 결제하면 끝이에요.\n· 신용카드 · 간편결제 · 계좌이체 모두 가능해요\n· 주문 변경/취소는 <b>출고 전(밤 11시)</b>까지 가능합니다\n· 결제 후에는 주문내역에서 배송 상태를 확인할 수 있어요.',
+        actions: [{ label: '장바구니 열기', fn: 'cart' }]
+      },
+      {
+        key: 'coupon', chip: '🎟 쿠폰 · 리워드',
+        kw: ['쿠폰', '할인', '적립', '리워드', '프로모션', '이벤트', '무료배송'],
+        answer: '쿠폰함에서 받아둔 쿠폰은 장바구니에서 바로 적용돼요 🎟\n· 신규 회원 10% 할인\n· 첫 구매 3,000원 즉시할인\n· 무료배송 쿠폰\n· 30일 챌린지 리워드 (7 · 15 · 30일)\n쿠폰은 주문 1건당 1장 적용됩니다.',
+        actions: [{ label: '쿠폰함 열기', fn: 'coupons' }]
+      },
+      {
+        key: 'refund', chip: '↩️ 교환 · 환불',
+        kw: ['환불', '교환', '반품', '취소', '하자', '오배송', '상했', '불량'],
+        answer: '신선식품이라 아래 기준으로 도와드려요.\n· <b>상품 하자 · 오배송</b>: 수령 후 24시간 이내 사진과 함께 접수 → 전액 환불 또는 재배송\n· <b>단순 변심</b>: 신선식품 특성상 교환·환불이 어려워요\n· 미개봉 상온 스낵은 수령 후 7일 이내 가능합니다.',
+        actions: [{ label: '1:1 문의 남기기', fn: 'cs' }]
+      },
+      {
+        key: 'product', chip: '🥗 상품 · 영양',
+        kw: ['칼로리', '단백질', '영양', '성분', '알레르기', '저당', '당', '재료', '원산지', '보관', '유통기한'],
+        answer: '스윗밸런스는 숫자를 숨기지 않아요.\n· 모든 메뉴에 칼로리와 단백질을 표기해요\n· 저당 · 고단백 라인은 상품 태그로 확인할 수 있어요\n· 알레르기 유발 성분은 상세 페이지에 표기돼요\n· 1인분 소분 포장이라 보관도 편해요 (냉장 0~10℃, 수령 후 48시간 이내 섭취 권장).',
+        actions: [{ label: '전체 상품 보기', fn: 'shop' }]
+      },
+      {
+        key: 'challenge', chip: '🌱 30일 챌린지',
+        kw: ['챌린지', '미션', '습관', '밸런스', '게이지', '30일', '웰니스', '연속'],
+        answer: '<b>30일 웰니스 라이프 챌린지</b>는 하루 3개의 작은 습관 미션이에요 🌱\n· EAT · MOVE · REST · MIND 네 가지 밸런스\n· 미션을 완료하면 밸런스 게이지가 차올라요\n· 7일 연속 달성 → 스윗밸런스 할인 쿠폰\n· 15일 달성 → 신제품 체험권\n· 30일 달성 → 웰니스 마스터 인증 + 새로운 샐러드 증정',
+        actions: [{ label: '오늘의 미션 열기', fn: 'challenge' }]
+      },
+      {
+        key: 'subscribe', chip: '📦 정기구독',
+        kw: ['구독', '정기', '플랜', '매주', '주기', '해지'],
+        answer: '정기구독은 두 가지가 있어요 📦\n· <b>7일 균형 식단 구독팩</b> 59,000원 (주 7끼)\n· <b>4주 정기구독 플랜</b> 219,000원 (28끼)\n· 배송 요일 변경과 일시정지는 언제든 가능하고, 해지 수수료는 없어요.',
+        actions: [{ label: '구독 상품 보기', fn: 'shop' }]
+      },
+      {
+        key: 'agent', chip: '👩‍💼 상담원 연결',
+        kw: ['상담원', '상담사', '사람', '전화', '고객센터', '연결', '통화'],
+        answer: '상담원에게 연결해드릴게요 👩‍💼\n· 전화 <b>' + CS_PHONE + '</b> (평일 09:00–17:00, 점심 12:00–13:00)\n· 상담 시간이 아니라면 1:1 문의를 남겨주세요. 영업일 기준 1일 이내에 답변드려요.',
+        actions: [{ label: '고객센터 연결', fn: 'cs' }]
+      }
+    ];
+
+    var chatOpen = false;
+    var chatBusy = false;
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function nowLabel() {
+      var d = new Date();
+      return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    }
+
+    function chatScroll() {
+      var log = document.getElementById('chatLog');
+      if (log) log.scrollTop = log.scrollHeight;
+    }
+
+    function pushUser(text) {
+      var log = document.getElementById('chatLog');
+      var el = document.createElement('div');
+      el.className = 'chat-msg me';
+      el.innerHTML = '<div class="chat-bubble">' + escapeHtml(text) + '</div><span class="chat-time">' + nowLabel() + '</span>';
+      log.appendChild(el);
+      chatScroll();
+    }
+
+    function pushBot(html, actions) {
+      var log = document.getElementById('chatLog');
+      var el = document.createElement('div');
+      el.className = 'chat-msg';
+      el.innerHTML = '<div class="chat-bubble-icon">🥗</div><div class="chat-bubble">' + html + '</div><span class="chat-time">' + nowLabel() + '</span>';
+      log.appendChild(el);
+
+      if (actions && actions.length) {
+        var row = document.createElement('div');
+        row.className = 'chat-actions';
+        actions.forEach(function (a) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'chat-action';
+          btn.textContent = a.label;
+          btn.addEventListener('click', function () { runChatAction(a.fn); });
+          row.appendChild(btn);
+        });
+        log.appendChild(row);
+      }
+      chatScroll();
+    }
+
+    function pushTyping() {
+      var log = document.getElementById('chatLog');
+      var el = document.createElement('div');
+      el.className = 'chat-msg';
+      el.id = 'chatTyping';
+      el.innerHTML = '<div class="chat-bubble-icon">🥗</div><div class="chat-bubble chat-typing"><span></span><span></span><span></span></div>';
+      log.appendChild(el);
+      chatScroll();
+    }
+
+    function popTyping() {
+      var el = document.getElementById('chatTyping');
+      if (el) el.parentNode.removeChild(el);
+    }
+
+    function runChatAction(fn) {
+      if (fn === 'cart') { closeChat(); openCart(); }
+      else if (fn === 'coupons') { closeChat(); openCoupons(); }
+      else if (fn === 'challenge') { closeChat(); openChallenge(); }
+      else if (fn === 'shop') { closeChat(); location.hash = '#shop'; }
+      else if (fn === 'cs') { chatTab('cs'); }
+    }
+
+    function matchTopic(text) {
+      var q = text.replace(/\s+/g, '');
+      var best = null, bestScore = 0;
+      BOT_TOPICS.forEach(function (t) {
+        var score = 0;
+        t.kw.forEach(function (k) { if (q.indexOf(k) !== -1) score++; });
+        if (score > bestScore) { bestScore = score; best = t; }
+      });
+      return bestScore > 0 ? best : null;
+    }
+
+    function botReply(text) {
+      if (chatBusy) return;
+      chatBusy = true;
+      pushTyping();
+      setTimeout(function () {
+        popTyping();
+        var topic = matchTopic(text);
+        if (topic) {
+          pushBot(topic.answer.replace(/\n/g, '<br>'), topic.actions);
+        } else {
+          pushBot(
+            '앗, 제가 아직 그 질문은 잘 모르겠어요 🥲<br>아래 주제 중에서 골라주시거나, 상담원에게 연결해드릴게요.',
+            [{ label: '고객센터 연결', fn: 'cs' }]
+          );
+        }
+        chatBusy = false;
+      }, 520);
+    }
+
+    function renderChatQuick() {
+      var box = document.getElementById('chatQuick');
+      box.innerHTML = '';
+      BOT_TOPICS.forEach(function (t) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chat-chip';
+        btn.textContent = t.chip;
+        btn.addEventListener('click', function () {
+          pushUser(t.chip.replace(/^\S+\s/, ''));
+          botReply(t.kw[0]);
+        });
+        box.appendChild(btn);
+      });
+    }
+
+    function csOpenNow() {
+      var d = new Date();
+      var day = d.getDay();
+      var h = d.getHours();
+      if (day === 0 || day === 6) return false;
+      if (h === 12) return false;
+      return h >= 9 && h < 17;
+    }
+
+    function renderCsStatus() {
+      var box = document.getElementById('csStatus');
+      var label = document.getElementById('csStatusLabel');
+      if (!box || !label) return;
+      var open = csOpenNow();
+      box.className = 'cs-status ' + (open ? 'on' : 'off');
+      label.textContent = open ? '지금 상담 가능해요 · 평일 09:00–17:00' : '지금은 상담 시간이 아니에요 · 평일 09:00–17:00';
+    }
+
+    function openChat() {
+      var panel = document.getElementById('chatPanel');
+      panel.classList.add('open');
+      panel.setAttribute('aria-hidden', 'false');
+      document.getElementById('chatFab').classList.add('open');
+      document.getElementById('chatFab').setAttribute('aria-expanded', 'true');
+      chatOpen = true;
+      renderCsStatus();
+
+      var log = document.getElementById('chatLog');
+      if (log && !log.childNodes.length) {
+        pushBot('안녕하세요, 스윗밸런스입니다 🥗<br>무엇을 도와드릴까요?<br>아래 버튼을 누르거나 궁금한 점을 입력해 주세요.');
+      }
+      chatScroll();
+    }
+
+    function closeChat() {
+      var panel = document.getElementById('chatPanel');
+      panel.classList.remove('open');
+      panel.setAttribute('aria-hidden', 'true');
+      document.getElementById('chatFab').classList.remove('open');
+      document.getElementById('chatFab').setAttribute('aria-expanded', 'false');
+      chatOpen = false;
+    }
+
+    function toggleChat() { if (chatOpen) closeChat(); else openChat(); }
+
+    function chatTab(name) {
+      if (!chatOpen) openChat();
+      document.querySelectorAll('.chat-tab').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-chattab') === name);
+      });
+      document.querySelectorAll('.chat-pane').forEach(function (p) {
+        p.classList.toggle('visible', p.getAttribute('data-pane') === name);
+      });
+      document.getElementById('chatStatusText').textContent =
+        name === 'cs' ? '평일 09:00–17:00 상담 운영' : '챗봇 상담 24시간 운영중';
+      if (name === 'cs') renderCsStatus(); else chatScroll();
+    }
+
+    function openCustomerCenter() { openChat(); chatTab('cs'); }
+
+    function ticketNo() {
+      var d = new Date();
+      var p = function (n) { return ('0' + n).slice(-2); };
+      return 'SB' + String(d.getFullYear()).slice(-2) + p(d.getMonth() + 1) + p(d.getDate()) + '-' + String(Math.floor(Math.random() * 900) + 100);
+    }
+
+    function submitInquiry(e) {
+      e.preventDefault();
+      var name = document.getElementById('csName');
+      var email = document.getElementById('csEmail');
+      var type = document.getElementById('csType');
+      var msg = document.getElementById('csMsg');
+
+      var checks = [
+        { field: 'csFieldName', ok: name.value.trim().length > 0 },
+        { field: 'csFieldEmail', ok: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) },
+        { field: 'csFieldType', ok: type.value !== '' },
+        { field: 'csFieldMsg', ok: msg.value.trim().length >= 10 }
+      ];
+      var valid = true;
+      checks.forEach(function (c) {
+        var el = document.getElementById(c.field);
+        el.classList.toggle('invalid', !c.ok);
+        if (!c.ok) valid = false;
+      });
+      if (!valid) return;
+
+      var ticket = ticketNo();
+      try {
+        var saved = JSON.parse(localStorage.getItem('sb_inquiries') || '[]');
+        saved.push({ ticket: ticket, name: name.value.trim(), email: email.value.trim(), type: type.value, message: msg.value.trim(), at: new Date().toISOString() });
+        localStorage.setItem('sb_inquiries', JSON.stringify(saved));
+      } catch (err) { /* storage unavailable */ }
+
+      var form = document.getElementById('csForm');
+      var done = document.createElement('div');
+      done.className = 'cs-done';
+      done.innerHTML =
+        '<div class="cs-done-emoji">✅</div>' +
+        '<div class="cs-done-title">문의가 접수되었어요</div>' +
+        '<div class="cs-done-desc word-keep">' + escapeHtml(name.value.trim()) + '님, 영업일 기준 1일 이내에<br>' + escapeHtml(email.value.trim()) + '으로 답변드릴게요.</div>' +
+        '<div class="cs-ticket">접수번호 ' + ticket + '</div>';
+      form.parentNode.insertBefore(done, form);
+      form.reset();
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('문의가 접수되었어요. 접수번호 ' + ticket);
+    }
+
+    function initWellness() {
+      renderWellness();
+      var modal = document.getElementById('wlModal');
+      if (modal) {
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeChallenge(); });
+      }
+      var pop = document.getElementById('wlPopup');
+      if (pop) {
+        pop.addEventListener('click', function (e) { if (e.target === pop) closeWellnessPopup(); });
+      }
+      grantRewards();
+      if (!popupHiddenToday()) {
+        setTimeout(openWellnessPopup, 1000);
+      }
+    }
+
+    function initChat() {
+      renderChatQuick();
+      renderCsStatus();
+      document.getElementById('chatForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var input = document.getElementById('chatInput');
+        var text = input.value.trim();
+        if (!text) return;
+        pushUser(text);
+        input.value = '';
+        botReply(text);
+      });
+      document.getElementById('csForm').addEventListener('submit', submitInquiry);
+    }
+
     /* ===================== Init ===================== */
     document.addEventListener('DOMContentLoaded', function () {
       loadState();
       renderTabs();
       renderGrid();
       updateBadges();
+      initWellness();
+      initChat();
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeAll();
+      if (e.key !== 'Escape') return;
+      var pop = document.getElementById('wlPopup');
+      var wl = document.getElementById('wlModal');
+      if (pop && pop.classList.contains('open')) { closeWellnessPopup(); return; }
+      if (wl && wl.classList.contains('open')) { closeChallenge(); return; }
+      if (chatOpen) { closeChat(); return; }
+      closeAll();
     });
 
     window.SB = {
@@ -1227,7 +2527,17 @@
       addToCart: addToCart,
       openCart: openCart,
       openCoupons: openCoupons,
-      closeAll: closeAll
+      closeAll: closeAll,
+      openChallenge: openChallenge,
+      closeChallenge: closeChallenge,
+      startChallenge: startChallenge,
+      closeWellnessPopup: closeWellnessPopup,
+      finishDay: finishDay,
+      nextDay: nextDay,
+      toggleChat: toggleChat,
+      closeChat: closeChat,
+      chatTab: chatTab,
+      openCustomerCenter: openCustomerCenter
     };
   })();
   </script>
