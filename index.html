@@ -495,6 +495,8 @@
     background: var(--paper); border: 1px solid var(--border); border-radius: var(--r-md);
     padding: 16px 12px; text-align: center; opacity: 0; transform: translateY(8px);
     transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+    width: 100%; -webkit-appearance: none; appearance: none; font-family: inherit; cursor: default;
+    position: relative; overflow: hidden;
   }
   .day-card.show { opacity: 1; transform: translateY(0); }
   .day-label { font-family: var(--en); font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--seed); text-transform: uppercase; }
@@ -502,6 +504,39 @@
   .day-emoji img { width: 46px; height: 46px; object-fit: cover; border-radius: var(--r-sm); margin: 0 auto; }
   .day-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.45; min-height: 52px; word-break: keep-all; }
   .day-stat { font-size: 10.5px; color: var(--slate); margin-top: 6px; }
+
+  /* 캡슐 뽑기(갓챠) 연출 */
+  .day-card.capsule { cursor: pointer; }
+  .day-card.capsule:hover .capsule-ball { transform: translateY(-3px) rotate(4deg); }
+  .capsule-ball {
+    font-size: 32px; line-height: 1; margin: 12px 0 6px; display: inline-block;
+    animation: capsule-bob 1.6s ease-in-out infinite;
+  }
+  @keyframes capsule-bob {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-5px) rotate(4deg); }
+  }
+  .capsule-hint { font-size: 10.5px; color: var(--slate); font-weight: 600; margin-top: 2px; }
+  .day-card.cracking .capsule-ball { animation: capsule-shake .42s ease-in-out; }
+  @keyframes capsule-shake {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    20% { transform: translateX(-4px) rotate(-8deg); }
+    40% { transform: translateX(4px) rotate(8deg); }
+    60% { transform: translateX(-4px) rotate(-6deg); }
+    80% { transform: translateX(4px) rotate(6deg); }
+  }
+  .day-card.pop { animation: capsule-pop .5s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes capsule-pop {
+    0% { transform: scale(.4) rotate(-6deg); opacity: 0; }
+    60% { transform: scale(1.12) rotate(2deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .day-card.opened::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(255,255,255,0) 70%);
+    animation: capsule-flash .5s ease-out forwards;
+  }
+  @keyframes capsule-flash { 0% { opacity: 1; } 100% { opacity: 0; } }
 
   .game-summary {
     display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 28px;
@@ -1504,9 +1539,9 @@
   <!-- ===== Star feature: Week Meal Game ===== -->
   <section id="week-game" class="section">
     <div class="wrap">
-      <div class="section-eyebrow">Play · 7-Day Meal Game</div>
+      <div class="section-eyebrow">Play · 7-Day Meal Gacha</div>
       <h2 class="section-title">이번 주, 나만의 균형을 뽑아보세요</h2>
-      <p class="section-sub word-keep">3가지 질문에 답하면 7일치 식단을 바로 짜드려요. 자취생의 냉장고 고민, 오늘로 끝.</p>
+      <p class="section-sub word-keep">3가지 질문에 답하면 7일치 메뉴 캡슐이 준비돼요. 캡슐을 하나씩 뽑아 이번 주 균형을 확인해보세요.</p>
 
       <div class="game-card">
         <div class="game-progress" id="gameProgress">
@@ -1518,10 +1553,10 @@
         <!-- Intro -->
         <div class="game-screen visible" data-screen="intro">
           <div class="game-intro">
-            <div class="game-icon">🗓️</div>
-            <h3>7일 균형 식단, 30초면 뽑혀요</h3>
-            <p class="word-keep">오늘 컨디션, 좋아하는 맛, 이번 주 목표만 알려주시면<br>스윗밸런스 메뉴로 월~일 식단을 짜드릴게요.</p>
-            <button class="btn btn-primary" type="button" onclick="SB.startGame()">식단 뽑으러 가기</button>
+            <div class="game-icon">🎁</div>
+            <h3>7일 균형 식단, 캡슐 뽑기로 만나요</h3>
+            <p class="word-keep">오늘 컨디션, 좋아하는 맛, 이번 주 목표만 알려주시면<br>스윗밸런스 메뉴로 월~일 캡슐 7개를 채워드릴게요.</p>
+            <button class="btn btn-primary" type="button" onclick="SB.startGame()">캡슐 뽑으러 가기</button>
           </div>
         </div>
 
@@ -1575,11 +1610,12 @@
         <!-- Result -->
         <div class="game-screen" data-screen="result">
           <div class="game-result">
-            <h3>당신의 7일 균형 식단이에요</h3>
-            <div class="result-sub">월요일부터 일요일까지, 매일 다른 균형으로 준비했어요.</div>
+            <h3>당신의 7일 균형 캡슐이 도착했어요</h3>
+            <div class="result-sub">캡슐을 하나씩 탭해서 뽑아보세요. 월요일부터 일요일까지 서로 다른 균형이 들어있어요.</div>
             <div class="week-grid" id="weekGrid"></div>
             <div class="game-summary" id="gameSummary"></div>
             <div class="game-result-ctas">
+              <button class="btn btn-secondary" type="button" id="gachaAllBtn" onclick="SB.gachaOpenAll()">캡슐 한번에 열기</button>
               <button class="btn btn-ghost" type="button" onclick="SB.resetGame()">다시 뽑기</button>
               <a class="btn btn-secondary" href="#shop">전체 메뉴 보러가기</a>
             </div>
@@ -3169,39 +3205,93 @@
       return c ? c.label : '';
     }
 
+    /* 7일 식단 뽑기 = 갓챠 캡슐 연출. 결과 자체는 pickWeek()가 그대로 정하고,
+       화면에는 처음에 닫힌 캡슐 7개만 보여준 뒤 탭할 때마다 하나씩 열어 보여준다. */
+    var gachaWeek = [];   // [{ product, day }] 이번 판에 뽑힌 7일치 결과
+    var gachaOpened = {}; // { dayIndex: true } 이미 연 캡슐
+
     function renderResult() {
       var week = pickWeek();
       var grid = document.getElementById('weekGrid');
       grid.innerHTML = '';
-
-      var byCat = {};
+      gachaWeek = [];
+      gachaOpened = {};
 
       week.forEach(function (id, i) {
         var p = findProduct(id);
         if (!p) return;
-        byCat[p.cat] = (byCat[p.cat] || 0) + 1;
+        gachaWeek[i] = p;
 
+        var card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'day-card capsule';
+        card.setAttribute('data-day', i);
+        card.setAttribute('aria-label', DAY_LABELS[i] + ' 캡슐 뽑기');
+        card.innerHTML =
+          '<div class="day-label">' + DAY_LABELS[i] + '</div>' +
+          '<div class="capsule-ball">🎁</div>' +
+          '<div class="capsule-hint">탭해서 뽑기</div>';
+        card.addEventListener('click', function () { openCapsule(i); });
+        grid.appendChild(card);
+
+        setTimeout(function () { card.classList.add('show'); }, i * 60);
+      });
+
+      document.getElementById('gameSummary').innerHTML = '';
+      var allBtn = document.getElementById('gachaAllBtn');
+      if (allBtn) allBtn.style.display = '';
+    }
+
+    function openCapsule(i) {
+      if (gachaOpened[i] || !gachaWeek[i]) return;
+      var card = document.querySelector('.day-card[data-day="' + i + '"]');
+      if (!card) return;
+      var p = gachaWeek[i];
+      gachaOpened[i] = true;
+      card.classList.add('cracking');
+
+      setTimeout(function () {
         var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
-        var card = document.createElement('div');
-        card.className = 'day-card';
+        card.classList.remove('capsule', 'cracking');
+        card.classList.add('opened', 'pop');
         card.innerHTML =
           '<div class="day-label">' + DAY_LABELS[i] + '</div>' +
           '<div class="day-emoji">' + (isImg ? '<img src="' + p.img + '" alt="' + p.name + '">' : p.img) + '</div>' +
           '<div class="day-name">' + p.name + '</div>' +
           '<div class="day-stat">' + catLabel(p.cat) + '</div>';
-        grid.appendChild(card);
+        updateGachaSummary();
+      }, 420);
+    }
 
-        setTimeout(function () { card.classList.add('show'); }, i * 60);
+    function gachaOpenAll() {
+      gachaWeek.forEach(function (p, i) {
+        if (gachaOpened[i]) return;
+        setTimeout(function () { openCapsule(i); }, i * 260);
+      });
+    }
+
+    function updateGachaSummary() {
+      var byCat = {};
+      var openedCount = 0;
+      gachaWeek.forEach(function (p, i) {
+        if (!gachaOpened[i]) return;
+        openedCount++;
+        byCat[p.cat] = (byCat[p.cat] || 0) + 1;
       });
 
       document.getElementById('gameSummary').innerHTML =
         CATEGORIES.filter(function (c) { return c.key !== 'all' && byCat[c.key]; })
           .map(function (c) { return '<span class="summary-pill">' + c.label + ' ' + byCat[c.key] + '일</span>'; })
           .join('');
+
+      var allBtn = document.getElementById('gachaAllBtn');
+      if (allBtn) allBtn.style.display = openedCount >= gachaWeek.length ? 'none' : '';
     }
 
     function resetGame() {
       answers = [];
+      gachaWeek = [];
+      gachaOpened = {};
       setDots(-1);
       document.querySelectorAll('.option-btn').forEach(function (b) { b.classList.remove('selected'); });
       showScreen('intro');
@@ -4501,6 +4591,7 @@
       startGame: startGame,
       answer: answerGame,
       resetGame: resetGame,
+      gachaOpenAll: gachaOpenAll,
       addToCart: addToCart,
       openCart: openCart,
       openCoupons: openCoupons,
