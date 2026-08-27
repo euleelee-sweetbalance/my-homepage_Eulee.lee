@@ -1114,6 +1114,15 @@
   }
   .cg-result.show { display: flex; }
   .cg-result-emoji { font-size: 44px; text-align: center; }
+  .cg-result-badge {
+    display: block; width: fit-content; margin: 12px auto 0; font-size: 11px; font-weight: 800;
+    letter-spacing: .1em; padding: 6px 15px; border-radius: var(--r-pill);
+    background: rgba(0,97,78,.1); color: var(--g);
+  }
+  .cg-result.fail .cg-result-badge { background: rgba(214,69,69,.12); color: var(--red); }
+  .cg-result.fail .cg-result-title { color: var(--red); }
+  .cg-result.over .cg-result-badge { background: rgba(196,120,20,.14); color: #B0700F; }
+  .cg-result.over .cg-result-title { color: #B0700F; }
   .cg-result-title { font-size: 19px; font-weight: 800; color: var(--ink); text-align: center; margin-top: 10px; word-break: keep-all; }
   .cg-result-sub { font-size: 12.5px; color: var(--slate); text-align: center; margin-top: 6px; word-break: keep-all; line-height: 1.6; }
   .cg-result-items {
@@ -3251,7 +3260,7 @@
       renderTickets();
 
       var els = cgEls();
-      els.result.classList.remove('show');
+      els.result.className = 'cg-result';
       els.result.innerHTML = '';
       els.overlay.classList.add('open');
       els.overlay.setAttribute('aria-hidden', 'false');
@@ -3320,6 +3329,29 @@
       return after.filter(function (id) { return before.indexOf(id) === -1; });
     }
 
+    /* 4개 이하는 실패, 8개 이상은 영양 과다 - 균형은 알맞게 담는 것 */
+    function cgGrade(n) {
+      if (n <= 4) {
+        return {
+          key: 'fail', emoji: '😢', badge: '실패',
+          title: '재료 ' + n + '개 · 실패!',
+          sub: '한 끼를 차리기엔 재료가 부족했어요.<br>괜찮아요, 다음 기회에 다시 채워봐요.'
+        };
+      }
+      if (n >= 8) {
+        return {
+          key: 'over', emoji: '⚠️', badge: '영양 과다',
+          title: '영양 과다! 주의!',
+          sub: '재료 ' + n + '개를 받았어요. 조금 과했네요.<br>균형은 많이 담는 게 아니라 알맞게 담는 거예요.'
+        };
+      }
+      return {
+        key: 'good', emoji: '🧺', badge: '균형 성공',
+        title: '재료 ' + n + '개 · 완벽한 균형!',
+        sub: '딱 알맞게 담았어요.<br>오늘의 식탁이 조금 더 풍성해졌어요.'
+      };
+    }
+
     function cgFinish() {
       cgStop();
       var newlyCooked = cgCommit();
@@ -3341,14 +3373,14 @@
         );
       }).join('');
 
+      var grade = cgGrade(CG.seq);
+
+      els.result.className = 'cg-result ' + grade.key;
       els.result.innerHTML =
-        (CG.seq > 0
-          ? '<div class="cg-result-emoji">🧺</div>' +
-            '<div class="cg-result-title">재료 ' + CG.seq + '개를 받았어요!</div>' +
-            '<div class="cg-result-sub word-keep">식탁이 조금 더 풍성해졌어요.</div>'
-          : '<div class="cg-result-emoji">🍃</div>' +
-            '<div class="cg-result-title">이번엔 하나도 못 받았네요</div>' +
-            '<div class="cg-result-sub word-keep">괜찮아요. 완벽하지 않아도 돼요.<br>내일 미션을 달성하면 또 기회가 생겨요.</div>') +
+        '<div class="cg-result-emoji">' + grade.emoji + '</div>' +
+        '<div class="cg-result-badge">' + grade.badge + '</div>' +
+        '<div class="cg-result-title">' + grade.title + '</div>' +
+        '<div class="cg-result-sub word-keep">' + grade.sub + '</div>' +
         '<div class="cg-result-items">' + chips + '</div>' +
         cooked +
         '<div class="cg-result-foot">' +
