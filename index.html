@@ -488,6 +488,18 @@
   }
   .br-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.16); }
 
+  /* 브랜드 키비주얼 · 블록 내 사진 */
+  .br-kv { max-width: 900px; margin: 0 auto 60px; border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--sh-lg); }
+  .br-kv img, .br-figure img, .br-line img { width: 100%; height: auto; display: block; }
+  .br-figure { margin-top: 20px; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-md); }
+  .br-figure-cap { font-size: 11.5px; color: rgba(253,255,230,.55); margin-top: 10px; text-align: center; word-break: keep-all; }
+
+  /* 제품 라인 카드 */
+  .br-lines { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 860px) { .br-lines { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 440px) { .br-lines { grid-template-columns: 1fr; } }
+  .br-line { border-radius: var(--r-md); overflow: hidden; box-shadow: var(--sh-md); background: #fff; }
+
   /* mission */
   .br-mission {
     background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
@@ -1516,13 +1528,20 @@
   <section id="brand" class="section">
     <div class="wrap">
       <div class="section-eyebrow">Brand</div>
-      <h2 class="section-title" style="margin-bottom:52px;">스윗밸런스를 소개합니다</h2>
+      <h2 class="section-title" style="margin-bottom:40px;">스윗밸런스를 소개합니다</h2>
+
+      <div class="br-kv">
+        <img src="assets/brand-kv-life.jpg" alt="먹어서 가꾸는 라이프 밸런스 - 샐러드는 스윗밸런스" loading="lazy">
+      </div>
 
       <!-- Brand core -->
       <div class="br-block">
         <div class="br-label">Brand core · Mission</div>
         <div class="br-mission">
           <div class="br-mission-kr">건강한 식사를 즐기는 것이<br><em>모두에게 당연한 세상</em>을 만드는 것</div>
+        </div>
+        <div class="br-figure">
+          <img src="assets/brand-people.jpg" alt="공원에서 스윗밸런스 제품을 들어올린 네 사람" loading="lazy">
         </div>
       </div>
 
@@ -1553,6 +1572,9 @@
             <div class="br-card-title">고객 맞춤형 정보 제공</div>
             <div class="br-card-desc">타협없는 품질 경쟁력(3번 세척 공정)을 바탕으로 기능성 제품(탄단지, 프로틴, 저당, 저칼로리) 및 뚜렷한 소구 포인트(테이스티, 오늘의 채소)를 제공하여 목표와 취향에 따라 손쉽게 제품을 선택할 수 있도록 한다.</div>
           </div>
+        </div>
+        <div class="br-figure">
+          <img src="assets/brand-kv-topping.jpg" alt="100가지 이상의 토핑, 16가지 이상의 드레싱 - 샐러드는 스윗밸런스" loading="lazy">
         </div>
       </div>
 
@@ -1594,6 +1616,17 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Product line -->
+      <div class="br-block">
+        <div class="br-label">Product line · 밸런스 라인업</div>
+        <div class="br-lines">
+          <div class="br-line"><img src="assets/line-protein.webp" alt="프로틴 밸런스 - 단백질 함량 20g 이상, 고기와 해산물 가득으로 보다 든든한 샐러드" loading="lazy"></div>
+          <div class="br-line"><img src="assets/line-tasty.webp" alt="테이스티 - 속세의 맛 그대로, 샐러드는 맛없어라는 선입견이 깨지는 샐러드" loading="lazy"></div>
+          <div class="br-line"><img src="assets/line-lowsugar.webp" alt="저당 밸런스 - 당류는 적게 맛은 다채롭게, 혈당 걱정 접어두고 즐기는 샐러드" loading="lazy"></div>
+          <div class="br-line"><img src="assets/line-calorie.webp" alt="칼로리 밸런스 - 평균 200kcal대, 칼로리 숫자 부담 없이 즐기는 샐러드" loading="lazy"></div>
         </div>
       </div>
 
