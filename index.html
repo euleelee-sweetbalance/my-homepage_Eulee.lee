@@ -270,8 +270,10 @@
     background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
     overflow: hidden; box-shadow: var(--sh-sm); display: flex; flex-direction: column;
     transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+    cursor: pointer;
   }
   .shop-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+  .shop-card:focus-visible { outline: 2px solid var(--g); outline-offset: 2px; }
   .shop-card-visual {
     position: relative; height: 168px; display: flex; align-items: center; justify-content: center;
     font-size: 56px; overflow: hidden;
@@ -719,6 +721,53 @@
     font-family: var(--kr); text-decoration: underline; padding: 4px 0;
   }
   .wl-demo-link:hover { color: var(--g); }
+
+  /* ---------- Product quick view ---------- */
+  .pv-modal {
+    position: fixed; inset: 0; background: rgba(15,23,20,.55); z-index: 402;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; visibility: hidden; transition: opacity var(--dur-base) var(--ease-out), visibility var(--dur-base) var(--ease-out);
+  }
+  .pv-modal.open { opacity: 1; visibility: visible; }
+  .pv-card {
+    width: min(480px, 100%); max-height: min(90vh, 720px); background: #fff;
+    border-radius: var(--r-2xl); box-shadow: var(--sh-lg); display: flex; flex-direction: column;
+    overflow: hidden; position: relative;
+    transform: translateY(16px) scale(.985); transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .pv-modal.open .pv-card { transform: translateY(0) scale(1); }
+  .pv-close {
+    position: absolute; top: 14px; right: 14px; z-index: 2; width: 34px; height: 34px; border-radius: 999px;
+    background: rgba(15,23,20,.4); color: #fff; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pv-close:hover { background: rgba(15,23,20,.6); }
+  .pv-gallery { position: relative; flex-shrink: 0; }
+  .pv-visual {
+    height: min(46vh, 360px); display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .pv-visual img { width: 100%; height: 100%; object-fit: cover; }
+  .pv-emoji { font-size: 96px; line-height: 1; }
+  .pv-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: 34px; height: 34px; border-radius: 999px; border: none; cursor: pointer;
+    background: rgba(255,255,255,.85); color: var(--ink);
+    display: flex; align-items: center; justify-content: center; transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pv-nav:hover { background: #fff; }
+  .pv-prev { left: 12px; }
+  .pv-next { right: 12px; }
+  .pv-dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; gap: 6px; justify-content: center; }
+  .pv-dot { width: 6px; height: 6px; border-radius: 999px; background: rgba(255,255,255,.55); }
+  .pv-dot.on { background: #fff; }
+  .pv-body { flex: 1; overflow-y: auto; padding: 22px 24px 24px; }
+  .pv-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .pv-badges:empty { display: none; }
+  .pv-name { font-family: var(--kr); font-weight: 800; font-size: 19px; color: var(--ink); line-height: 1.4; word-break: keep-all; }
+  .pv-desc { font-size: 13.5px; color: var(--slate); line-height: 1.7; margin-top: 8px; word-break: keep-all; }
+  .pv-foot { margin-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .pv-actions { display: flex; align-items: center; gap: 8px; }
+  .pv-actions .wish-btn { position: static; width: 38px; height: 38px; background: var(--paper); color: var(--slate); }
 
   .wl-block { margin-bottom: 22px; }
   .wl-block-title {
@@ -1722,6 +1771,28 @@
   <!-- ===== Overlay ===== -->
   <div class="overlay" id="overlay" onclick="SB.closeAll()"></div>
 
+  <!-- ===== Product quick view ===== -->
+  <div class="pv-modal" id="pvModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pvName">
+    <div class="pv-card">
+      <button class="pv-close" type="button" aria-label="닫기" onclick="SB.closeQuickView()">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="pv-gallery" id="pvGallery"></div>
+      <div class="pv-body">
+        <div class="pv-badges" id="pvBadges"></div>
+        <div class="pv-name" id="pvName"></div>
+        <p class="pv-desc" id="pvDesc"></p>
+        <div class="pv-foot">
+          <div id="pvPrice"></div>
+          <div class="pv-actions">
+            <button class="wish-btn" id="pvWish" type="button" aria-label="찜하기">♡</button>
+            <button class="btn btn-primary" id="pvAdd" type="button">+ 담기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== Cart drawer ===== -->
   <div class="drawer" id="cartDrawer" aria-hidden="true">
     <div class="drawer-head">
@@ -2034,7 +2105,7 @@
       { id: 'sal-24', cat: 'salad', img: '🥗', badges: [], name: "왕새우 치폴레 샐러드", desc: "다채로운 식감과 매콤한 감칠맛 가득한 왕새우 샐러드" },
       { id: 'bs-01', cat: 'burgersandwich', img: '🥪', badges: [], name: "콘참치 모닝 샌드위치", desc: "고소하고 짭짤한 참치에 옥수수콘을 더한 단짠 샌드위치" },
       { id: 'sal-25', cat: 'salad', img: '🥗', badges: [], name: "에그마요 심플 샐러드", desc: "에그마요의 고소함, 고구마의 달콤함, 드레싱의 매콤함이 어우러진 샐러드" },
-      { id: 'wrap-08', cat: 'saladwrap', img: '🌯', badges: [], name: "바질리코타치즈 요거트 샐러드 랩", desc: "한 손으로 간편하게 즐기는 상큼한 요거트 베이스 바질 리코타 치즈 샐러드 랩" },
+      { id: 'wrap-08', cat: 'saladwrap', img: 'assets/product-basil-wrap-single.png', gallery: ['assets/product-basil-wrap-single.png', 'assets/product-basil-wrap-party.png'], badges: [], name: "바질리코타치즈 요거트 샐러드 랩", desc: "한 손으로 간편하게 즐기는 상큼한 요거트 베이스 바질 리코타 치즈 샐러드 랩" },
       { id: 'wrap-09', cat: 'saladwrap', img: '🌯', badges: [], name: "간장 불고기 샐러드 랩", desc: "한 손으로 간편하게 즐기는 짭조름한 불고기 샐러드 랩" },
       { id: 'meal-02', cat: 'meal', img: '🍱', badges: [], name: "크림굴림만두와 곤약간장계란밥", desc: "육즙 가득 만두와 닭가슴살 곤약간장계란밥에 특제 크림소스를 버무린 도시락" },
       { id: 'wrap-10', cat: 'saladwrap', img: '🌯', badges: [], name: "달걀지단 유자소이 샐러드 랩", desc: "한 손으로 간편하게 즐기는 포슬포슬 달걀지단 샐러드 랩" },
@@ -2213,11 +2284,23 @@
       renderGrid();
     }
 
-    function visualMarkup(p) {
-      if (/\.(png|jpg|jpeg|webp)$/i.test(p.img)) {
-        return '<img src="' + p.img + '" alt="' + p.name + '">';
-      }
-      return p.img;
+    function isImgSrc(src) { return /\.(png|jpg|jpeg|webp)$/i.test(src); }
+
+    function srcVisualMarkup(src, alt) {
+      return isImgSrc(src) ? '<img src="' + src + '" alt="' + alt + '">' : src;
+    }
+
+    function visualMarkup(p) { return srcVisualMarkup(p.img, p.name); }
+
+    function badgesMarkup(p) {
+      return (p.badges || []).map(function (b) {
+        return '<span class="badge ' + BADGE_CLASS[b] + '">' + BADGE_LABEL[b] + '</span>';
+      }).join('');
+    }
+
+    /* 제품이 가진 사진(들) - 없으면 카드와 같은 이모지 한 장으로 폴백 */
+    function productGallery(p) {
+      return (Array.isArray(p.gallery) && p.gallery.length) ? p.gallery : [p.img];
     }
 
     function priceMarkup(p) {
@@ -2251,10 +2334,12 @@
       page.forEach(function (p) {
         var card = document.createElement('div');
         card.className = 'shop-card';
-        var badgesHtml = (p.badges || []).map(function (b) {
-          return '<span class="badge ' + BADGE_CLASS[b] + '">' + BADGE_LABEL[b] + '</span>';
-        }).join('');
-        var isImg = /\.(png|jpg|jpeg|webp)$/i.test(p.img);
+        card.setAttribute('data-id', p.id);
+        card.setAttribute('role', 'button');
+        card.tabIndex = 0;
+        card.setAttribute('aria-label', p.name + ' 상세 이미지 보기');
+        var badgesHtml = badgesMarkup(p);
+        var isImg = isImgSrc(p.img);
 
         card.innerHTML =
           '<div class="shop-card-visual"' + (isImg ? '' : ' style="background:linear-gradient(135deg,#EEF6DE,#CFE3B0);"') + '>' +
@@ -2275,13 +2360,32 @@
       });
 
       grid.querySelectorAll('[data-add]').forEach(function (btn) {
-        btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-add')); });
+        btn.addEventListener('click', function (e) { e.stopPropagation(); addToCart(btn.getAttribute('data-add')); });
       });
       grid.querySelectorAll('[data-wish]').forEach(function (btn) {
-        btn.addEventListener('click', function () { toggleWish(btn.getAttribute('data-wish'), btn); });
+        btn.addEventListener('click', function (e) { e.stopPropagation(); toggleWish(btn.getAttribute('data-wish')); });
       });
 
       renderMore(list.length);
+    }
+
+    /* 카드 자체는 매 렌더마다 새로 만들어지지만 #shopGrid 엘리먼트는 그대로라
+       위임 리스너를 한 번만 걸어두면 렌더 때마다 다시 바인딩할 필요가 없다. */
+    function initShopGridInteractions() {
+      var grid = document.getElementById('shopGrid');
+      grid.addEventListener('click', function (e) {
+        if (e.target.closest('[data-wish],[data-add]')) return;
+        var card = e.target.closest('.shop-card');
+        if (card) openQuickView(card.getAttribute('data-id'));
+      });
+      grid.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        if (e.target.closest('[data-wish],[data-add]')) return;
+        var card = e.target.closest('.shop-card');
+        if (!card) return;
+        e.preventDefault();
+        openQuickView(card.getAttribute('data-id'));
+      });
     }
 
     function renderMore(total) {
@@ -2297,14 +2401,23 @@
       });
     }
 
-    function toggleWish(id, btn) {
+    /* id가 같은 하트 버튼은 화면에 동시에 여러 개 있을 수 있다
+       (상품 카드 + 상세보기 모달) - 전부 같은 상태로 맞춘다 */
+    function syncWishButtons(id) {
+      var on = !!wished[id];
+      document.querySelectorAll('[data-wish="' + id + '"]').forEach(function (b) {
+        b.classList.toggle('active', on);
+        b.textContent = on ? '♥' : '♡';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.setAttribute('aria-label', on ? '찜 해제' : '찜하기');
+      });
+    }
+
+    function toggleWish(id) {
       wished[id] = !wished[id];
       if (!wished[id]) delete wished[id];
-      btn.classList.toggle('active', !!wished[id]);
-      btn.textContent = wished[id] ? '♥' : '♡';
-      btn.setAttribute('aria-pressed', wished[id] ? 'true' : 'false');
-      btn.setAttribute('aria-label', wished[id] ? '찜 해제' : '찜하기');
       saveState();
+      syncWishButtons(id);
       renderWishTab();
       updateBadges();
       /* 위시리스트 탭에서 해제하면 목록에서도 바로 빠져야 한다 */
@@ -2498,6 +2611,77 @@
       renderCart();
       var c = findCoupon(id);
       showToast((c ? c.title : '쿠폰') + '을(를) 받았어요.');
+    }
+
+    /* ===================== Product quick view ===================== */
+    var pv = { id: null, gallery: [], idx: 0 };
+
+    function pvRenderGallery() {
+      var box = document.getElementById('pvGallery');
+      var imgs = pv.gallery;
+      var src = imgs[pv.idx];
+      box.innerHTML =
+        '<div class="pv-visual"' + (isImgSrc(src) ? '' : ' style="background:linear-gradient(135deg,#EEF6DE,#CFE3B0);"') + '>' +
+          (isImgSrc(src) ? srcVisualMarkup(src, '') : '<span class="pv-emoji">' + src + '</span>') +
+        '</div>' +
+        (imgs.length > 1 ?
+          '<button class="pv-nav pv-prev" type="button" aria-label="이전 사진">' +
+            '<svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>' +
+          '</button>' +
+          '<button class="pv-nav pv-next" type="button" aria-label="다음 사진">' +
+            '<svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>' +
+          '</button>' +
+          '<div class="pv-dots">' + imgs.map(function (_, i) { return '<span class="pv-dot' + (i === pv.idx ? ' on' : '') + '"></span>'; }).join('') + '</div>'
+          : '');
+
+      if (imgs.length > 1) {
+        box.querySelector('.pv-prev').addEventListener('click', function () { pvGoTo(pv.idx - 1); });
+        box.querySelector('.pv-next').addEventListener('click', function () { pvGoTo(pv.idx + 1); });
+      }
+    }
+
+    function pvGoTo(i) {
+      var n = pv.gallery.length;
+      pv.idx = ((i % n) + n) % n;
+      pvRenderGallery();
+    }
+
+    function openQuickView(id) {
+      var p = findProduct(id);
+      if (!p) return;
+      pv = { id: id, gallery: productGallery(p), idx: 0 };
+      pvRenderGallery();
+
+      document.getElementById('pvBadges').innerHTML = badgesMarkup(p);
+      document.getElementById('pvName').textContent = p.name;
+      document.getElementById('pvDesc').textContent = p.desc;
+      document.getElementById('pvPrice').innerHTML = priceMarkup(p);
+
+      var wishBtn = document.getElementById('pvWish');
+      wishBtn.setAttribute('data-wish', id);
+      syncWishButtons(id);
+
+      var addBtn = document.getElementById('pvAdd');
+      addBtn.style.display = p.price ? '' : 'none';
+      addBtn.onclick = function () { addToCart(id); };
+
+      document.getElementById('pvModal').classList.add('open');
+      document.getElementById('pvModal').setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeQuickView() {
+      document.getElementById('pvModal').classList.remove('open');
+      document.getElementById('pvModal').setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+
+    function initQuickView() {
+      document.getElementById('pvWish').addEventListener('click', function () {
+        toggleWish(this.getAttribute('data-wish'));
+      });
+      var modal = document.getElementById('pvModal');
+      modal.addEventListener('click', function (e) { if (e.target === modal) closeQuickView(); });
     }
 
     /* ===================== Drawers / overlay ===================== */
@@ -3951,6 +4135,8 @@
       initVisits();
       renderTabs();
       renderGrid();
+      initShopGridInteractions();
+      initQuickView();
       updateBadges();
       initWellness();
       initTable();
@@ -3962,9 +4148,11 @@
       var pop = document.getElementById('wlPopup');
       var wl = document.getElementById('wlModal');
       var cgo = document.getElementById('catchGame');
+      var pvm = document.getElementById('pvModal');
       if (cgo && cgo.classList.contains('open')) { closeCatch(); return; }
       if (pop && pop.classList.contains('open')) { closeWellnessPopup(); return; }
       if (wl && wl.classList.contains('open')) { closeChallenge(); return; }
+      if (pvm && pvm.classList.contains('open')) { closeQuickView(); return; }
       if (chatOpen) { closeChat(); return; }
       closeAll();
     });
@@ -3977,6 +4165,7 @@
       openCart: openCart,
       openCoupons: openCoupons,
       openWishlist: openWishlist,
+      closeQuickView: closeQuickView,
       closeAll: closeAll,
       openChallenge: openChallenge,
       closeChallenge: closeChallenge,
