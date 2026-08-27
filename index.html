@@ -302,6 +302,7 @@
   .form-switch { text-align: center; margin-top: 16px; font-size: 12.5px; color: var(--char); }
   .form-switch a { color: var(--g); font-weight: 700; text-decoration: underline; cursor: pointer; }
   .demo-hint { font-size: 11px; color: var(--g); background: rgba(0,97,78,.08); border-radius: var(--r-sm); padding: 9px 10px; margin-bottom: 16px; text-align: center; word-break: keep-all; }
+  .auth-notice { font-size: 12px; font-weight: 700; color: var(--red); background: rgba(214,69,69,.08); border-radius: var(--r-sm); padding: 10px 12px; margin-bottom: 16px; text-align: center; word-break: keep-all; }
 
   /* ---------- Challenge modal ---------- */
   .modal-lg { width: min(560px, 94vw); }
@@ -1252,6 +1253,11 @@
 
     function checkout() {
       if (Object.keys(cart).length === 0) return;
+      if (!currentUser) {
+        pendingCheckout = true;
+        openAuth('login', '주문하려면 로그인이 필요해요. 로그인하면 주문이 바로 진행돼요.');
+        return;
+      }
       cart = {};
       appliedCoupon = null;
       saveState();
@@ -1312,6 +1318,8 @@
     var users = [];        // [{ name, email, password, marketing, consentAt }]
     var currentUser = null; // email or null
     var authMode = 'login';
+    var pendingCheckout = false; // true when auth modal was opened by clicking 주문하기
+    var authContextMsg = null;   // notice shown above the auth form (e.g. login-required-to-checkout)
 
     function loadAuthState() {
       try {
@@ -1351,6 +1359,7 @@
 
     function loginFormHtml() {
       return (
+        (authContextMsg ? '<div class="auth-notice">' + escapeHtml(authContextMsg) + '</div>' : '') +
         '<div class="demo-hint">데모 계정으로 바로 체험해보세요 · demo@sweetbalance.kr / demo1234</div>' +
         '<form id="loginForm" novalidate>' +
           '<div class="field"><label for="loginEmail">이메일</label><input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="username"></div>' +
@@ -1364,6 +1373,7 @@
 
     function signupFormHtml() {
       return (
+        (authContextMsg ? '<div class="auth-notice">' + escapeHtml(authContextMsg) + '</div>' : '') +
         '<form id="signupForm" novalidate>' +
           '<div class="field"><label for="signupName">이름</label><input type="text" id="signupName" placeholder="홍길동" autocomplete="name"></div>' +
           '<div class="field"><label for="signupEmail">이메일</label><input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="username"></div>' +
@@ -1401,7 +1411,7 @@
 
     function bindAuthEvents(mode) {
       if (mode === 'login') {
-        document.getElementById('goSignup').addEventListener('click', function () { openAuth('signup'); });
+        document.getElementById('goSignup').addEventListener('click', function () { openAuth('signup', authContextMsg); });
         document.getElementById('loginForm').addEventListener('submit', function (e) {
           e.preventDefault();
           var email = document.getElementById('loginEmail').value;
@@ -1414,11 +1424,17 @@
           currentUser = user.email;
           saveAuthState();
           renderAuthArea();
-          closeAll();
-          showToast(user.name + '님, 환영해요! 로그인되었어요.');
+          if (pendingCheckout) {
+            pendingCheckout = false;
+            showToast(user.name + '님, 환영해요! 로그인되었어요.');
+            checkout();
+          } else {
+            closeAll();
+            showToast(user.name + '님, 환영해요! 로그인되었어요.');
+          }
         });
       } else {
-        document.getElementById('goLogin').addEventListener('click', function () { openAuth('login'); });
+        document.getElementById('goLogin').addEventListener('click', function () { openAuth('login', authContextMsg); });
 
         document.querySelectorAll('.consent-view').forEach(function (btn) {
           btn.addEventListener('click', function () {
@@ -1459,14 +1475,21 @@
           currentUser = email;
           saveAuthState();
           renderAuthArea();
-          closeAll();
-          showToast('회원가입이 완료됐어요. 반가워요, ' + name + '님!');
+          if (pendingCheckout) {
+            pendingCheckout = false;
+            showToast('회원가입이 완료됐어요. 반가워요, ' + name + '님!');
+            checkout();
+          } else {
+            closeAll();
+            showToast('회원가입이 완료됐어요. 반가워요, ' + name + '님!');
+          }
         });
       }
     }
 
-    function openAuth(mode) {
+    function openAuth(mode, contextMsg) {
       authMode = mode;
+      authContextMsg = contextMsg || null;
       document.getElementById('authModalTitle').textContent = mode === 'login' ? '로그인' : '회원가입';
       document.getElementById('authModalBody').innerHTML = mode === 'login' ? loginFormHtml() : signupFormHtml();
       bindAuthEvents(mode);
@@ -1753,6 +1776,8 @@
       document.getElementById('authModal').classList.remove('open');
       document.getElementById('challengeModal').classList.remove('open');
       document.body.classList.remove('no-scroll');
+      pendingCheckout = false;
+      authContextMsg = null;
     }
 
     /* ===================== Header badges ===================== */
